@@ -6,6 +6,8 @@ To get the project running, go into these directories, and follow instructions t
 - `backend`
 - `reverse_proxy`
 
+Then visit [http://localhost:3000](http://localhost:3000)
+
 ### Notes
 
 #### Ports
