@@ -1,0 +1,9 @@
+services:
+  nginx:
+    build: .
+    network_mode: "host"
+    develop:
+      watch:
+        - action: rebuild
+          path: .
+          target: nginx.conf
