@@ -13,6 +13,7 @@ To get the project running, go into these directories, and follow instructions t
 - `frontend`
 - `backend`
 - `reverse_proxy`
+- `database`
 
 Then visit [http://localhost:3000](http://localhost:3000)
 
@@ -20,7 +21,7 @@ Then visit [http://localhost:3000](http://localhost:3000)
 
 #### Ports
 
-Ports among `frontend`, `backend`, and `reverse_proxy` must be consistent.
+Ports among `frontend`, `backend`, `database`, and `reverse_proxy` must be consistent.
 
 #### About Nix
 
