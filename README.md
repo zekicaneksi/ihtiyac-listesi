@@ -7,6 +7,7 @@ Requirement for setting up the project locally;
 - Without Nix
     - Docker
     - Node.js (20) with NPM
+    - Mongodb Compass to inspect the DB
 
 To get the project running, go into these directories, and follow instructions to get them running;
 
