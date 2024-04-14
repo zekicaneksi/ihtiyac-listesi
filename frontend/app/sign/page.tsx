@@ -3,6 +3,8 @@
 import React, { useState, FunctionComponent } from "react";
 
 export default function Register() {
+  const [tab, setTab] = useState<"login" | "register">("login");
+
   const [username, setUsername] = useState<string>("");
   const [fullname, setFullname] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -17,25 +19,42 @@ export default function Register() {
           placeholder={"username"}
           type={"text"}
         />
-        <Input
-          value={fullname}
-          setValue={setFullname}
-          placeholder={"full name"}
-          type={"text"}
-        />
+        {tab === "register" && (
+          <Input
+            value={fullname}
+            setValue={setFullname}
+            placeholder={"full name"}
+            type={"text"}
+          />
+        )}
         <Input
           value={password}
           setValue={setPassword}
           placeholder={"password"}
           type={"password"}
         />
-        <Input
-          value={passwordAgain}
-          setValue={setPasswordAgain}
-          placeholder={"password again"}
-          type={"password"}
-        />
-        <button className="bg-sky-500 px-3 py-3">Register</button>
+        {tab === "register" && (
+          <Input
+            value={passwordAgain}
+            setValue={setPasswordAgain}
+            placeholder={"password again"}
+            type={"password"}
+          />
+        )}
+        <button className="bg-sky-500 px-3 py-3">
+          {tab === "login" ? "Login" : "Register"}
+        </button>
+        {tab === "login" && (
+          <p className={"self-center text-base text-gray-100"}>or</p>
+        )}
+        <button
+          className="bg-sky-500 px-3 py-3"
+          onClick={() => {
+            setTab((old) => (old === "login" ? "register" : "login"));
+          }}
+        >
+          {tab === "login" ? "Register" : "<"}
+        </button>
       </div>
     </div>
   );
