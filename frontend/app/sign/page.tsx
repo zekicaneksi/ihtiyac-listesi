@@ -15,7 +15,7 @@ export default function Register() {
   const [infoMessage, setInfoMessage] = useState<string>("");
 
   async function register() {
-    var checkRegexps = {
+    let checkRegexps = {
       containsSpecialCharacters: /[^a-zA-Z0-9]/,
       charactersAndSpacesOnly: /[^a-zA-Z ]/,
       containsWhiteSpace: /[ ]/,

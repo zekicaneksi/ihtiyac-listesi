@@ -29,7 +29,7 @@ router.post(
   async (req: Request<{}, {}, RegisterBody>, res: Response) => {
     const bodyUser: RegisterBody = req.body;
 
-    var checkRegexps = {
+    let checkRegexps = {
       containsSpecialCharacters: /[^a-zA-Z0-9]/,
       charactersAndSpacesOnly: /[^a-zA-Z ]/,
       containsWhiteSpace: /[ ]/,
