@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, FunctionComponent } from "react";
+import React, { useState, FunctionComponent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchBackendPOST } from "@/app/utils/fetch";
 
@@ -17,6 +17,10 @@ export default function Register() {
   const [passwordAgain, setPasswordAgain] = useState<string>("");
 
   const [infoMessage, setInfoMessage] = useState<string>("");
+
+  useEffect(() => {
+    setInfoMessage("");
+  }, [tab]);
 
   async function register() {
     let checkRegexps = {
