@@ -1,5 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import dbCon, { setupDatabase, User } from "./db_setup";
+import bcrypt from "bcrypt";
 
 const app: Express = express();
 const port = 3002;
@@ -60,9 +61,14 @@ router.post(
         res.send("Username exists");
       } else {
         // Username doesn't exist, creating user
+
+        // Hashing the password
+        const salt = bcrypt.genSaltSync(10);
+        const hashedPassword = bcrypt.hashSync(bodyUser.password, salt);
+
         const insertResult = await dbCon.collection<User>("users").insertOne({
           username: bodyUser.username,
-          password: bodyUser.password,
+          password: hashedPassword,
           fullname: bodyUser.fullname,
           memberOfRooms: [],
           profilePictureId: null,
