@@ -1,8 +1,12 @@
 "use client";
 
 import React, { useState, FunctionComponent } from "react";
+import { useRouter } from "next/navigation";
+import { fetchBackendPOST } from "@/app/utils/fetch";
 
 export default function Register() {
+  const router = useRouter();
+
   const [tab, setTab] = useState<"login" | "register">("login");
 
   const [disableForm, setDisableForm] = useState<boolean>(false);
@@ -21,6 +25,7 @@ export default function Register() {
       containsWhiteSpace: /[ ]/,
     };
 
+    // Validating inputs
     if (checkRegexps.containsSpecialCharacters.test(username)) {
       setInfoMessage("Username cannot contain special characters");
     } else if (username.length < 6 || username.length > 15) {
@@ -36,9 +41,32 @@ export default function Register() {
     } else if (password !== passwordAgain) {
       setInfoMessage("Passwords do not match");
     } else {
+      // Validation successful
+      // Making the backend request
       setDisableForm(true);
       setInfoMessage("please wait...");
-      // make the register fetch
+
+      interface IBodyData {
+        username: string;
+        fullname: string;
+        password: string;
+      }
+      const bodyData: IBodyData = {
+        username: username,
+        fullname: fullname,
+        password: password,
+      };
+
+      const fetchResponse = await fetchBackendPOST<IBodyData>(
+        "/register",
+        bodyData,
+      );
+
+      if (fetchResponse.status === 406) {
+        setInfoMessage("Username exists, please choose another username");
+      } else {
+        router.push("/");
+      }
     }
 
     setDisableForm(false);
