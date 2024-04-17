@@ -79,7 +79,7 @@ export default function Register() {
   return (
     <div className="flex h-screen">
       <div
-        className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex flex-col gap-4 bg-slate-700 px-4 py-4`}
+        className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 bg-slate-700 px-4 py-4`}
       >
         <Input
           value={username}
@@ -110,7 +110,9 @@ export default function Register() {
           />
         )}
         {infoMessage !== "" && (
-          <p className="self-center text-base text-gray-100">{infoMessage}</p>
+          <p className="self-center text-center text-base text-gray-100">
+            {infoMessage}
+          </p>
         )}
         <button
           className="bg-sky-500 px-3 py-3"
