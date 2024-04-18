@@ -85,6 +85,45 @@ router.post(
   },
 );
 
+interface LoginBody {
+  username: string;
+  password: string;
+}
+
+router.post(
+  "/login",
+  async (req: Request<{}, {}, LoginBody>, res: Response) => {
+    const user: User | null = await dbCon
+      .collection<User>("users")
+      .findOne({ username: req.body.username });
+
+    function setResponseForFail() {
+      res.statusCode = 401;
+      res.send("invalid credentials");
+    }
+
+    function setResponseForSuccess() {
+      res.statusCode = 200;
+      res.send("login successful");
+    }
+
+    if (user) {
+      // Username is found, check the password
+      if (bcrypt.compareSync(req.body.password, user.password)) {
+        // Password is correct
+        // Login the user
+        setResponseForSuccess();
+      } else {
+        // Password is incorrect
+        setResponseForFail();
+      }
+    } else {
+      // Username is not found
+      setResponseForFail();
+    }
+  },
+);
+
 app.use("/api", router);
 
 async function main() {
