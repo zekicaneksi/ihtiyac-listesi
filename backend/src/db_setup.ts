@@ -26,7 +26,7 @@ export interface User {
 export interface Session {
   _id?: ObjectId; // Is set when retrieved from the database
   user_id: ObjectId;
-  creation_date: Date;
+  last_touch_date: Date;
 }
 
 export async function setupDatabase() {
@@ -71,7 +71,7 @@ export async function setupDatabase() {
       $jsonSchema: {
         bsonType: "object",
         title: "Session Object Validation",
-        required: ["user_id", "creation_date"],
+        required: ["user_id", "last_touch_date"],
         properties: {
           user_id: {
             bsonType: "objectId",

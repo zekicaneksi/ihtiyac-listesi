@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import dbCon, { setupDatabase, User, Session } from "./db_setup";
 import bcrypt from "bcrypt";
 import cookie from "cookie";
@@ -11,35 +11,82 @@ const router = express.Router();
 
 app.use(express.json());
 
-router.get("/hello", (req: Request, res: Response) => {
+async function setCookie(
+  res: Response,
+  user_id: ObjectId | null,
+  session_id?: string,
+) {
+  let sessionidToSet = "";
+  if (session_id) {
+    sessionidToSet = session_id;
+  } else {
+    if (!user_id) return;
+    const insertResult = await dbCon.collection<Session>("sessions").insertOne({
+      user_id: user_id,
+      last_touch_date: new Date(),
+    });
+    sessionidToSet = insertResult.insertedId.toString();
+  }
+
+  res.setHeader(
+    "Set-Cookie",
+    cookie.serialize("sessionid", sessionidToSet, {
+      domain: "localhost",
+      maxAge: 3 * 24 * 60 * 60,
+      path: "/",
+      httpOnly: true,
+      sameSite: true,
+      secure: false,
+    }),
+  );
+}
+
+// Middleware that checks the session
+// sets res.locals.session with session data
+// sets res.locals.user with user data
+// returns 401 if session does not exist
+async function checkSession(req: Request, res: Response, next: NextFunction) {
   let cookies = cookie.parse(req.headers.cookie || "");
 
   let sessionId: string = cookies.sessionid;
 
-  console.log(sessionId);
+  function responseUnauthorized() {
+    res.statusCode = 401;
+    res.send("unauthorized");
+  }
 
-  res.send("Helloo");
-});
-
-async function setCookie(res: Response, user_id: ObjectId) {
-  const insertResult = await dbCon.collection<Session>("sessions").insertOne({
-    user_id: user_id,
-    creation_date: new Date(),
-  });
-  if (insertResult) {
-    res.setHeader(
-      "Set-Cookie",
-      cookie.serialize("sessionid", insertResult.insertedId.toString(), {
-        domain: "localhost",
-        maxAge: 3 * 24 * 60 * 60,
-        path: "/",
-        httpOnly: true,
-        sameSite: true,
-        secure: false,
-      }),
-    );
+  if (sessionId) {
+    const last_touch_date: Date = new Date();
+    let session = await dbCon
+      .collection<Session>("sessions")
+      .findOneAndUpdate(
+        { _id: new ObjectId(sessionId) },
+        { $set: { last_touch_date: last_touch_date } },
+      );
+    if (session) {
+      await setCookie(res, null, session._id.toString());
+      session.last_touch_date = last_touch_date;
+      res.locals.session = session;
+      let user = await dbCon
+        .collection<User>("users")
+        .findOne({ _id: session.user_id });
+      res.locals.user = user;
+      next();
+    } else {
+      res.clearCookie("sessionid");
+      responseUnauthorized();
+    }
+  } else {
+    responseUnauthorized();
   }
 }
+
+router.get("/hello", checkSession, (req: Request, res: Response) => {
+  console.log(res.locals.session);
+  console.log(res.locals.user);
+  const user: User = res.locals.user;
+  res.send("Helloo " + user.fullname);
+});
 
 interface RegisterBody {
   username: string;
