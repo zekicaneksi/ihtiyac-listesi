@@ -1,7 +1,8 @@
 import express, { Express, Request, Response } from "express";
-import dbCon, { setupDatabase, User } from "./db_setup";
+import dbCon, { setupDatabase, User, Session } from "./db_setup";
 import bcrypt from "bcrypt";
 import cookie from "cookie";
+import { ObjectId } from "mongodb";
 
 const app: Express = express();
 const port = 3002;
@@ -12,21 +13,32 @@ app.use(express.json());
 
 router.get("/hello", (req: Request, res: Response) => {
   let cookies = cookie.parse(req.headers.cookie || "");
-  console.log(cookies);
+
+  let sessionId: string = cookies.sessionid;
+
+  console.log(sessionId);
+
   res.send("Helloo");
 });
 
-function setCookie(res: Response) {
-  res.setHeader(
-    "Set-Cookie",
-    cookie.serialize("foo", "bar", {
-      domain: "localhost",
-      maxAge: 3 * 24 * 60 * 60,
-      httpOnly: true,
-      sameSite: true,
-      secure: false,
-    }),
-  );
+async function setCookie(res: Response, user_id: ObjectId) {
+  const insertResult = await dbCon.collection<Session>("sessions").insertOne({
+    user_id: user_id,
+    creation_date: new Date(),
+  });
+  if (insertResult) {
+    res.setHeader(
+      "Set-Cookie",
+      cookie.serialize("sessionid", insertResult.insertedId.toString(), {
+        domain: "localhost",
+        maxAge: 3 * 24 * 60 * 60,
+        path: "/",
+        httpOnly: true,
+        sameSite: true,
+        secure: false,
+      }),
+    );
+  }
 }
 
 interface RegisterBody {
@@ -85,7 +97,7 @@ router.post(
         });
         if (insertResult.insertedId) {
           res.statusCode = 201;
-          setCookie(res);
+          await setCookie(res, insertResult.insertedId);
           res.send("creation successful");
         } else {
           res.statusCode = 500;
@@ -113,8 +125,8 @@ router.post(
       res.send("invalid credentials");
     }
 
-    function setResponseForSuccess() {
-      setCookie(res);
+    async function setResponseForSuccess() {
+      if (user?._id) await setCookie(res, user._id);
       res.statusCode = 200;
       res.send("login successful");
     }
@@ -124,7 +136,7 @@ router.post(
       if (bcrypt.compareSync(req.body.password, user.password)) {
         // Password is correct
         // Login the user
-        setResponseForSuccess();
+        await setResponseForSuccess();
       } else {
         // Password is incorrect
         setResponseForFailure();
