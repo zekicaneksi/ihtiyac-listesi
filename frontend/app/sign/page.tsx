@@ -76,8 +76,32 @@ export default function Register() {
     setDisableForm(false);
   }
 
-  function login() {
-    console.log("logging in");
+  async function login() {
+    setDisableForm(true);
+    setInfoMessage("please wait...");
+
+    interface IBodyData {
+      username: string;
+      password: string;
+    }
+
+    const fetchResponse = await fetchBackendPOST<IBodyData>("/login", {
+      username: username,
+      password: password,
+    });
+
+    if (fetchResponse.status === 401) {
+      // Invalid credentials
+      setInfoMessage("Invalid credentials");
+    } else if (fetchResponse.status === 200) {
+      // Login successful
+      router.push("/");
+    } else {
+      // Unknown error
+      setInfoMessage("Unkown error");
+    }
+
+    setDisableForm(false);
   }
 
   return (
