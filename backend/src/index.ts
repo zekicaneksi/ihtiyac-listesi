@@ -16,12 +16,6 @@ router.get("/hello", (req: Request, res: Response) => {
   res.send("Helloo");
 });
 
-router.get("/test", async (req: Request, res: Response) => {
-  const results = await dbCon.collection<User>("users").find().toArray();
-  console.log(results);
-  res.send("test");
-});
-
 function setCookie(res: Response) {
   res.setHeader(
     "Set-Cookie",
