@@ -11,6 +11,8 @@ const router = express.Router();
 
 app.use(express.json());
 
+// When provided an user_id, it will create a new session and set the sessionid cookie.
+// When user_id is null and given a session_id, it will instead set the sessionid cookie with the given session_id.
 async function setCookie(
   res: Response,
   user_id: ObjectId | null,
