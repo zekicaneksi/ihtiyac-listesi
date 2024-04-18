@@ -1,6 +1,7 @@
 import express, { Express, Request, Response } from "express";
 import dbCon, { setupDatabase, User } from "./db_setup";
 import bcrypt from "bcrypt";
+import cookie from "cookie";
 
 const app: Express = express();
 const port = 3002;
@@ -10,6 +11,8 @@ const router = express.Router();
 app.use(express.json());
 
 router.get("/hello", (req: Request, res: Response) => {
+  let cookies = cookie.parse(req.headers.cookie || "");
+  console.log(cookies);
   res.send("Helloo");
 });
 
@@ -18,6 +21,19 @@ router.get("/test", async (req: Request, res: Response) => {
   console.log(results);
   res.send("test");
 });
+
+function setCookie(res: Response) {
+  res.setHeader(
+    "Set-Cookie",
+    cookie.serialize("foo", "bar", {
+      domain: "localhost",
+      maxAge: 3 * 24 * 60 * 60,
+      httpOnly: true,
+      sameSite: true,
+      secure: false,
+    }),
+  );
+}
 
 interface RegisterBody {
   username: string;
@@ -75,6 +91,7 @@ router.post(
         });
         if (insertResult.insertedId) {
           res.statusCode = 201;
+          setCookie(res);
           res.send("creation successful");
         } else {
           res.statusCode = 500;
@@ -97,12 +114,13 @@ router.post(
       .collection<User>("users")
       .findOne({ username: req.body.username });
 
-    function setResponseForFail() {
+    function setResponseForFailure() {
       res.statusCode = 401;
       res.send("invalid credentials");
     }
 
     function setResponseForSuccess() {
+      setCookie(res);
       res.statusCode = 200;
       res.send("login successful");
     }
@@ -115,11 +133,11 @@ router.post(
         setResponseForSuccess();
       } else {
         // Password is incorrect
-        setResponseForFail();
+        setResponseForFailure();
       }
     } else {
       // Username is not found
-      setResponseForFail();
+      setResponseForFailure();
     }
   },
 );
