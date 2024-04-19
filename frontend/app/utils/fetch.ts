@@ -12,3 +12,7 @@ export function fetchBackendPOST<BodyType>(
     body: JSON.stringify(bodyData),
   });
 }
+
+export function fetchBackendGET(url: string): Promise<Response> {
+  return fetch(backendUrlPrefix + url);
+}

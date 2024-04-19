@@ -77,11 +77,20 @@ async function checkSession(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+// Used for checking if the client has a session
+// Also, for providing the user with their basic information
 router.get("/hello", checkSession, (req: Request, res: Response) => {
-  console.log(res.locals.session);
-  console.log(res.locals.user);
   const user: User = res.locals.user;
-  res.send("Helloo " + user.fullname);
+
+  res.statusCode = 200;
+  res.send(
+    JSON.stringify({
+      username: user.username,
+      fullname: user.fullname,
+      id: user._id,
+      profilePictureId: user.profilePictureId,
+    }),
+  );
 });
 
 interface RegisterBody {
