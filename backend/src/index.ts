@@ -2,6 +2,7 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import dbCon, { setupDatabase, User, Session } from "./db_setup";
 import bcrypt from "bcrypt";
 import cookie from "cookie";
+import cookie_options from "./cookie_options";
 import { ObjectId } from "mongodb";
 
 const app: Express = express();
@@ -32,14 +33,7 @@ async function setCookie(
 
   res.setHeader(
     "Set-Cookie",
-    cookie.serialize("sessionid", sessionidToSet, {
-      domain: "localhost",
-      maxAge: 3 * 24 * 60 * 60,
-      path: "/",
-      httpOnly: true,
-      sameSite: true,
-      secure: false,
-    }),
+    cookie.serialize("sessionid", sessionidToSet, cookie_options),
   );
 }
 
