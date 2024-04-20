@@ -1,8 +1,8 @@
 export default {
-  domain: "localhost",
+  domain: process.env.DOMAIN as string,
   maxAge: 3 * 24 * 60 * 60,
   path: "/",
   httpOnly: true,
   sameSite: true,
-  secure: false,
+  secure: process.env.SECURE === "true",
 };

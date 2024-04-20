@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express, { Express, NextFunction, Request, Response } from "express";
 import dbCon, { setupDatabase, User, Session } from "./db_setup";
 import bcrypt from "bcrypt";
@@ -6,7 +7,7 @@ import cookie_options from "./cookie_options";
 import { ObjectId } from "mongodb";
 
 const app: Express = express();
-const port = 3002;
+const port = process.env.PORT;
 
 const router = express.Router();
 

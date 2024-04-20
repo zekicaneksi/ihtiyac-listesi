@@ -15,6 +15,7 @@
     "@types/cookie": "^0.6.0",
     "bcrypt": "^5.1.1",
     "cookie": "^0.6.0",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongodb": "^6.5.0"
   },

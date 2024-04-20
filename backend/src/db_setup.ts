@@ -1,9 +1,9 @@
 import { MongoClient, ObjectId } from "mongodb";
 import cookie_options from "./cookie_options";
 
-const uri = "mongodb://localhost:27017/ihtiyac_listesi";
+const uri = process.env.MONGODB_URL;
 
-const client = new MongoClient(uri);
+const client = new MongoClient(uri as string);
 
 const dbCon = client.db("ihtiyac_listesi");
 
