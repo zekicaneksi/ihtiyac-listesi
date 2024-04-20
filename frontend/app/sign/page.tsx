@@ -3,6 +3,7 @@
 import React, { useState, FunctionComponent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchBackendPOST } from "@/app/utils/fetch";
+import { IoArrowBack } from "react-icons/io5";
 
 export default function Register() {
   const router = useRouter();
@@ -159,7 +160,11 @@ export default function Register() {
             setTab((old) => (old === "login" ? "register" : "login"));
           }}
         >
-          {tab === "login" ? "Register" : "<"}
+          {tab === "login" ? (
+            "Register"
+          ) : (
+            <IoArrowBack className={"m-auto size-6"} />
+          )}
         </button>
       </div>
     </div>

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { fetchBackendGET } from "@/app/utils/fetch";
 import { usePathname, useRouter } from "next/navigation";
+import { GrInProgress } from "react-icons/gr";
 
 export interface User {
   id: number;
@@ -49,7 +50,14 @@ export const UserProvider = ({ children }: Props) => {
 
   if (pathname === "/sign") return <> {children} </>;
 
-  if (!user) return <p>loading...</p>;
+  if (!user)
+    return (
+      <div className={"flex h-screen"}>
+        <div className={"m-auto"}>
+          <GrInProgress className="size-8 animate-spin" />
+        </div>
+      </div>
+    );
 
   return (
     <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
