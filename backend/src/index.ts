@@ -200,6 +200,16 @@ router.post(
   },
 );
 
+router.get("/logout", checkSession, async (req: Request, res: Response) => {
+  res.clearCookie("sessionid");
+  const session: Session = res.locals.session;
+  await dbCon
+    .collection<Session>("sessions")
+    .findOneAndDelete({ _id: session._id });
+  res.statusCode = 200;
+  res.send("logged out");
+});
+
 app.use("/api", router);
 
 async function main() {

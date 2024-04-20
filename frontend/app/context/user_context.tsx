@@ -43,6 +43,7 @@ export const UserProvider = ({ children }: Props) => {
   }
 
   useEffect(() => {
+    if (pathname === "/sign") setUser(undefined);
     if (pathname !== "/sign" && !user) {
       fetchUser();
     }
