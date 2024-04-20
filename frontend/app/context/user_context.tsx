@@ -9,6 +9,7 @@ import { fetchBackendGET } from "@/app/utils/fetch";
 import { usePathname, useRouter } from "next/navigation";
 
 export interface User {
+  id: number;
   username: string;
   fullname: string;
   profilePictureId: string | null;
