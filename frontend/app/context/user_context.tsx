@@ -55,7 +55,7 @@ export const UserProvider = ({ children }: Props) => {
     return (
       <div className={"flex h-screen"}>
         <div className={"m-auto"}>
-          <GrInProgress className="size-8 animate-spin" />
+          <GrInProgress className="size-8 animate-spin text-[#575C5F]" />
         </div>
       </div>
     );
