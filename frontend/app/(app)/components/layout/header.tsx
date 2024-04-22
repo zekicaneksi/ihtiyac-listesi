@@ -21,7 +21,7 @@ const ProfilePicturePlaceHolder = () => {
 
 export const Header = () => {
   return (
-    <div className="relative flex h-[10vh] justify-between bg-[#575C5F] p-2 md:h-[6vh]">
+    <div className="bg-foreground relative flex h-[10vh] justify-between p-2 md:h-[6vh]">
       <LogoWithName />
       <ProfilePicturePlaceHolder />
     </div>
