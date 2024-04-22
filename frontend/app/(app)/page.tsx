@@ -1,7 +1,7 @@
 "use client";
 
 import { useUserContext } from "@/app/context/user_context";
-import { fetchBackendGET } from "./utils/fetch";
+import { fetchBackendGET } from "@/app/utils/fetch";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
