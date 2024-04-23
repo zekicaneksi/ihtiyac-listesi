@@ -11,7 +11,7 @@ const Layout = ({ children }: ChildrenProps) => {
   return (
     <>
       <Header />
-      {children}
+      <div className="flex flex-grow flex-col">{children}</div>
     </>
   );
 };

@@ -17,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-background`}>
+      <body className={`${inter.className} flex flex-col bg-background`}>
         <Layout>{children}</Layout>
       </body>
     </html>
