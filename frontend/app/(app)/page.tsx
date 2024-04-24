@@ -1,19 +1,10 @@
 "use client";
 
 import { useUserContext } from "@/app/context/user_context";
-import { fetchBackendGET } from "@/app/utils/fetch";
-import { useRouter } from "next/navigation";
 import Footer, { MenuElementProps } from "@/app/(app)/components/layout/footer";
 
 export default function Home() {
   const { user } = useUserContext();
-
-  const router = useRouter();
-
-  async function logout() {
-    await fetchBackendGET("/logout");
-    router.push("/sign");
-  }
 
   const menuElements: MenuElementProps[] = [
     {
@@ -51,12 +42,6 @@ export default function Home() {
             </button>
           );
         })}
-        <button
-          className="bg-sky-700 px-4 py-2 text-white hover:bg-sky-800 sm:px-8 sm:py-3"
-          onClick={logout}
-        >
-          logout
-        </button>
       </div>
       <Footer menuElements={menuElements} />
     </>
