@@ -34,7 +34,9 @@ export async function createCollection() {
       $jsonSchema: {
         bsonType: "object",
         title: "Room Object Validation",
+        additionalProperties: false,
         required: [
+          "_id",
           "name",
           "password",
           "members",
@@ -43,6 +45,9 @@ export async function createCollection() {
           "history",
         ],
         properties: {
+          _id: {
+            bsonType: "objectId",
+          },
           name: {
             bsonType: "string",
           },

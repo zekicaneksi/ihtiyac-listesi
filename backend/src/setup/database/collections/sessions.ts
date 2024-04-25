@@ -14,12 +14,16 @@ export async function createCollection() {
       $jsonSchema: {
         bsonType: "object",
         title: "Session Object Validation",
-        required: ["user_id", "last_touch_date"],
+        required: ["_id", "user_id", "last_touch_date"],
+        additionalProperties: false,
         properties: {
+          _id: {
+            bsonType: "objectId",
+          },
           user_id: {
             bsonType: "objectId",
           },
-          creation_date: {
+          last_touch_date: {
             bsonType: "date",
           },
         },

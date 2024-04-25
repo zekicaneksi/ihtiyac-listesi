@@ -16,7 +16,9 @@ export async function createCollection() {
       $jsonSchema: {
         bsonType: "object",
         title: "User Object Validation",
+        additionalProperties: false,
         required: [
+          "_id",
           "username",
           "fullname",
           "password",
@@ -24,6 +26,9 @@ export async function createCollection() {
           "profilePictureId",
         ],
         properties: {
+          _id: {
+            bsonType: "objectId",
+          },
           username: {
             bsonType: "string",
           },
