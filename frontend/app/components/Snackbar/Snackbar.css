@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes inAndOut {
+  0% {
+    top: 0px;
+    transform: translate(-50%, -100%);
+  }
+  10% {
+    top: 1.5vh;
+    transform: translate(-50%, 100%);
+  }
+  90% {
+    top: 1.5vh;
+    transform: translate(-50%, 100%);
+  }
+  100% {
+    top: 0vh;
+    transform: translate(-50%, -100%);
+  }
+}

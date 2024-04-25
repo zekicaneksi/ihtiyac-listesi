@@ -1,6 +1,7 @@
 "use client";
 
 import Popup from "@/app/components/Popup";
+import Snackbar from "@/app/components/Snackbar/Snackbar";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { ImExit } from "react-icons/im";
@@ -53,6 +54,7 @@ interface RoomProps {
 }
 
 const Room = (props: RoomProps) => {
+  const [isSnackbarOpen, setIsSnackbarOpen] = useState<boolean>(false);
   const [showLeaveRoomPopup, setShowLeaveRoomPopup] = useState<boolean>(false);
 
   const router = useRouter();
@@ -65,11 +67,18 @@ const Room = (props: RoomProps) => {
   async function copyRoomId(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
     console.log("copy room id:" + props.room.roomId);
-    // Also show a little snackbar
+    setIsSnackbarOpen(true);
   }
 
   return (
     <>
+      <Snackbar
+        message={"Copied to clipboard"}
+        onClose={() => {
+          setIsSnackbarOpen(false);
+        }}
+        open={isSnackbarOpen}
+      />
       <LeaveRoomPopup
         room={props.room}
         isOpen={showLeaveRoomPopup}
