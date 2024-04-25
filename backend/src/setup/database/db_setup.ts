@@ -4,6 +4,7 @@ import {
   createCollection as createSessionsCollection,
   garbageCollectSessions,
 } from "./collections/sessions";
+import { createCollection as createRoomsCollection } from "./collections/rooms";
 
 const uri = process.env.MONGODB_URL;
 
@@ -20,6 +21,7 @@ process.on("SIGINT", async function () {
 export async function setupDatabase() {
   await createUsersCollection();
   await createSessionsCollection();
+  await createRoomsCollection();
   setInterval(garbageCollectSessions, 600000);
 }
 
