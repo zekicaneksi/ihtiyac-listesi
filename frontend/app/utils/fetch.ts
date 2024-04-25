@@ -2,7 +2,7 @@ let backendUrlPrefix = "/api";
 
 // Check response for usual stuff such as 401 for redirecting to /sign
 function processResponse(res: Response) {
-  if (res.status === 401) {
+  if (res.status === 401 && window.location.pathname !== "/sign") {
     window.location.replace("/sign");
   }
 }
