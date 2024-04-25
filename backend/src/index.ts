@@ -1,9 +1,11 @@
 import "dotenv/config";
 import express, { Express, NextFunction, Request, Response } from "express";
-import dbCon, { setupDatabase, User, Session } from "./db_setup";
+import dbCon, { setupDatabase } from "./setup/database/db_setup";
+import { User } from "./setup/database/collections/users";
+import { Session } from "./setup/database/collections/sessions";
 import bcrypt from "bcrypt";
 import cookie from "cookie";
-import cookie_options from "./cookie_options";
+import cookie_options from "./setup/cookie_options";
 import { ObjectId } from "mongodb";
 
 const app: Express = express();
