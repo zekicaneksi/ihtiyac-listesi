@@ -66,7 +66,7 @@ const Room = (props: RoomProps) => {
 
   async function copyRoomId(e: React.MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
-    console.log("copy room id:" + props.room.roomId);
+    navigator.clipboard.writeText(props.room.roomId);
     setIsSnackbarOpen(true);
   }
 
