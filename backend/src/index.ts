@@ -7,6 +7,7 @@ import bcrypt from "bcrypt";
 import cookie from "cookie";
 import cookie_options from "./setup/cookie_options";
 import { ObjectId } from "mongodb";
+import regexp from "./utils/regex";
 
 const app: Express = express();
 const port = process.env.PORT;
@@ -107,23 +108,21 @@ router.post(
   async (req: Request<{}, {}, RegisterBody>, res: Response) => {
     const bodyUser: RegisterBody = req.body;
 
-    let checkRegexps = {
-      containsSpecialCharacters: /[^a-zA-Z0-9]/,
-      charactersAndSpacesOnly: /[^a-zA-Z ]/,
-      containsWhiteSpace: /[ ]/,
-    };
-
     // Validating fields
     res.statusCode = 409;
-    if (checkRegexps.containsSpecialCharacters.test(bodyUser.username)) {
+    if (RegExp(regexp.containsSpecialCharacter).test(bodyUser.username)) {
       res.send("Username cannot contain special characters");
     } else if (bodyUser.username.length < 6 || bodyUser.username.length > 15) {
       res.send("Username must be 6-15 characters long");
-    } else if (checkRegexps.charactersAndSpacesOnly.test(bodyUser.fullname)) {
+    } else if (
+      RegExp(regexp.containsSpecialCharacterExceptSpaceOrNumber).test(
+        bodyUser.fullname,
+      )
+    ) {
       res.send("Full name must consist of characters and spaces only");
     } else if (bodyUser.fullname.length < 4 || bodyUser.fullname.length > 25) {
       res.send("Fullname must be 4-25 characters long");
-    } else if (checkRegexps.containsWhiteSpace.test(bodyUser.password)) {
+    } else if (RegExp(regexp.containsWhiteSpace).test(bodyUser.password)) {
       res.send("Password cannot contain whitespaces");
     } else if (bodyUser.password.length < 8 || bodyUser.password.length > 20) {
       res.send("Password must be 8-20 characters long");
