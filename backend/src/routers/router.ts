@@ -1,5 +1,5 @@
 import express from "express";
-import checkSession from "../middleware/checkSession";
+import checkSession from "@/middleware/checkSession";
 
 import hello from "./routes/hello";
 import login from "./routes/login";

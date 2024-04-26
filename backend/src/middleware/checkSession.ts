@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import cookie from "cookie";
-import dbCon from "../setup/database/db_setup";
-import { Session } from "../setup/database/collections/sessions";
-import { User } from "../setup/database/collections/users";
+import dbCon from "@/setup/database/db_setup";
+import { Session } from "@/setup/database/collections/sessions";
+import { User } from "@/setup/database/collections/users";
 import { ObjectId } from "mongodb";
 import setCookie from "./setCookie";
 

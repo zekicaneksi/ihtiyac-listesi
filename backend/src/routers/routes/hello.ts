@@ -1,4 +1,4 @@
-import { User } from "../../setup/database/collections/users";
+import { User } from "@/setup/database/collections/users";
 import { Request, Response } from "express";
 
 // Used for checking if the client has a session

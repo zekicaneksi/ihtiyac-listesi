@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import regexp from "../../utils/regex";
-import dbCon from "../../setup/database/db_setup";
-import { User } from "../../setup/database/collections/users";
+import regexp from "@/utils/regex";
+import dbCon from "@/setup/database/db_setup";
+import { User } from "@/setup/database/collections/users";
 import bcrypt from "bcrypt";
-import setCookie from "../../middleware/setCookie";
+import setCookie from "@/middleware/setCookie";
 
 interface RegisterBody {
   username: string;

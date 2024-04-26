@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { User } from "../../setup/database/collections/users";
-import dbCon from "../../setup/database/db_setup";
+import { User } from "@/setup/database/collections/users";
+import dbCon from "@/setup/database/db_setup";
 import bcrypt from "bcrypt";
-import setCookie from "../../middleware/setCookie";
+import setCookie from "@/middleware/setCookie";
 
 interface LoginBody {
   username: string;

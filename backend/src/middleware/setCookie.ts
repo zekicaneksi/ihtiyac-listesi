@@ -1,9 +1,9 @@
 import { Response } from "express";
 import { ObjectId } from "mongodb";
-import dbCon from "../setup/database/db_setup";
-import { Session } from "../setup/database/collections/sessions";
+import dbCon from "@/setup/database/db_setup";
+import { Session } from "@/setup/database/collections/sessions";
 import cookie from "cookie";
-import cookie_options from "../setup/cookie_options";
+import cookie_options from "@/setup/cookie_options";
 
 // When provided an user_id, it will create a new session and set the "sessionid" cookie.
 // When user_id is null and given a session_id, it will instead set(refresh) the "sessionid" cookie with the given session_id.
