@@ -67,8 +67,18 @@ export async function createCollection() {
             bsonType: "array",
             items: {
               bsonType: "object",
-              required: ["title", "description", "addedBy", "willBeBoughtBy"],
+              required: [
+                "_id",
+                "title",
+                "description",
+                "addedBy",
+                "willBeBoughtBy",
+              ],
+              additionalProperties: false,
               properties: {
+                _id: {
+                  bsonType: "objectId",
+                },
                 title: {
                   bsonType: "string",
                 },
@@ -89,13 +99,18 @@ export async function createCollection() {
             items: {
               bsonType: "object",
               required: [
+                "_id",
                 "title",
                 "description",
                 "addedBy",
                 "boughtBy",
                 "purchaseDate",
               ],
+              additionalProperties: false,
               properties: {
+                _id: {
+                  bsonType: "objectId",
+                },
                 title: {
                   bsonType: "string",
                 },
