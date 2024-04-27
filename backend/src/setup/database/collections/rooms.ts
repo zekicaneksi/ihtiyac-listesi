@@ -50,9 +50,12 @@ export async function createCollection() {
           },
           name: {
             bsonType: "string",
+            maxLength: 40,
+            minLength: 2,
           },
           password: {
             bsonType: "string",
+            maxLength: 300,
           },
           members: {
             bsonType: "array",
