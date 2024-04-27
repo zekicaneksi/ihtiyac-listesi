@@ -9,7 +9,7 @@ async function upgrade(
 ) {
   const pathname = request.url;
 
-  if (pathname === "/ws") {
+  if (pathname === "/ws/") {
     wssHome.handleUpgrade(request, socket, head, function done(ws) {
       wssHome.emit("connection", ws, request);
     });

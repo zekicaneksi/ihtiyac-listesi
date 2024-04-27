@@ -1,11 +1,24 @@
 "use client";
 
 import Footer, { MenuElementProps } from "@/app/(app)/components/layout/footer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaArrowDownLong } from "react-icons/fa6";
 import Room, { IRoom } from "./components/page/Room";
+import { useWs } from "@/app/(app)/hooks/useWebsocket";
 
 export default function Home() {
+  const [ready, val, send] = useWs({ url: "/" });
+
+  useEffect(() => {
+    if (ready) {
+      if (send) {
+        send("test message");
+      }
+    }
+  }, [ready, send]); // make sure to include send in dependency array
+
+  console.log(val);
+
   const [rooms, setRooms] = useState<IRoom[]>([
     { roomId: "123123123123", roomName: "the josenburgh family" },
     { roomId: "4564564546", roomName: "the interoptics company" },
