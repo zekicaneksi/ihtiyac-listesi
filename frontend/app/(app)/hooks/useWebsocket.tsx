@@ -16,6 +16,7 @@ export const useWs = ({ url }: Props) => {
     socket.onopen = () => setIsReady(true);
     socket.onclose = () => setIsReady(false);
     socket.onmessage = (event) => setVal(event.data);
+    socket.onerror = () => window.location.reload();
 
     ws.current = socket;
 
