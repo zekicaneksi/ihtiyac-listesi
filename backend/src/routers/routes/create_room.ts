@@ -5,6 +5,7 @@ import dbCon from "@/setup/database/db_setup";
 import { Room } from "@/setup/database/collections/rooms";
 import { User } from "@/setup/database/collections/users";
 import { ObjectId } from "mongodb";
+import { notifyCreatedRoom } from "@/websocket/websocket_servers/home";
 
 interface Body {
   name: string;
@@ -42,6 +43,11 @@ export default async (req: Request, res: Response) => {
     if (insertResult.insertedId) {
       res.statusCode = 201;
       res.send("room creation is successful");
+
+      notifyCreatedRoom(user._id?.toString() as string, {
+        roomName: bodyData.name,
+        roomId: insertResult.insertedId.toString(),
+      });
     } else {
       res.statusCode = 500;
       res.send("something went wrong");

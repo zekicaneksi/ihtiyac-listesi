@@ -9,7 +9,31 @@ import {
 
 const wsServer = new WebSocketServer({ noServer: true });
 
-const connectionMap = new Map<Session, { ws: WebSocket; user: User }>();
+const connectionMap = new Map<string, Map<Session, WebSocket>>();
+
+function addToMap(userId: string, session: Session, ws: WebSocket) {
+  if (connectionMap.has(userId)) {
+    connectionMap.get(userId)?.set(session, ws);
+  } else {
+    const newMap = new Map<Session, WebSocket>();
+    newMap.set(session, ws);
+    connectionMap.set(userId, newMap);
+  }
+}
+
+function removeFromMap(userId: string, session: Session) {
+  connectionMap.get(userId)?.delete(session);
+  if (connectionMap.get(userId)?.size === 0) connectionMap.delete(userId);
+}
+
+export function notifyCreatedRoom(
+  userId: string,
+  roomData: { roomName: string; roomId: string },
+) {
+  connectionMap.get(userId)?.forEach((ws) => {
+    ws.send(JSON.stringify(roomData));
+  });
+}
 
 wsServer.on(
   "connection",
@@ -19,13 +43,13 @@ wsServer.on(
     setWebSocketHeartbeatListeners(ws);
 
     ws.on("close", function close() {
-      connectionMap.delete(session);
+      removeFromMap(user._id?.toString() as string, session);
     });
     ws.on("message", function message(data) {
       console.log("received: %s", data);
     });
 
-    connectionMap.set(session, { ws: ws, user: user });
+    addToMap(user._id?.toString() as string, session, ws);
 
     ws.send("something");
   },
