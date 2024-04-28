@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { FaArrowDownLong } from "react-icons/fa6";
 import Room, { IRoom } from "./components/page/Room";
 import { useWs } from "@/app/(app)/hooks/useWebsocket";
+import CreateRoomPopup from "./components/page/CreateRoomPopup";
 
 export default function Home() {
   const [ready, val, send] = useWs({ url: "/" });
@@ -26,12 +27,15 @@ export default function Home() {
     { roomId: "23523r2323r", roomName: "the fancyness family" },
   ]);
 
+  const [showCreateRoomPopup, setShowCreateRoomPopup] =
+    useState<boolean>(false);
+
   async function joinRoom() {
     console.log("join room");
   }
 
-  async function createRoom() {
-    console.log("create room");
+  function handleCreateRoomPopupClose() {
+    setShowCreateRoomPopup(false);
   }
 
   const menuElements: MenuElementProps[] = [
@@ -41,12 +45,18 @@ export default function Home() {
     },
     {
       text: "Create Room",
-      onClick: createRoom,
+      onClick: () => {
+        setShowCreateRoomPopup(true);
+      },
     },
   ];
 
   return (
     <>
+      <CreateRoomPopup
+        isOpen={showCreateRoomPopup}
+        handleClose={handleCreateRoomPopupClose}
+      />
       {rooms.length === 0 ? (
         <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
           <p>Looks like you are not a part of any room</p>

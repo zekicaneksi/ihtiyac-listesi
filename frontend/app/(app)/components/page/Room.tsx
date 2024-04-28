@@ -1,5 +1,6 @@
 "use client";
 
+import Button from "@/app/components/Button";
 import Popup from "@/app/components/Popup";
 import Snackbar from "@/app/components/Snackbar/Snackbar";
 import { useRouter } from "next/navigation";
@@ -33,12 +34,8 @@ const LeaveRoomPopup = (props: LeaveRoomPopupProps) => {
         <p>
           Do you really want to leave <b>{props.room.roomName}</b>?
         </p>
-        <button className={"bg-foreground"} onClick={handleYes}>
-          yes
-        </button>
-        <button className={"bg-foreground"} onClick={handleNo}>
-          no
-        </button>
+        <Button onClick={handleYes}>yes</Button>
+        <Button onClick={handleNo}>no</Button>
       </div>
     </Popup>
   );

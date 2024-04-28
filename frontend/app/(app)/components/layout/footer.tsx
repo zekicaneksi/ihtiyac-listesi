@@ -61,7 +61,10 @@ const Footer = (props: FooterProps) => {
                 <div
                   key={index}
                   className={`flex items-center justify-center ${index === 0 && "border-t-4"} border-b-4 border-background h-[${MenuElementHeight_SmallScreen}vh] md:h-[${MenuElementHeight_BigScreen}vh] bg-foreground hover:brightness-150`}
-                  onClick={elem.onClick}
+                  onClick={() => {
+                    elem.onClick();
+                    setIsMenuOpen(false);
+                  }}
                 >
                   <p>{elem.text}</p>
                 </div>

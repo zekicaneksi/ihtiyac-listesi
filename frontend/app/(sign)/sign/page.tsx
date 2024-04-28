@@ -1,9 +1,12 @@
 "use client";
 
-import React, { useState, FunctionComponent, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchBackendPOST } from "@/app/utils/fetch";
 import { IoArrowBack } from "react-icons/io5";
+import Input from "@/app/components/Input";
+import Button from "@/app/components/Button";
+import regexp from "@/app/utils/regexp";
 
 export default function Register() {
   const router = useRouter();
@@ -24,22 +27,18 @@ export default function Register() {
   }, [tab]);
 
   async function register() {
-    let checkRegexps = {
-      containsSpecialCharacters: /[^a-zA-Z0-9]/,
-      charactersAndSpacesOnly: /[^a-zA-Z ]/,
-      containsWhiteSpace: /[ ]/,
-    };
-
     // Validating inputs
-    if (checkRegexps.containsSpecialCharacters.test(username)) {
+    if (RegExp(regexp.containsSpecialCharacter).test(username)) {
       setInfoMessage("Username cannot contain special characters");
     } else if (username.length < 6 || username.length > 15) {
       setInfoMessage("Username must be 6-15 characters long");
-    } else if (checkRegexps.charactersAndSpacesOnly.test(fullname)) {
+    } else if (
+      RegExp(regexp.containsSpecialCharacterExceptSpaceOrNumber).test(fullname)
+    ) {
       setInfoMessage("Full name must consist of characters and spaces only");
     } else if (fullname.length < 4 || fullname.length > 25) {
       setInfoMessage("Fullname must be 4-25 characters long");
-    } else if (checkRegexps.containsWhiteSpace.test(password)) {
+    } else if (RegExp(regexp.containsWhiteSpace).test(password)) {
       setInfoMessage("Password cannot contain whitespaces");
     } else if (password.length < 8 || password.length > 20) {
       setInfoMessage("Password must be 8-20 characters long");
@@ -49,7 +48,7 @@ export default function Register() {
       // Validation successful
       // Making the backend request
       setDisableForm(true);
-      setInfoMessage("please wait...");
+      setInfoMessage("creating user...");
 
       interface IBodyData {
         username: string;
@@ -108,7 +107,7 @@ export default function Register() {
   return (
     <div className="flex h-screen">
       <div
-        className={`${disableForm ? "pointer-events-none opacity-70" : ""} bg-foreground m-auto flex  w-80 flex-col gap-4 px-4 py-4`}
+        className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 bg-foreground px-4 py-4`}
       >
         <Input
           value={username}
@@ -143,19 +142,17 @@ export default function Register() {
             {infoMessage}
           </p>
         )}
-        <button
-          className="bg-element px-3 py-3"
+        <Button
           onClick={() => {
             tab === "login" ? login() : register();
           }}
         >
           {tab === "login" ? "Login" : "Register"}
-        </button>
+        </Button>
         {tab === "login" && (
           <p className={"self-center text-base text-gray-100"}>or</p>
         )}
-        <button
-          className="bg-element px-3 py-3"
+        <Button
           onClick={() => {
             setTab((old) => (old === "login" ? "register" : "login"));
           }}
@@ -165,27 +162,8 @@ export default function Register() {
           ) : (
             <IoArrowBack className={"m-auto size-6"} />
           )}
-        </button>
+        </Button>
       </div>
     </div>
   );
 }
-
-interface InputProps {
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
-  placeholder: string;
-  type: "text" | "password";
-}
-
-const Input: FunctionComponent<InputProps> = (props) => {
-  return (
-    <input
-      className="px-2 py-2"
-      value={props.value}
-      onChange={(e) => props.setValue(e.target.value)}
-      placeholder={props.placeholder}
-      type={props.type}
-    ></input>
-  );
-};
