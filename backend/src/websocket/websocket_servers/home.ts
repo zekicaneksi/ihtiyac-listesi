@@ -6,6 +6,9 @@ import {
   setWebSocketHeartbeatListeners,
   getHeartbeatInterval,
 } from "../utils/heartbeat";
+import dbCon from "@/setup/database/db_setup";
+import { Room } from "@/setup/database/collections/rooms";
+import { ObjectId } from "mongodb";
 
 const wsServer = new WebSocketServer({ noServer: true });
 
@@ -31,13 +34,23 @@ export function notifyCreatedRoom(
   roomData: { roomName: string; roomId: string },
 ) {
   connectionMap.get(userId)?.forEach((ws) => {
-    ws.send(JSON.stringify(roomData));
+    ws.send(JSON.stringify({ type: "roomCreation", ...roomData }));
   });
+}
+
+async function getInitialRooms(userId: ObjectId) {
+  const response = await dbCon
+    .collection<Room>("rooms")
+    .find({ members: userId })
+    .project({ name: 1 })
+    .toArray();
+
+  return response;
 }
 
 wsServer.on(
   "connection",
-  function connection(ws: CustomWebSocket, session: Session, user: User) {
+  async function connection(ws: CustomWebSocket, session: Session, user: User) {
     ws.on("error", console.error);
 
     setWebSocketHeartbeatListeners(ws);
@@ -45,13 +58,11 @@ wsServer.on(
     ws.on("close", function close() {
       removeFromMap(user._id?.toString() as string, session);
     });
-    ws.on("message", function message(data) {
-      console.log("received: %s", data);
-    });
 
     addToMap(user._id?.toString() as string, session, ws);
 
-    ws.send("something");
+    const initialRooms = await getInitialRooms(user._id as ObjectId);
+    ws.send(JSON.stringify({ type: "initialRooms", rooms: initialRooms }));
   },
 );
 

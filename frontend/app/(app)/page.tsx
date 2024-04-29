@@ -8,10 +8,21 @@ import CreateRoomPopup from "./components/page/CreateRoomPopup";
 import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
 import useWS from "@/app/(app)/hooks/useWS";
 
+type WSMessage =
+  | {
+      type: "roomCreation";
+      roomId: string;
+      roomName: string;
+    }
+  | {
+      type: "initialRooms";
+      rooms: { _id: string; name: string }[];
+    };
+
 export default function Home() {
   const [fullScreenLoadingMsg, setFullScreenLoadingMsg] = useState<string>("");
-
-  const { lastJsonMessage, readyState } = useWS({ url: "/" });
+  const [rooms, setRooms] = useState<IRoom[]>([]);
+  const { lastJsonMessage, readyState } = useWS<WSMessage>({ url: "/" });
 
   // Managing loading screen
   useEffect(() => {
@@ -21,16 +32,25 @@ export default function Home() {
     }
   }, [readyState]);
 
-  useEffect(() => {
-    console.log(lastJsonMessage);
-  }, [lastJsonMessage]);
+  function handleWSMessage(msg: WSMessage) {
+    if (msg === null) return;
+    if (msg.type === "roomCreation") {
+      setRooms((prevState) => [
+        ...prevState,
+        { roomName: msg.roomName, roomId: msg.roomId },
+      ]);
+    } else if (msg.type === "initialRooms") {
+      setRooms(
+        msg.rooms.map((e) => {
+          return { roomName: e.name, roomId: e._id };
+        }),
+      );
+    }
+  }
 
-  const [rooms, setRooms] = useState<IRoom[]>([
-    { roomId: "123123123123", roomName: "the josenburgh family" },
-    { roomId: "4564564546", roomName: "the interoptics company" },
-    { roomId: "f2342r123r12r", roomName: "the cryptors family" },
-    { roomId: "23523r2323r", roomName: "the fancyness family" },
-  ]);
+  useEffect(() => {
+    handleWSMessage(lastJsonMessage);
+  }, [lastJsonMessage]);
 
   const [showCreateRoomPopup, setShowCreateRoomPopup] =
     useState<boolean>(false);

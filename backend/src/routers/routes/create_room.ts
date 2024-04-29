@@ -37,7 +37,7 @@ export default async (req: Request, res: Response) => {
       creatorId: user._id as ObjectId,
       items: [],
       history: [],
-      members: [],
+      members: [user._id as ObjectId],
     });
 
     if (insertResult.insertedId) {
