@@ -1,4 +1,5 @@
-let backendUrlPrefix = "/api";
+export let backendUrlPrefix = "/api";
+export let backendWSPrefix = "/ws";
 
 // Check response for usual stuff such as 401 for redirecting to /sign
 function processResponse(res: Response) {

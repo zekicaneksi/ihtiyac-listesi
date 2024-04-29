@@ -8,6 +8,7 @@ import React, {
 import { fetchBackendGET } from "@/app/utils/fetch";
 import { usePathname, useRouter } from "next/navigation";
 import { GrInProgress } from "react-icons/gr";
+import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
 
 export interface User {
   id: number;
@@ -53,11 +54,7 @@ export const UserProvider = ({ children }: Props) => {
 
   if (!user)
     return (
-      <div className={"flex h-screen"}>
-        <div className={"m-auto"}>
-          <GrInProgress className="text-foreground size-8 animate-spin" />
-        </div>
-      </div>
+      <FullPageLoadingScreen show={true} message={"Fetching credentials..."} />
     );
 
   return (

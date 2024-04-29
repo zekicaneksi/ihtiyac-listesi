@@ -4,21 +4,26 @@ import Footer, { MenuElementProps } from "@/app/(app)/components/layout/footer";
 import { useEffect, useState } from "react";
 import { FaArrowDownLong } from "react-icons/fa6";
 import Room, { IRoom } from "./components/page/Room";
-import { useWs } from "@/app/(app)/hooks/useWebsocket";
 import CreateRoomPopup from "./components/page/CreateRoomPopup";
+import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
+import useWS from "@/app/(app)/hooks/useWS";
 
 export default function Home() {
-  const [ready, val, send] = useWs({ url: "/" });
+  const [fullScreenLoadingMsg, setFullScreenLoadingMsg] = useState<string>("");
+
+  const { lastJsonMessage, readyState } = useWS({ url: "/" });
+
+  // Managing loading screen
+  useEffect(() => {
+    if (readyState !== 1) setFullScreenLoadingMsg("Connecting real-time...");
+    else {
+      setFullScreenLoadingMsg("");
+    }
+  }, [readyState]);
 
   useEffect(() => {
-    if (ready) {
-      if (send) {
-        send("test message");
-      }
-    }
-  }, [ready, send]); // make sure to include send in dependency array
-
-  console.log(val);
+    console.log(lastJsonMessage);
+  }, [lastJsonMessage]);
 
   const [rooms, setRooms] = useState<IRoom[]>([
     { roomId: "123123123123", roomName: "the josenburgh family" },
@@ -53,6 +58,10 @@ export default function Home() {
 
   return (
     <>
+      <FullPageLoadingScreen
+        show={fullScreenLoadingMsg === "" ? false : true}
+        message={fullScreenLoadingMsg}
+      />
       <CreateRoomPopup
         isOpen={showCreateRoomPopup}
         handleClose={handleCreateRoomPopupClose}

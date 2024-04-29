@@ -17,4 +17,7 @@ export function setWebSocketHeartbeatListeners(ws: CustomWebSocket) {
   ws.on("pong", () => {
     ws.isAlive = true;
   });
+  ws.on("message", function message(data) {
+    if (data.toString() === "ping") ws.send("pong");
+  });
 }
