@@ -22,7 +22,7 @@ function CreateRoomPopup(props: CreateRoomPopupProps) {
   const [disableForm, setDisableForm] = useState<boolean>(false);
 
   function handleClose() {
-    props.handleClose();
+    if (!disableForm) props.handleClose();
   }
 
   useEffect(() => {

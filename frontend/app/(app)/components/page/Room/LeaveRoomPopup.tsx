@@ -16,6 +16,10 @@ const LeaveRoomPopup = (props: LeaveRoomPopupProps) => {
   const [disableForm, setDisableForm] = useState<boolean>(false);
   const [infoMessage, setInfoMessage] = useState("");
 
+  function handleClose() {
+    if (!disableForm) props.handleClose();
+  }
+
   useEffect(() => {
     setInfoMessage("");
   }, [props.isOpen]);
@@ -33,22 +37,17 @@ const LeaveRoomPopup = (props: LeaveRoomPopupProps) => {
     });
 
     if (response.status === 200) {
-      props.handleClose();
+      handleClose();
     } else {
       setInfoMessage("Something went wrong!");
     }
   }
   async function handleNo() {
-    props.handleClose();
+    handleClose();
   }
 
   return (
-    <Popup
-      open={props.isOpen}
-      handleClose={() => {
-        props.handleClose();
-      }}
-    >
+    <Popup open={props.isOpen} handleClose={handleClose}>
       <div
         className={`${disableForm ? "pointer-events-none opacity-70" : ""} z-20 flex w-80 flex-col gap-4 bg-foreground px-4 py-4`}
       >
