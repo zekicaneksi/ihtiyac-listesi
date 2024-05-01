@@ -20,7 +20,7 @@ async function checkSession(req: Request, res: Response, next: NextFunction) {
     res.send("redirect");
   }
 
-  if (sessionId) {
+  if (sessionId && ObjectId.isValid(sessionId)) {
     const last_touch_date: Date = new Date();
     let session = await dbCon
       .collection<Session>("sessions")

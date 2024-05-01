@@ -13,6 +13,11 @@ export default async (req: Request, res: Response) => {
   const bodyData: Body = req.body;
   const user: User = res.locals.user;
 
+  if (!ObjectId.isValid(bodyData.roomId)) {
+    res.statusCode = 400;
+    res.send("invalid room id");
+  }
+
   const updatedRoom = await dbCon
     .collection<Room>("rooms")
     .findOneAndUpdate(

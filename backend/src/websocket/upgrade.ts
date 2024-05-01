@@ -15,7 +15,7 @@ async function authenticateUser(request: IncomingMessage): Promise<{
   let cookies = cookie.parse(request.headers.cookie || "");
   let sessionId: string = cookies.sessionid;
 
-  if (!sessionId) {
+  if (!sessionId || !ObjectId.isValid(sessionId)) {
     return { user: null, session: null, status: "unauthenticated" };
   }
 
