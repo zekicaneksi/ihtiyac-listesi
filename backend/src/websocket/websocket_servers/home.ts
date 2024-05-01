@@ -62,12 +62,12 @@ wsServer.on(
     setWebSocketHeartbeatListeners(ws);
 
     ws.on("close", function close() {
-      removeFromMap(user._id?.toString() as string, session);
+      removeFromMap(user._id.toString(), session);
     });
 
-    addToMap(user._id?.toString() as string, session, ws);
+    addToMap(user._id.toString(), session, ws);
 
-    const initialRooms = await getInitialRooms(user._id as ObjectId);
+    const initialRooms = await getInitialRooms(user._id);
     ws.send(JSON.stringify({ type: "initialRooms", rooms: initialRooms }));
   },
 );

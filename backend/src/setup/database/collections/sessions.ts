@@ -3,7 +3,7 @@ import dbCon from "../db_setup";
 import cookie_options from "../../cookie_options";
 
 export interface Session {
-  _id?: ObjectId; // Is set when retrieved from the database
+  _id: ObjectId;
   user_id: ObjectId;
   last_touch_date: Date;
 }

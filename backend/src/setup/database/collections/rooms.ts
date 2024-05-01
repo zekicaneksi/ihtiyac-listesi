@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import dbCon from "../db_setup";
 
 export interface RoomItem {
-  _id?: ObjectId; // Is set when retrieved from the database
+  _id: ObjectId;
   title: string;
   description: string;
   addedBy: ObjectId;
@@ -10,7 +10,7 @@ export interface RoomItem {
 }
 
 export interface RoomHistoryItem {
-  _id?: ObjectId; // Is set when retrieved from the database
+  _id: ObjectId;
   title: string;
   description: string;
   addedBy: ObjectId;
@@ -19,7 +19,7 @@ export interface RoomHistoryItem {
 }
 
 export interface Room {
-  _id?: ObjectId; // Is set when retrieved from the database
+  _id: ObjectId;
   name: string;
   password: string;
   members: ObjectId[];

@@ -6,9 +6,9 @@ import {
 } from "./collections/sessions";
 import { createCollection as createRoomsCollection } from "./collections/rooms";
 
-const uri = process.env.MONGODB_URL;
+const uri = process.env.MONGODB_URL as string;
 
-const client = new MongoClient(uri as string);
+const client = new MongoClient(uri);
 
 const dbCon = client.db("ihtiyac_listesi");
 

@@ -17,10 +17,12 @@ async function setCookie(
     sessionidToSet = session_id;
   } else {
     if (!user_id) return;
-    const insertResult = await dbCon.collection<Session>("sessions").insertOne({
-      user_id: user_id,
-      last_touch_date: new Date(),
-    });
+    const insertResult = await dbCon
+      .collection<Omit<Session, "_id">>("sessions")
+      .insertOne({
+        user_id: user_id,
+        last_touch_date: new Date(),
+      });
     sessionidToSet = insertResult.insertedId.toString();
   }
 

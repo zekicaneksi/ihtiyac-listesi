@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import dbCon from "@/setup/database/db_setup";
 import { Room } from "@/setup/database/collections/rooms";
 import { User } from "@/setup/database/collections/users";
-import { ObjectId } from "mongodb";
 import { notifyCreatedRoom } from "@/websocket/websocket_servers/home";
 
 interface Body {
@@ -31,20 +30,22 @@ export default async (req: Request, res: Response) => {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(bodyData.password, salt);
 
-    const insertResult = await dbCon.collection<Room>("rooms").insertOne({
-      name: bodyData.name,
-      password: hashedPassword,
-      creatorId: user._id as ObjectId,
-      items: [],
-      history: [],
-      members: [user._id as ObjectId],
-    });
+    const insertResult = await dbCon
+      .collection<Omit<Room, "_id">>("rooms")
+      .insertOne({
+        name: bodyData.name,
+        password: hashedPassword,
+        creatorId: user._id,
+        items: [],
+        history: [],
+        members: [user._id],
+      });
 
     if (insertResult.insertedId) {
       res.statusCode = 201;
       res.send("room creation is successful");
 
-      notifyCreatedRoom(user._id?.toString() as string, {
+      notifyCreatedRoom(user._id.toString(), {
         roomName: bodyData.name,
         roomId: insertResult.insertedId.toString(),
       });

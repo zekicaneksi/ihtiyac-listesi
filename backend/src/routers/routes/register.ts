@@ -48,13 +48,15 @@ export default async (req: Request<{}, {}, RegisterBody>, res: Response) => {
       const salt = bcrypt.genSaltSync(10);
       const hashedPassword = bcrypt.hashSync(bodyUser.password, salt);
 
-      const insertResult = await dbCon.collection<User>("users").insertOne({
-        username: bodyUser.username,
-        password: hashedPassword,
-        fullname: bodyUser.fullname,
-        memberOfRooms: [],
-        profilePictureId: null,
-      });
+      const insertResult = await dbCon
+        .collection<Omit<User, "_id">>("users")
+        .insertOne({
+          username: bodyUser.username,
+          password: hashedPassword,
+          fullname: bodyUser.fullname,
+          memberOfRooms: [],
+          profilePictureId: null,
+        });
       if (insertResult.insertedId) {
         res.statusCode = 201;
         await setCookie(res, insertResult.insertedId);

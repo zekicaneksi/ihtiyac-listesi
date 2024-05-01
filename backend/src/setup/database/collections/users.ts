@@ -3,7 +3,7 @@ import dbCon from "../db_setup";
 import regexp from "@/utils/regex";
 
 export interface User {
-  _id?: ObjectId; // Is set when retrieved from the database
+  _id: ObjectId;
   username: string;
   password: string;
   fullname: string;

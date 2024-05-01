@@ -17,16 +17,18 @@ export default async (req: Request, res: Response) => {
     .collection<Room>("rooms")
     .findOneAndUpdate(
       { _id: new ObjectId(bodyData.roomId) },
-      { $pull: { members: user._id as ObjectId } },
+      { $pull: { members: user._id } },
       { returnDocument: "after" },
     );
 
   if (updatedRoom) {
-    notifyLeftRoom(user._id?.toString() as string, updatedRoom._id.toString());
+    notifyLeftRoom(user._id.toString(), updatedRoom._id.toString());
 
     // Delete the room if it has no members left
     if (updatedRoom.members.length === 0) {
-        await dbCon.collection<Room>("rooms").findOneAndDelete({_id: updatedRoom._id})
+      await dbCon
+        .collection<Room>("rooms")
+        .findOneAndDelete({ _id: updatedRoom._id });
     }
 
     res.statusCode = 200;
