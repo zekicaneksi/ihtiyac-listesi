@@ -24,6 +24,11 @@ export default async (req: Request, res: Response) => {
   if (updatedRoom) {
     notifyLeftRoom(user._id?.toString() as string, updatedRoom._id.toString());
 
+    // Delete the room if it has no members left
+    if (updatedRoom.members.length === 0) {
+        await dbCon.collection<Room>("rooms").findOneAndDelete({_id: updatedRoom._id})
+    }
+
     res.statusCode = 200;
     res.send("left room");
   } else {
