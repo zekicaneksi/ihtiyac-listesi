@@ -44,6 +44,15 @@ export function notifyLeftRoom(userId: string, roomId: string) {
   });
 }
 
+export function notifyJoinRoom(
+  userId: string,
+  roomData: { roomName: string; roomId: string },
+) {
+  connectionMap.get(userId)?.forEach((ws) => {
+    ws.send(JSON.stringify({ type: "roomJoin", ...roomData }));
+  });
+}
+
 async function getInitialRooms(userId: ObjectId) {
   const response = await dbCon
     .collection<Room>("rooms")

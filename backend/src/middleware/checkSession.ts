@@ -17,7 +17,7 @@ async function checkSession(req: Request, res: Response, next: NextFunction) {
 
   function responseUnauthorized() {
     res.statusCode = 401;
-    res.send("unauthorized");
+    res.send("redirect");
   }
 
   if (sessionId) {

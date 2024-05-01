@@ -7,6 +7,7 @@ import Room, { IRoom } from "./components/page/Room/Room";
 import CreateRoomPopup from "./components/page/CreateRoomPopup";
 import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
 import useWS from "@/app/(app)/hooks/useWS";
+import JoinRoomPopup from "./components/page/JoinRoomPopup";
 
 type WSMessage =
   | {
@@ -21,12 +22,22 @@ type WSMessage =
   | {
       type: "roomLeave";
       roomId: string;
+    }
+  | {
+      type: "roomJoin";
+      roomId: string;
+      roomName: string;
     };
 
 export default function Home() {
   const [fullScreenLoadingMsg, setFullScreenLoadingMsg] = useState<string>("");
   const [rooms, setRooms] = useState<IRoom[]>([]);
   const { lastJsonMessage, readyState } = useWS<WSMessage>({ url: "/" });
+
+  const [showCreateRoomPopup, setShowCreateRoomPopup] =
+    useState<boolean>(false);
+
+  const [showJoinRoomPopup, setShowJoinRoomPopup] = useState<boolean>(false);
 
   // Managing loading screen
   useEffect(() => {
@@ -51,6 +62,11 @@ export default function Home() {
       );
     } else if (msg.type === "roomLeave") {
       setRooms((prevState) => prevState.filter((e) => e.roomId !== msg.roomId));
+    } else if (msg.type === "roomJoin") {
+      setRooms((prevState) => [
+        ...prevState,
+        { roomName: msg.roomName, roomId: msg.roomId },
+      ]);
     }
   }
 
@@ -58,21 +74,20 @@ export default function Home() {
     handleWSMessage(lastJsonMessage);
   }, [lastJsonMessage]);
 
-  const [showCreateRoomPopup, setShowCreateRoomPopup] =
-    useState<boolean>(false);
-
-  async function joinRoom() {
-    console.log("join room");
-  }
-
   function handleCreateRoomPopupClose() {
     setShowCreateRoomPopup(false);
+  }
+
+  function handleJoinRoomPopupClose() {
+    setShowJoinRoomPopup(false);
   }
 
   const menuElements: MenuElementProps[] = [
     {
       text: "Join Room",
-      onClick: joinRoom,
+      onClick: () => {
+        setShowJoinRoomPopup(true);
+      },
     },
     {
       text: "Create Room",
@@ -91,6 +106,10 @@ export default function Home() {
       <CreateRoomPopup
         isOpen={showCreateRoomPopup}
         handleClose={handleCreateRoomPopupClose}
+      />
+      <JoinRoomPopup
+        isOpen={showJoinRoomPopup}
+        handleClose={handleJoinRoomPopupClose}
       />
       {rooms.length === 0 ? (
         <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
