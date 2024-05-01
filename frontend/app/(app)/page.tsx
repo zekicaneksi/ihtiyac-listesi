@@ -17,6 +17,10 @@ type WSMessage =
   | {
       type: "initialRooms";
       rooms: { _id: string; name: string }[];
+    }
+  | {
+      type: "roomLeave";
+      roomId: string;
     };
 
 export default function Home() {
@@ -45,6 +49,8 @@ export default function Home() {
           return { roomName: e.name, roomId: e._id };
         }),
       );
+    } else if (msg.type === "roomLeave") {
+      setRooms((prevState) => prevState.filter((e) => e.roomId !== msg.roomId));
     }
   }
 

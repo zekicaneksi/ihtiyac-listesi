@@ -38,6 +38,12 @@ export function notifyCreatedRoom(
   });
 }
 
+export function notifyLeftRoom(userId: string, roomId: string) {
+  connectionMap.get(userId)?.forEach((ws) => {
+    ws.send(JSON.stringify({ type: "roomLeave", roomId: roomId }));
+  });
+}
+
 async function getInitialRooms(userId: ObjectId) {
   const response = await dbCon
     .collection<Room>("rooms")

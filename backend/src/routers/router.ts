@@ -6,6 +6,7 @@ import login from "./routes/login";
 import logout from "./routes/logout";
 import register from "./routes/register";
 import createRoom from "./routes/create_room";
+import leaveRoom from "./routes/leave_room";
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.post("/login", login);
 router.get("/logout", checkSession, logout);
 router.post("/register", register);
 router.post("/create-room", checkSession, createRoom);
+router.post("/leave-room", checkSession, leaveRoom);
 
 export default router;

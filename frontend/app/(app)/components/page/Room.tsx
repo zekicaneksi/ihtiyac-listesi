@@ -3,8 +3,9 @@
 import Button from "@/app/components/Button";
 import Popup from "@/app/components/Popup";
 import Snackbar from "@/app/components/Snackbar/Snackbar";
+import { fetchBackendPOST } from "@/app/utils/fetch";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ImExit } from "react-icons/im";
 
 interface LeaveRoomPopupProps {
@@ -14,12 +15,32 @@ interface LeaveRoomPopupProps {
 }
 
 const LeaveRoomPopup = (props: LeaveRoomPopupProps) => {
+  const [disableForm, setDisableForm] = useState<boolean>(false);
+  const [infoMessage, setInfoMessage] = useState("");
+
+  useEffect(() => {
+    setInfoMessage("");
+  }, [props.isOpen]);
+
   async function handleYes() {
-    console.log("clicked yes");
-    props.handleClose();
+    setDisableForm(true);
+    setInfoMessage("leaving room...");
+
+    interface PostData {
+      roomId: string;
+    }
+
+    const response = await fetchBackendPOST<PostData>("/leave-room", {
+      roomId: props.room.roomId,
+    });
+
+    if (response.status === 200) {
+      props.handleClose();
+    } else {
+      setInfoMessage("Something went wrong!");
+    }
   }
   async function handleNo() {
-    console.log("clicked no");
     props.handleClose();
   }
 
@@ -30,12 +51,21 @@ const LeaveRoomPopup = (props: LeaveRoomPopupProps) => {
         props.handleClose();
       }}
     >
-      <div className="h-[500px] w-[500px] bg-red-400">
-        <p>
-          Do you really want to leave <b>{props.room.roomName}</b>?
+      <div
+        className={`${disableForm ? "pointer-events-none opacity-70" : ""} z-20 flex w-80 flex-col gap-4 bg-foreground px-4 py-4`}
+      >
+        <p className="text-center">
+          Do you want to leave room <b>{props.room.roomName}</b>?
         </p>
-        <Button onClick={handleYes}>yes</Button>
-        <Button onClick={handleNo}>no</Button>
+        {infoMessage !== "" && (
+          <p className="self-center text-center text-base text-gray-100">
+            {infoMessage}
+          </p>
+        )}
+        <div className="flex flex-row gap-4 [&>button]:flex-grow">
+          <Button onClick={handleYes}>Yes</Button>
+          <Button onClick={handleNo}>No</Button>
+        </div>
       </div>
     </Popup>
   );
