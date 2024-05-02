@@ -9,21 +9,16 @@ interface useWSProps {
 }
 
 const useWS = <Type,>(props: useWSProps) => {
-  // Used to refresh page when WebSocket connection is gone AFTER it has been established to prevent showing out of date data
+  // Used to refresh page when WebSocket reconnection is made to prevent showing out of date data
   const [shouldRefreshPage, setShouldRefreshPage] = useState<boolean>(false);
 
   const ws = useWebSocket<Type>(backendWSPrefix + props.url, {
     onOpen: () => {
       setShouldRefreshPage(true);
+      if (shouldRefreshPage) window.location.reload();
     },
     heartbeat: { timeout: 10000 + 1000, interval: 5000 },
-    shouldReconnect: (_) => {
-      if (shouldRefreshPage) {
-        window.location.reload();
-        return false;
-      }
-      return true;
-    },
+    shouldReconnect: (_) => true,
   });
 
   return ws;
