@@ -13,6 +13,7 @@ const Profile = () => {
 
   const [file, setFile] = useState<File>();
   const [preview, setPreview] = useState<string>();
+  const [infoMessage, setInfoMessage] = useState<string>("");
 
   const [disabled, setDisabled] = useState<boolean>(false);
 
@@ -26,7 +27,10 @@ const Profile = () => {
 
   async function handleUpload() {
     if (!file) return;
+
     setDisabled(true);
+    setInfoMessage("uploading...");
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("fileName", file.name);
@@ -37,11 +41,11 @@ const Profile = () => {
     });
 
     if (response.status === 200) {
-      console.log("okkk");
+      setInfoMessage("successful");
     } else if (response.status === 413) {
-      console.log("file size too big");
+      setInfoMessage("file size is too big");
     } else {
-      console.log("something went wrong");
+      setInfoMessage("something went wrong");
     }
 
     setDisabled(false);
@@ -52,6 +56,9 @@ const Profile = () => {
       setPreview(undefined);
       return;
     }
+
+    setInfoMessage("");
+
     const objectUrl = URL.createObjectURL(file);
     setPreview(objectUrl);
 
@@ -93,6 +100,7 @@ const Profile = () => {
             onChange={handleImageChange}
             accept="image/jpeg, image/png"
           />
+          {infoMessage && <p className="self-center">{infoMessage}</p>}
           <Button
             onClick={handleUpload}
             className={`${file ? "" : "pointer-events-none opacity-70"}`}
