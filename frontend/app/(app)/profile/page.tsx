@@ -14,6 +14,8 @@ const Profile = () => {
   const [file, setFile] = useState<File>();
   const [preview, setPreview] = useState<string>();
 
+  const [disabled, setDisabled] = useState<boolean>(false);
+
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files || e.target.files.length === 0) {
       setFile(undefined);
@@ -24,6 +26,7 @@ const Profile = () => {
 
   async function handleUpload() {
     if (!file) return;
+    setDisabled(true);
     const formData = new FormData();
     formData.append("file", file);
     formData.append("fileName", file.name);
@@ -40,6 +43,8 @@ const Profile = () => {
     } else {
       console.log("something went wrong");
     }
+
+    setDisabled(false);
   }
 
   useEffect(() => {
@@ -70,7 +75,9 @@ const Profile = () => {
   return (
     <>
       <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
-        <div className="flex w-fit flex-col gap-8">
+        <div
+          className={`flex w-fit flex-col gap-8 ${disabled ? "pointer-events-none opacity-70" : ""}`}
+        >
           <div className="flex flex-row justify-center gap-8">
             <div className="size-16 bg-red-300"></div>
             <p className="self-center">{user.fullname}</p>
@@ -86,7 +93,12 @@ const Profile = () => {
             onChange={handleImageChange}
             accept="image/jpeg, image/png"
           />
-          <Button onClick={handleUpload}>Upload Picture</Button>
+          <Button
+            onClick={handleUpload}
+            className={`${file ? "" : "pointer-events-none opacity-70"}`}
+          >
+            Upload Picture
+          </Button>
         </div>
       </div>
       <Footer menuElements={menuElements} />
