@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  fetchBackendGET,
-  fetchBackendPOST,
-  fetchBackendPOSTAny,
-} from "@/app/utils/fetch";
+import { fetchBackendGET, fetchBackendPOSTAny } from "@/app/utils/fetch";
 import { useRouter } from "next/navigation";
 import Footer, { MenuElementProps } from "@/app/(app)/components/layout/footer";
 import { User, useUserContext } from "@/app/context/user_context";
@@ -30,14 +26,54 @@ const Profile = () => {
     setFile(e.target.files[0]);
   }
 
+  async function resizeImage(
+    image: ImageBitmap,
+    outputWidth: number,
+    outputHeight: number,
+  ) {
+    let canvas = document.createElement("canvas");
+    canvas.width = outputWidth;
+    canvas.height = outputHeight;
+    let ctx = canvas.getContext("2d");
+
+    ctx?.drawImage(image, 0, 0);
+
+    const { promise, resolve, reject } = Promise.withResolvers<Blob>();
+
+    canvas.toBlob((blob) => {
+      if (blob == null)
+        return reject(new TypeError("Canvas could not create the image"));
+      resolve(blob);
+    });
+
+    const blob = await promise;
+
+    return blob;
+  }
+
   async function handleUpload() {
     if (!file) return;
 
     setDisabled(true);
     setInfoMessage("uploading...");
 
+    // Resizing image for upload
+    const targetWidth = 250;
+    const targetHeight = 250;
+
+    const blob = await resizeImage(
+      await createImageBitmap(file, {
+        resizeWidth: targetWidth,
+        resizeHeight: targetHeight,
+        resizeQuality: "high",
+      }),
+      targetWidth,
+      targetHeight,
+    );
+
+    // Preparing and sending the data
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", blob);
     formData.append("fileName", file.name);
 
     const response = await fetchBackendPOSTAny("/upload-picture", formData);
