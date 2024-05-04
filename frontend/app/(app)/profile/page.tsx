@@ -95,11 +95,15 @@ const Profile = () => {
               src={preview}
             />
           )}
-          <input
-            type="file"
-            onChange={handleImageChange}
-            accept="image/jpeg, image/png"
-          />
+          <label className="cursor-pointer border-2 border-black p-2 text-center">
+            <input
+              type="file"
+              onChange={handleImageChange}
+              accept="image/jpeg, image/png"
+              className="hidden"
+            />
+            Choose File
+          </label>
           {infoMessage && <p className="self-center">{infoMessage}</p>}
           <Button
             onClick={handleUpload}
