@@ -8,6 +8,7 @@ import { User } from "@/setup/database/collections/users";
 
 export default async (req: Request, res: Response) => {
   const user: User = res.locals.user;
+  let generatedFileName: string;
 
   const bb = busboy({
     headers: req.headers,
@@ -20,7 +21,7 @@ export default async (req: Request, res: Response) => {
       if (mimeType !== "image/jpeg" && mimeType !== "image/png") file.resume();
       else {
         const imagePath = "/../public/uploaded_images/";
-        const generatedFileName = uuidv4();
+        generatedFileName = uuidv4();
         const saveAddress = appRootPath + imagePath + generatedFileName;
 
         file.on("limit", () => {
@@ -56,7 +57,7 @@ export default async (req: Request, res: Response) => {
   });
   bb.on("close", () => {
     res.writeHead(200, { Connection: "close" });
-    res.end();
+    res.end(generatedFileName);
   });
 
   req.pipe(bb);

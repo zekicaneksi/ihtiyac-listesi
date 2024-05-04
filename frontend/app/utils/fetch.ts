@@ -9,6 +9,7 @@ async function processResponse(res: Response) {
   }
 }
 
+// For sending JSON data
 export async function fetchBackendPOST<BodyType>(
   url: string,
   bodyData: BodyType,
@@ -19,6 +20,23 @@ export async function fetchBackendPOST<BodyType>(
       "Content-Type": "application/json",
     },
     body: JSON.stringify(bodyData),
+  });
+
+  await processResponse(response);
+
+  return response;
+}
+
+// For sending any type of data with custom headers
+export async function fetchBackendPOSTAny(
+  url: string,
+  bodyData: BodyInit,
+  headers?: HeadersInit,
+): Promise<Response> {
+  const response: Response = await fetch(backendUrlPrefix + url, {
+    method: "POST",
+    headers: headers,
+    body: bodyData,
   });
 
   await processResponse(response);

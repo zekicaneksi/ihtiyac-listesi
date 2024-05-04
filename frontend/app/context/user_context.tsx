@@ -18,6 +18,7 @@ export interface User {
 
 interface IUserContext {
   user: User;
+  setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
 }
 
 const UserContext = createContext<IUserContext>({} as IUserContext);
@@ -57,7 +58,9 @@ export const UserProvider = ({ children }: Props) => {
     );
 
   return (
-    <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ user, setUser }}>
+      {children}
+    </UserContext.Provider>
   );
 };
 

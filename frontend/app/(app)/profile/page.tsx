@@ -1,14 +1,19 @@
 "use client";
 
-import { fetchBackendGET } from "@/app/utils/fetch";
+import {
+  fetchBackendGET,
+  fetchBackendPOST,
+  fetchBackendPOSTAny,
+} from "@/app/utils/fetch";
 import { useRouter } from "next/navigation";
 import Footer, { MenuElementProps } from "@/app/(app)/components/layout/footer";
-import { useUserContext } from "@/app/context/user_context";
+import { User, useUserContext } from "@/app/context/user_context";
 import Button from "@/app/components/Button";
 import { useEffect, useState } from "react";
+import ProfilePicture from "@/app/components/ProfilePicture";
 
 const Profile = () => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const router = useRouter();
 
   const [file, setFile] = useState<File>();
@@ -35,13 +40,17 @@ const Profile = () => {
     formData.append("file", file);
     formData.append("fileName", file.name);
 
-    const response = await fetch("/api/upload-picture", {
-      method: "POST",
-      body: formData,
-    });
+    const response = await fetchBackendPOSTAny("/upload-picture", formData);
+
+    const newImageId = await response.text();
 
     if (response.status === 200) {
       setInfoMessage("successful");
+      setUser((oldState) => {
+        let clone: User = JSON.parse(JSON.stringify(oldState));
+        clone.profilePictureId = newImageId;
+        return clone;
+      });
     } else if (response.status === 413) {
       setInfoMessage("file size is too big");
     } else {
@@ -86,7 +95,7 @@ const Profile = () => {
           className={`flex w-fit flex-col gap-8 ${disabled ? "pointer-events-none opacity-70" : ""}`}
         >
           <div className="flex flex-row justify-center gap-8">
-            <div className="size-16 bg-red-300"></div>
+            <ProfilePicture address={user.profilePictureId} />
             <p className="self-center">{user.fullname}</p>
           </div>
           {preview && (

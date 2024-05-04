@@ -9,8 +9,11 @@ import createRoom from "./routes/create_room";
 import leaveRoom from "./routes/leave_room";
 import joinRoom from "./routes/join_room";
 import uploadPicture from "./routes/upload_picture";
+import { appRootPath } from "..";
 
 const router = express.Router();
+
+router.use("/public", express.static(appRootPath + "/../public"));
 
 router.get("/hello", checkSession, hello);
 router.post("/login", login);

@@ -1,5 +1,7 @@
 "use cilent";
 
+import ProfilePicture from "@/app/components/ProfilePicture";
+import { useUserContext } from "@/app/context/user_context";
 import { useRouter } from "next/navigation";
 
 const LogoWithName = () => {
@@ -19,16 +21,18 @@ const LogoWithName = () => {
   );
 };
 
-// Replace with the actual profile image later on
 const ProfilePicturePlaceHolder = () => {
+  const { user } = useUserContext();
   const router = useRouter();
   return (
-    <div
-      className="aspect-square h-[100%] w-auto rounded-full bg-teal-500 hover:cursor-pointer"
+    <ProfilePicture
       onClick={() => {
         router.push("/profile");
       }}
-    ></div>
+      fillHeight={true}
+      address={user.profilePictureId}
+      cursor="pointer"
+    />
   );
 };
 
