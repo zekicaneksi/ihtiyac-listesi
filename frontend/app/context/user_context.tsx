@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import { fetchBackendGET } from "@/app/utils/fetch";
 import { usePathname, useRouter } from "next/navigation";
-import { GrInProgress } from "react-icons/gr";
 import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
 
 export interface User {

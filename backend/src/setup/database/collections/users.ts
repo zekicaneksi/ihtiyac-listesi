@@ -8,7 +8,7 @@ export interface User {
   password: string;
   fullname: string;
   memberOfRooms: ObjectId[];
-  profilePictureId: null | ObjectId;
+  profilePictureId: string | null;
 }
 
 export async function createCollection() {
@@ -51,7 +51,7 @@ export async function createCollection() {
             },
           },
           profilePictureId: {
-            bsonType: ["objectId", "null"],
+            bsonType: ["string", "null"],
           },
         },
       },
