@@ -1,5 +1,5 @@
 import internal from "stream";
-import wssHome from "./websocket_servers/home";
+import wssHome from "./websocket_servers/home/home";
 import { IncomingMessage } from "http";
 import cookie from "cookie";
 import dbCon from "@/setup/database/db_setup";

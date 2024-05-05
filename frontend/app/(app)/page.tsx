@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { FaArrowDownLong } from "react-icons/fa6";
 import Room, { IRoom } from "./components/page/Room/Room";
 import CreateRoomPopup from "./components/page/CreateRoomPopup";
-import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
-import useWS from "@/app/(app)/hooks/useWS";
 import JoinRoomPopup from "./components/page/JoinRoomPopup";
+import { useUserContext } from "../context/user_context";
+import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
 
 type WSMessage =
   | {
@@ -30,22 +30,15 @@ type WSMessage =
     };
 
 export default function Home() {
-  const [fullScreenLoadingMsg, setFullScreenLoadingMsg] = useState<string>("");
+  const { user, setUser, ws } = useUserContext();
+
   const [rooms, setRooms] = useState<IRoom[]>([]);
-  const { lastJsonMessage, readyState } = useWS<WSMessage>({ url: "/" });
+  const [loadingRooms, setLoadingRooms] = useState<boolean>(true);
 
   const [showCreateRoomPopup, setShowCreateRoomPopup] =
     useState<boolean>(false);
 
   const [showJoinRoomPopup, setShowJoinRoomPopup] = useState<boolean>(false);
-
-  // Managing loading screen
-  useEffect(() => {
-    if (readyState !== 1) setFullScreenLoadingMsg("Connecting real-time...");
-    else {
-      setFullScreenLoadingMsg("");
-    }
-  }, [readyState]);
 
   function handleWSMessage(msg: WSMessage) {
     if (msg === null) return;
@@ -60,6 +53,7 @@ export default function Home() {
           return { roomName: e.name, roomId: e._id };
         }),
       );
+      setLoadingRooms(false);
     } else if (msg.type === "roomLeave") {
       setRooms((prevState) => prevState.filter((e) => e.roomId !== msg.roomId));
     } else if (msg.type === "roomJoin") {
@@ -71,8 +65,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-    handleWSMessage(lastJsonMessage);
-  }, [lastJsonMessage]);
+    handleWSMessage(ws.lastJsonMessage);
+  }, [ws.lastJsonMessage]);
+
+  useEffect(() => {
+    ws.sendMessage("getRooms");
+  }, []);
 
   function handleCreateRoomPopupClose() {
     setShowCreateRoomPopup(false);
@@ -97,12 +95,19 @@ export default function Home() {
     },
   ];
 
+  const NoRoomsSection = () => {
+    return (
+      <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
+        <p>Looks like you are not a part of any room</p>
+        <p>You can create or join a room from the menu down below</p>
+        <FaArrowDownLong className="size-12" />
+      </div>
+    );
+  };
+
   return (
     <>
-      <FullPageLoadingScreen
-        show={fullScreenLoadingMsg === "" ? false : true}
-        message={fullScreenLoadingMsg}
-      />
+      <FullPageLoadingScreen show={loadingRooms} message="Loading rooms..." />
       <CreateRoomPopup
         isOpen={showCreateRoomPopup}
         handleClose={handleCreateRoomPopupClose}
@@ -112,11 +117,7 @@ export default function Home() {
         handleClose={handleJoinRoomPopupClose}
       />
       {rooms.length === 0 ? (
-        <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
-          <p>Looks like you are not a part of any room</p>
-          <p>You can create or join a room from the menu down below</p>
-          <FaArrowDownLong className="size-12" />
-        </div>
+        <NoRoomsSection />
       ) : (
         <div className="flex-grow">
           {rooms.map((room) => {

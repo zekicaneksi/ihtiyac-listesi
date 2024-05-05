@@ -3,7 +3,7 @@ import { User } from "@/setup/database/collections/users";
 import dbCon from "@/setup/database/db_setup";
 import { Room } from "@/setup/database/collections/rooms";
 import { ObjectId } from "mongodb";
-import { notifyLeftRoom } from "@/websocket/websocket_servers/home";
+import { notifyLeftRoom } from "@/websocket/websocket_servers/home/messages";
 
 interface Body {
   roomId: string;

@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import dbCon from "@/setup/database/db_setup";
 import { Room } from "@/setup/database/collections/rooms";
 import { User } from "@/setup/database/collections/users";
-import { notifyCreatedRoom } from "@/websocket/websocket_servers/home";
+import { notifyCreatedRoom } from "@/websocket/websocket_servers/home/messages";
 
 interface Body {
   name: string;

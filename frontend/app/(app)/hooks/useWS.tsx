@@ -8,11 +8,11 @@ interface useWSProps {
   url: string;
 }
 
-const useWS = <Type,>(props: useWSProps) => {
+const useWS = (props: useWSProps) => {
   // Used to refresh page when WebSocket reconnection is made to prevent showing out of date data
   const [shouldRefreshPage, setShouldRefreshPage] = useState<boolean>(false);
 
-  const ws = useWebSocket<Type>(backendWSPrefix + props.url, {
+  const ws = useWebSocket(backendWSPrefix + props.url, {
     onOpen: () => {
       setShouldRefreshPage(true);
       if (shouldRefreshPage) window.location.reload();

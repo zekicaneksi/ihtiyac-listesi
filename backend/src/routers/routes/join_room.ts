@@ -4,7 +4,7 @@ import dbCon from "@/setup/database/db_setup";
 import { Room } from "@/setup/database/collections/rooms";
 import { ObjectId } from "mongodb";
 import bcrypt from "bcrypt";
-import { notifyJoinRoom } from "@/websocket/websocket_servers/home";
+import { notifyJoinRoom } from "@/websocket/websocket_servers/home/messages";
 
 interface Body {
   roomId: string;
