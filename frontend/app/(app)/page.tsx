@@ -1,12 +1,12 @@
 "use client";
 
-import Footer, { MenuElementProps } from "@/app/(app)/components/layout/footer";
+import Footer, { MenuElementProps } from "@/app/components/Footer";
 import { useEffect, useState } from "react";
 import { FaArrowDownLong } from "react-icons/fa6";
-import Room, { IRoom } from "./components/page/Room/Room";
-import CreateRoomPopup from "./components/page/CreateRoomPopup";
-import JoinRoomPopup from "./components/page/JoinRoomPopup";
-import { useUserContext } from "../context/user_context";
+import Room, { IRoom } from "./components/Room/Room";
+import CreateRoomPopup from "./components/CreateRoomPopup";
+import JoinRoomPopup from "./components/JoinRoomPopup";
+import { useUserContext } from "./context/user_context";
 import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
 
 type WSMessage =

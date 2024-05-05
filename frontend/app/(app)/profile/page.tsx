@@ -2,8 +2,8 @@
 
 import { fetchBackendGET, fetchBackendPOSTAny } from "@/app/utils/fetch";
 import { useRouter } from "next/navigation";
-import Footer, { MenuElementProps } from "@/app/(app)/components/layout/footer";
-import { User, useUserContext } from "@/app/context/user_context";
+import Footer, { MenuElementProps } from "@/app/components/Footer";
+import { User, useUserContext } from "@/app/(app)/context/user_context";
 import Button from "@/app/components/Button";
 import { useEffect, useState } from "react";
 import ProfilePicture from "@/app/components/ProfilePicture";

@@ -6,10 +6,11 @@ import React, {
   useState,
 } from "react";
 import { fetchBackendGET } from "@/app/utils/fetch";
-import { usePathname, useRouter } from "next/navigation";
-import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
-import useWS from "../(app)/hooks/useWS";
+import { useRouter } from "next/navigation";
 import { WebSocketHook } from "react-use-websocket/dist/lib/types";
+import useWS from "@/app/hooks/useWS";
+import FullPageLoadingScreen from "@/app/components/FullPageLoadingScreen";
+import { ReadyState } from "react-use-websocket";
 
 export interface User {
   id: number;
@@ -35,7 +36,6 @@ export const UserProvider = ({ children }: Props) => {
   const ws = useWS({ url: "/" });
 
   const router = useRouter();
-  const pathname = usePathname();
 
   async function fetchUser() {
     let response = await fetchBackendGET("/hello");
@@ -48,20 +48,15 @@ export const UserProvider = ({ children }: Props) => {
   }
 
   useEffect(() => {
-    if (pathname === "/sign") setUser(undefined);
-    if (pathname !== "/sign" && !user) {
-      fetchUser();
-    }
-  }, [pathname]);
-
-  if (pathname === "/sign") return <> {children} </>;
+    fetchUser();
+  }, []);
 
   if (!user)
     return (
       <FullPageLoadingScreen show={true} message={"Fetching credentials..."} />
     );
 
-  if (!ws)
+  if (ws.readyState !== ReadyState.OPEN)
     return (
       <FullPageLoadingScreen show={true} message={"Connecting real-time..."} />
     );

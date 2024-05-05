@@ -1,6 +1,5 @@
 "use client";
 
-import { UserProvider } from "@/app/context/user_context";
 import { ReactNode } from "react";
 
 interface ChildrenProps {
@@ -8,7 +7,7 @@ interface ChildrenProps {
 }
 
 const Layout = ({ children }: ChildrenProps) => {
-  return <UserProvider>{children}</UserProvider>;
+  return <>{children}</>;
 };
 
 export default Layout;

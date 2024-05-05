@@ -1,7 +1,7 @@
 "use cilent";
 
 import ProfilePicture from "@/app/components/ProfilePicture";
-import { useUserContext } from "@/app/context/user_context";
+import { useUserContext } from "@/app/(app)/context/user_context";
 import { useRouter } from "next/navigation";
 
 const LogoWithName = () => {
