@@ -1,13 +1,32 @@
 import CustomWebSocket from "@/websocket/utils/CustomWebSocket";
-import { getInitialRooms } from "./messages";
+import { getInitialItems, getInitialRooms } from "./messages";
 import { User } from "@/setup/database/collections/users";
+
+type Message =
+  | {
+      type: "getRooms";
+    }
+  | {
+      type: "getItems";
+      roomId: string;
+    };
 
 export function setOnMessage(ws: CustomWebSocket, user: User) {
   ws.on("message", async function message(data) {
-    const strData = data.toString();
-    if (strData === "getRooms") {
+    // Checking if data is json
+    try {
+      JSON.parse(data.toString());
+    } catch (err) {
+      return;
+    }
+    const jsonData: Message = JSON.parse(data.toString());
+    if (jsonData.type === "getRooms") {
       const initialRooms = await getInitialRooms(user._id);
       ws.send(JSON.stringify({ type: "initialRooms", rooms: initialRooms }));
+    } else if (jsonData.type === "getItems") {
+      const initialItems = await getInitialItems(jsonData.roomId, user._id);
+      if (initialItems)
+        ws.send(JSON.stringify({ type: "initialItems", items: initialItems }));
     }
   });
 }

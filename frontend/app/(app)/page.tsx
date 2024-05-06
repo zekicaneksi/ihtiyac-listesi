@@ -69,7 +69,7 @@ export default function Home() {
   }, [ws.lastJsonMessage]);
 
   useEffect(() => {
-    ws.sendMessage("getRooms");
+    ws.sendJsonMessage({ type: "getRooms" });
   }, []);
 
   function handleCreateRoomPopupClose() {

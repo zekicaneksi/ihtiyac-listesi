@@ -8,6 +8,7 @@ import { fetchBackendPOST } from "@/app/utils/fetch";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
+import { useUserContext } from "@/app/(app)/context/user_context";
 
 interface AddRoomPopupProps {
   isOpen: boolean;
@@ -89,8 +90,42 @@ const AddRoomPopup = (props: AddRoomPopupProps) => {
   );
 };
 
+interface RoomItem {
+  _id: string;
+  title: string;
+  description: string;
+  addedBy: null;
+  willBeBoughtBy: null;
+}
+
+type WSMessage = { type: "initialItems"; items: RoomItem[] };
+
 const Room = () => {
+  const [roomItems, setRoomItems] = useState<RoomItem[]>([]);
+
   const [showAddRoomPopup, setShowAddRoomPopup] = useState<boolean>(false);
+
+  const { user, setUser, ws } = useUserContext();
+
+  const pathname = usePathname();
+
+  useEffect(() => {
+    ws.sendJsonMessage({
+      type: "getItems",
+      roomId: pathname.substring(pathname.lastIndexOf("/") + 1),
+    });
+  }, []);
+
+  function handleWSMessage(msg: WSMessage) {
+    if (msg === null) return;
+    if (msg.type === "initialItems") {
+      setRoomItems(msg.items);
+    }
+  }
+
+  useEffect(() => {
+    handleWSMessage(ws.lastJsonMessage);
+  }, [ws.lastJsonMessage]);
 
   function handleAddItem() {
     setShowAddRoomPopup(true);
@@ -123,6 +158,9 @@ const Room = () => {
       />
       <div className="relative flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
         <p>Hello from room</p>
+        {roomItems.map((e) => (
+          <p key={e._id}>{e.title}</p>
+        ))}
         <div
           className="absolute bottom-0 right-0 m-5 size-12 hover:cursor-pointer md:size-16"
           onClick={handleAddItem}

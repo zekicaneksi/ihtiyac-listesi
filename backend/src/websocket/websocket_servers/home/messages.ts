@@ -36,3 +36,14 @@ export async function getInitialRooms(userId: ObjectId) {
 
   return response;
 }
+
+export async function getInitialItems(roomId: string, userId: ObjectId) {
+  if (!ObjectId.isValid(roomId)) return null;
+
+  const response = await dbCon
+    .collection<Room>("rooms")
+    .findOne({ _id: new ObjectId(roomId), members: { $in: [userId] } });
+
+  if (!response) return null;
+  else return response.items;
+}
