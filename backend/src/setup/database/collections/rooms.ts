@@ -84,9 +84,13 @@ export async function createCollection() {
                 },
                 title: {
                   bsonType: "string",
+                  minLength: 1,
+                  maxLength: 60,
                 },
                 description: {
                   bsonType: "string",
+                  minLength: 0,
+                  maxLength: 400,
                 },
                 addedBy: {
                   bsonType: "objectId",
