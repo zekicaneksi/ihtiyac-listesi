@@ -1,6 +1,8 @@
 import express from "express";
 import checkSession from "@/middleware/checkSession";
 
+import { appRootPath } from "..";
+
 import hello from "./routes/hello";
 import login from "./routes/login";
 import logout from "./routes/logout";
@@ -9,7 +11,7 @@ import createRoom from "./routes/create_room";
 import leaveRoom from "./routes/leave_room";
 import joinRoom from "./routes/join_room";
 import uploadPicture from "./routes/upload_picture";
-import { appRootPath } from "..";
+import addItem from "./routes/add_item";
 
 const router = express.Router();
 
@@ -23,5 +25,6 @@ router.post("/create-room", checkSession, createRoom);
 router.post("/leave-room", checkSession, leaveRoom);
 router.post("/join-room", checkSession, joinRoom);
 router.post("/upload-picture", checkSession, uploadPicture);
+router.post("/add-item", checkSession, addItem);
 
 export default router;

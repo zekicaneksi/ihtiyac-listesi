@@ -5,6 +5,7 @@ import Footer, { MenuElementProps } from "@/app/components/Footer";
 import Input from "@/app/components/Input";
 import Popup from "@/app/components/Popup";
 import { fetchBackendPOST } from "@/app/utils/fetch";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
 
@@ -19,6 +20,8 @@ const AddRoomPopup = (props: AddRoomPopupProps) => {
 
   const [infoMessage, setInfoMessage] = useState<string>("");
   const [disableForm, setDisableForm] = useState<boolean>(false);
+
+  const pathname = usePathname();
 
   function handlePopupClose() {
     if (!disableForm) props.handleClose();
@@ -38,11 +41,13 @@ const AddRoomPopup = (props: AddRoomPopupProps) => {
       interface PostData {
         title: string;
         description: string;
+        roomId: string;
       }
 
       const response = await fetchBackendPOST<PostData>("/add-item", {
         title: title,
         description: description,
+        roomId: pathname.substring(pathname.lastIndexOf("/") + 1),
       });
 
       if (response.status === 201) {
@@ -57,6 +62,7 @@ const AddRoomPopup = (props: AddRoomPopupProps) => {
   useEffect(() => {
     setTitle("");
     setDescription("");
+    setInfoMessage("");
   }, [props.isOpen]);
 
   return (
