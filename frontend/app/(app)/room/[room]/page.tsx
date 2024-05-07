@@ -70,12 +70,12 @@ const Room = () => {
         isOpen={showAddRoomPopup}
         handleClose={handleAddRoomPopupClose}
       />
-      <div className="relative flex flex-grow flex-col">
+      <div className="flex flex-grow flex-col overflow-auto">
         {roomItems.map((e) => (
           <RoomItem {...e} key={e._id} />
         ))}
         <div
-          className="absolute bottom-0 right-0 m-5 size-12 hover:cursor-pointer md:size-16"
+          className="sticky bottom-0 right-0 ml-auto mt-auto size-12 hover:cursor-pointer md:size-16"
           onClick={handleAddItem}
         >
           <IoAddCircle className="h-full w-full" />
