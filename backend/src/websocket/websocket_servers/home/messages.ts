@@ -42,8 +42,58 @@ export async function getInitialItems(roomId: string, userId: ObjectId) {
 
   const response = await dbCon
     .collection<Room>("rooms")
-    .findOne({ _id: new ObjectId(roomId), members: { $in: [userId] } });
+    .aggregate([
+      {
+        $match: {
+          $and: [{ _id: new ObjectId(roomId) }, { members: { $in: [userId] } }],
+        },
+      },
+      { $unwind: "$items" },
+      {
+        $lookup: {
+          from: "users",
+          localField: "items.addedBy",
+          foreignField: "_id",
+          as: "items.addedBy",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "items.willBeBoughtBy",
+          foreignField: "_id",
+          as: "items.willBeBoughtBy",
+        },
+      },
+      {
+        $replaceRoot: { newRoot: "$items" },
+      },
+      {
+        $project: {
+          "addedBy.password": 0,
+          "addedBy.memberOfRooms": 0,
+          "addedBy.username": 0,
+
+          "willBeBoughtBy.password": 0,
+          "willBeBoughtBy.memberOfRooms": 0,
+          "willBeBoughtBy.username": 0,
+        },
+      },
+      {
+        $set: {
+          addedBy: { $first: "$addedBy" },
+          willBeBoughtBy: {
+            $cond: [
+              { $eq: [{ $size: "$willBeBoughtBy" }, 0] },
+              null,
+              { $first: "$willBeBoughtBy" },
+            ],
+          },
+        },
+      },
+    ])
+    .toArray();
 
   if (!response) return null;
-  else return response.items;
+  else return response;
 }
