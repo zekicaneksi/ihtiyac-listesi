@@ -119,7 +119,7 @@ export default function Home() {
       {rooms.length === 0 ? (
         <NoRoomsSection />
       ) : (
-        <div className="flex-grow">
+        <div className="flex-grow overflow-auto">
           {rooms.map((room) => {
             return <Room key={room.roomId} room={room} />;
           })}
