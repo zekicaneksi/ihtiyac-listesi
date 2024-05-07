@@ -6,19 +6,12 @@ import { useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
 import { useUserContext } from "@/app/(app)/context/user_context";
 import AddRoomPopup from "./components/AddRoomPopup";
+import RoomItem, { IRoomItem } from "./components/RoomItem";
 
-interface RoomItem {
-  _id: string;
-  title: string;
-  description: string;
-  addedBy: null;
-  willBeBoughtBy: null;
-}
-
-type WSMessage = { type: "initialItems"; items: RoomItem[] };
+type WSMessage = { type: "initialItems"; items: IRoomItem[] };
 
 const Room = () => {
-  const [roomItems, setRoomItems] = useState<RoomItem[]>([]);
+  const [roomItems, setRoomItems] = useState<IRoomItem[]>([]);
 
   const [showAddRoomPopup, setShowAddRoomPopup] = useState<boolean>(false);
 
@@ -73,10 +66,9 @@ const Room = () => {
         isOpen={showAddRoomPopup}
         handleClose={handleAddRoomPopupClose}
       />
-      <div className="relative flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
-        <p>Hello from room</p>
+      <div className="relative flex flex-grow flex-col">
         {roomItems.map((e) => (
-          <p key={e._id}>{e.title}</p>
+          <RoomItem {...e} key={e._id} />
         ))}
         <div
           className="absolute bottom-0 right-0 m-5 size-12 hover:cursor-pointer md:size-16"
