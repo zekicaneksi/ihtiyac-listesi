@@ -9,7 +9,6 @@ export default async (req: Request, res: Response) => {
   res.statusCode = 200;
   res.send(
     JSON.stringify({
-      username: user.username,
       fullname: user.fullname,
       id: user._id,
       profilePictureId: user.profilePictureId,

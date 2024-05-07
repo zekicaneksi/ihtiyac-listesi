@@ -14,7 +14,6 @@ import { ReadyState } from "react-use-websocket";
 
 export interface User {
   id: number;
-  username: string;
   fullname: string;
   profilePictureId: string | null;
 }
@@ -34,7 +33,6 @@ interface Props {
 export const UserProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User>();
   const ws = useWS({ url: "/" });
-
   const router = useRouter();
 
   async function fetchUser() {
