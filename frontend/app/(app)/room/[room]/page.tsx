@@ -8,7 +8,9 @@ import { useUserContext } from "@/app/(app)/context/user_context";
 import AddRoomPopup from "./components/AddRoomPopup";
 import RoomItem, { IRoomItem } from "./components/RoomItem";
 
-type WSMessage = { type: "initialItems"; items: IRoomItem[] };
+type WSMessage =
+  | { type: "initialItems"; items: IRoomItem[] }
+  | { type: "itemAdd"; item: IRoomItem };
 
 const Room = () => {
   const [roomItems, setRoomItems] = useState<IRoomItem[]>([]);
@@ -30,6 +32,8 @@ const Room = () => {
     if (msg === null) return;
     if (msg.type === "initialItems") {
       setRoomItems(msg.items);
+    } else if (msg.type === "itemAdd") {
+      setRoomItems((prevState) => [...prevState, msg.item]);
     }
   }
 

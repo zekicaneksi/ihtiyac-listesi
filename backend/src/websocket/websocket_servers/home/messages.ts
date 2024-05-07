@@ -1,7 +1,8 @@
 import { connectionMap } from "./home";
 import { ObjectId } from "mongodb";
 import dbCon from "@/setup/database/db_setup";
-import { Room } from "@/setup/database/collections/rooms";
+import { Room, RoomItem } from "@/setup/database/collections/rooms";
+import { User } from "@/setup/database/collections/users";
 
 export function notifyCreatedRoom(
   userId: string,
@@ -96,4 +97,24 @@ export async function getInitialItems(roomId: string, userId: ObjectId) {
 
   if (!response) return null;
   else return response;
+}
+
+export async function notifyAddItem(userIds: string[], addedItem: RoomItem) {
+  const addedByUser = await dbCon
+    .collection<User>("users")
+    .findOne(
+      { _id: addedItem.addedBy },
+      { projection: { _id: 1, fullname: 1, profilePictureId: 1 } },
+    );
+
+  for (let i = 0; i < userIds.length; i++) {
+    connectionMap.get(userIds[i])?.forEach((ws) => {
+      ws.send(
+        JSON.stringify({
+          type: "itemAdd",
+          item: { ...addedItem, addedBy: addedByUser ? addedByUser : null },
+        }),
+      );
+    });
+  }
 }

@@ -1,8 +1,9 @@
 import { Request, Response } from "express";
 import dbCon from "@/setup/database/db_setup";
-import { Room } from "@/setup/database/collections/rooms";
+import { Room, RoomItem } from "@/setup/database/collections/rooms";
 import { User } from "@/setup/database/collections/users";
 import { ObjectId } from "mongodb";
+import { notifyAddItem } from "@/websocket/websocket_servers/home/messages";
 
 interface Body {
   title: string;
@@ -29,26 +30,30 @@ export default async (req: Request, res: Response) => {
     res.send("description cannot be longer than 400 characters");
   }
 
-  const itemId = new ObjectId();
+  const itemToAdd: RoomItem = {
+    _id: new ObjectId(),
+    title: bodyData.title,
+    description: bodyData.description,
+    addedBy: user._id,
+    willBeBoughtBy: null,
+  };
 
   const insertResult = await dbCon.collection<Room>("rooms").findOneAndUpdate(
     { _id: roomId, members: { $in: [user._id] } },
     {
       $addToSet: {
-        items: {
-          _id: itemId,
-          title: bodyData.title,
-          description: bodyData.description,
-          addedBy: user._id,
-          willBeBoughtBy: null,
-        },
+        items: { ...itemToAdd },
       },
     },
   );
 
   if (!insertResult) {
-    res.status(500).send("internal error");
+    return res.status(500).send("internal error");
   }
 
+  await notifyAddItem(
+    insertResult.members.map((e) => e.toString()),
+    itemToAdd,
+  );
   res.status(201).send("successful");
 };
