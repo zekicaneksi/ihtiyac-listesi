@@ -7,6 +7,7 @@ import { IoAddCircle } from "react-icons/io5";
 import { useUserContext } from "@/app/(app)/context/user_context";
 import AddRoomPopup from "./components/AddRoomPopup";
 import RoomItem, { IRoomItem } from "./components/RoomItem";
+import { FaArrowDownLong } from "react-icons/fa6";
 
 type WSMessage =
   | { type: "initialItems"; items: IRoomItem[] }
@@ -64,6 +65,20 @@ const Room = () => {
     },
   ];
 
+  const NoItemsSection = () => {
+    return (
+      <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
+        <p>Looks like your room has no items yet</p>
+        <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
+          <p>You can create a new item with the </p>
+          <IoAddCircle className="size-6" />
+          <p> button at the right-bottom corner</p>
+        </div>
+        <FaArrowDownLong className="size-12 -rotate-45" />
+      </div>
+    );
+  };
+
   return (
     <>
       <AddRoomPopup
@@ -71,9 +86,11 @@ const Room = () => {
         handleClose={handleAddRoomPopupClose}
       />
       <div className="flex flex-grow flex-col overflow-auto">
-        {roomItems.map((e) => (
-          <RoomItem {...e} key={e._id} />
-        ))}
+        {roomItems.length === 0 ? (
+          <NoItemsSection />
+        ) : (
+          roomItems.map((e) => <RoomItem {...e} key={e._id} />)
+        )}
         <div
           className="sticky bottom-0 right-0 ml-auto mt-auto size-12 hover:cursor-pointer md:size-16"
           onClick={handleAddItem}
