@@ -24,7 +24,7 @@ const ProfilePicture = (props: ProfilePictureProps) => {
 
   return (
     <div
-      className={`aspect-square ${props.fillHeight ? "h-[100%]" : "h-12"} w-auto hover:cursor-${props.cursor}`}
+      className={`aspect-square ${props.fillHeight ? "h-[100%]" : "h-8"} w-auto hover:cursor-${props.cursor}`}
       onClick={props.onClick}
     >
       <img

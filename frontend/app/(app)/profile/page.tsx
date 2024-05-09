@@ -150,10 +150,7 @@ const Profile = () => {
             Choose File
           </label>
           {infoMessage && <p className="self-center">{infoMessage}</p>}
-          <Button
-            onClick={handleUpload}
-            className={`${file ? "" : "pointer-events-none opacity-70"}`}
-          >
+          <Button onClick={handleUpload} disabled={file ? false : true}>
             Upload Picture
           </Button>
         </div>
