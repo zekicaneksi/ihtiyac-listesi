@@ -13,6 +13,7 @@ import joinRoom from "./routes/join_room";
 import uploadPicture from "./routes/upload_picture";
 import addItem from "./routes/add_item";
 import willBuy from "./routes/will_buy";
+import cancelWillBuy from "./routes/cancel_will_buy";
 
 const router = express.Router();
 
@@ -28,5 +29,6 @@ router.post("/join-room", checkSession, joinRoom);
 router.post("/upload-picture", checkSession, uploadPicture);
 router.post("/add-item", checkSession, addItem);
 router.post("/will-buy", checkSession, willBuy);
+router.post("/cancel-will-buy", checkSession, cancelWillBuy);
 
 export default router;

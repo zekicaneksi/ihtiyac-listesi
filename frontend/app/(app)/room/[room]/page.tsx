@@ -17,6 +17,11 @@ type WSMessage =
       roomId: string;
       itemId: string;
       willBuyUser: User;
+    }
+  | {
+      type: "cancelWillBuy";
+      roomId: string;
+      itemId: string;
     };
 
 const Room = () => {
@@ -48,6 +53,13 @@ const Room = () => {
         const newState = [...prevState];
         const targetItemIndex = newState.findIndex((e) => e._id === msg.itemId);
         newState[targetItemIndex].willBeBoughtBy = msg.willBuyUser;
+        return newState;
+      });
+    } else if (msg.type === "cancelWillBuy") {
+      setRoomItems((prevState) => {
+        const newState = [...prevState];
+        const targetItemIndex = newState.findIndex((e) => e._id === msg.itemId);
+        newState[targetItemIndex].willBeBoughtBy = null;
         return newState;
       });
     }

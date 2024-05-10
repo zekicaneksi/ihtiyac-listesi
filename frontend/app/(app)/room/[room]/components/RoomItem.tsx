@@ -22,6 +22,7 @@ const RoomItem = (props: IRoomItem) => {
   const { user, setUser, ws } = useUserContext();
 
   const pathname = usePathname();
+  const roomId = pathname.substring(pathname.lastIndexOf("/") + 1);
 
   const willBeBoughtByMe =
     props.willBeBoughtBy?._id === user._id ? true : false;
@@ -41,7 +42,7 @@ const RoomItem = (props: IRoomItem) => {
       itemId: string;
     }
     const response = await fetchBackendPOST<PostData>("/will-buy", {
-      roomId: pathname.substring(pathname.lastIndexOf("/") + 1),
+      roomId: roomId,
       itemId: props._id,
     });
 
@@ -50,7 +51,19 @@ const RoomItem = (props: IRoomItem) => {
 
   async function handleWillNotBuyOnClick(e: React.MouseEvent<HTMLElement>) {
     e.stopPropagation();
-    console.log("will not buy");
+
+    setIsDisabled(true);
+
+    interface PostData {
+      roomId: string;
+      itemId: string;
+    }
+    const response = await fetchBackendPOST<PostData>("/cancel-will-buy", {
+      roomId: roomId,
+      itemId: props._id,
+    });
+
+    if (response.status === 201) setIsDisabled(false);
   }
 
   function handleBoughtOnClick(e: React.MouseEvent<HTMLElement>) {
