@@ -54,6 +54,11 @@ export default async (req: Request, res: Response) => {
   await notifyAddItem(
     insertResult.members.map((e) => e.toString()),
     itemToAdd,
+    {
+      id: Number(user._id.toString()),
+      fullname: user.fullname,
+      profilePictureId: user.profilePictureId,
+    },
   );
   res.status(201).send("successful");
 };

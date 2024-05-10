@@ -2,7 +2,12 @@ import { connectionMap } from "./home";
 import { ObjectId } from "mongodb";
 import dbCon from "@/setup/database/db_setup";
 import { Room, RoomItem } from "@/setup/database/collections/rooms";
-import { User } from "@/setup/database/collections/users";
+
+interface UserFrontend {
+  id: number;
+  fullname: string;
+  profilePictureId: string | null;
+}
 
 export function notifyCreatedRoom(
   userId: string,
@@ -99,20 +104,17 @@ export async function getInitialItems(roomId: string, userId: ObjectId) {
   else return response;
 }
 
-export async function notifyAddItem(userIds: string[], addedItem: RoomItem) {
-  const addedByUser = await dbCon
-    .collection<User>("users")
-    .findOne(
-      { _id: addedItem.addedBy },
-      { projection: { _id: 1, fullname: 1, profilePictureId: 1 } },
-    );
-
+export async function notifyAddItem(
+  userIds: string[],
+  addedItem: RoomItem,
+  addedBy: UserFrontend,
+) {
   for (let i = 0; i < userIds.length; i++) {
     connectionMap.get(userIds[i])?.forEach((ws) => {
       ws.send(
         JSON.stringify({
           type: "itemAdd",
-          item: { ...addedItem, addedBy: addedByUser ? addedByUser : null },
+          item: { ...addedItem, addedBy: addedBy },
         }),
       );
     });
@@ -122,11 +124,7 @@ export async function notifyAddItem(userIds: string[], addedItem: RoomItem) {
 export function notifyWillBuy(
   userIds: string[],
   itemId: string,
-  willBuyUser: {
-    id: number;
-    fullname: string;
-    profilePictureId: string | null;
-  },
+  willBuyUser: UserFrontend,
   roomId: string,
 ) {
   for (let i = 0; i < userIds.length; i++) {
