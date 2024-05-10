@@ -23,7 +23,8 @@ const RoomItem = (props: IRoomItem) => {
 
   const pathname = usePathname();
 
-  const willBeBoughtByMe = props.willBeBoughtBy?.id === user.id ? true : false;
+  const willBeBoughtByMe =
+    props.willBeBoughtBy?._id === user._id ? true : false;
 
   function handleDivOnClick() {
     if (isDisabled) return;

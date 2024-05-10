@@ -10,7 +10,7 @@ export default async (req: Request, res: Response) => {
   res.send(
     JSON.stringify({
       fullname: user.fullname,
-      id: user._id,
+      _id: user._id,
       profilePictureId: user.profilePictureId,
     }),
   );

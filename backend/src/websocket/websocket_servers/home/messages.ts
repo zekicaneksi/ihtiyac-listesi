@@ -4,7 +4,7 @@ import dbCon from "@/setup/database/db_setup";
 import { Room, RoomItem } from "@/setup/database/collections/rooms";
 
 interface UserFrontend {
-  id: string;
+  _id: string;
   fullname: string;
   profilePictureId: string | null;
 }
@@ -101,15 +101,7 @@ export async function getInitialItems(roomId: string, userId: ObjectId) {
     .toArray();
 
   if (!response) return null;
-  // Frontend expects the "_id" field named as "id"
-  else
-    return response.map((e) => {
-      if (e.willBeBoughtBy?._id) {
-        e.willBeBoughtBy.id = e.willBeBoughtBy._id;
-        delete e.willBeBoughtBy._id;
-      }
-      return e;
-    });
+  else return response;
 }
 
 export async function notifyAddItem(

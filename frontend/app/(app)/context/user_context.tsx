@@ -13,7 +13,7 @@ import FullPageLoadingScreen from "@/app/components/FullPageLoadingScreen";
 import { ReadyState } from "react-use-websocket";
 
 export interface User {
-  id: string;
+  _id: string;
   fullname: string;
   profilePictureId: string | null;
 }
