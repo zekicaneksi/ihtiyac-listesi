@@ -1,6 +1,6 @@
 "use client";
 
-import { User } from "@/app/(app)/context/user_context";
+import { User, useUserContext } from "@/app/(app)/context/user_context";
 import Button from "@/app/components/Button";
 import ProfilePicture from "@/app/components/ProfilePicture";
 import { fetchBackendPOST } from "@/app/utils/fetch";
@@ -19,7 +19,11 @@ const RoomItem = (props: IRoomItem) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
+  const { user, setUser, ws } = useUserContext();
+
   const pathname = usePathname();
+
+  const willBeBoughtByMe = props.willBeBoughtBy?.id === user.id ? true : false;
 
   function handleDivOnClick() {
     if (isDisabled) return;
@@ -41,6 +45,11 @@ const RoomItem = (props: IRoomItem) => {
     });
 
     if (response.status === 201) setIsDisabled(false);
+  }
+
+  async function handleWillNotBuyOnClick(e: React.MouseEvent<HTMLElement>) {
+    e.stopPropagation();
+    console.log("will not buy");
   }
 
   function handleBoughtOnClick(e: React.MouseEvent<HTMLElement>) {
@@ -74,10 +83,14 @@ const RoomItem = (props: IRoomItem) => {
           <div className="mt-4 flex flex-row justify-center gap-4 sm:justify-normal">
             <Button
               bgColor="bg-background"
-              onClick={handleWillBuyOnClick}
+              onClick={
+                willBeBoughtByMe
+                  ? handleWillNotBuyOnClick
+                  : handleWillBuyOnClick
+              }
               disabled={isDisabled}
             >
-              Will Buy
+              {willBeBoughtByMe ? "Will Not Buy" : "Will Buy"}
             </Button>
             <Button
               bgColor="bg-background"

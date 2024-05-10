@@ -36,7 +36,7 @@ export default async (req: Request, res: Response) => {
     dbRes.members.map((e) => e.toString()),
     itemId.toString(),
     {
-      id: Number(user._id.toString()),
+      id: user._id.toString(),
       fullname: user.fullname,
       profilePictureId: user.profilePictureId,
     },
