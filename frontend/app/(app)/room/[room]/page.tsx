@@ -4,14 +4,20 @@ import Footer, { MenuElementProps } from "@/app/components/Footer";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
-import { useUserContext } from "@/app/(app)/context/user_context";
+import { User, useUserContext } from "@/app/(app)/context/user_context";
 import AddRoomPopup from "./components/AddRoomPopup";
 import RoomItem, { IRoomItem } from "./components/RoomItem";
 import { FaArrowDownLong } from "react-icons/fa6";
 
 type WSMessage =
   | { type: "initialItems"; items: IRoomItem[] }
-  | { type: "itemAdd"; item: IRoomItem };
+  | { type: "itemAdd"; item: IRoomItem }
+  | {
+      type: "willBuy";
+      roomId: string;
+      itemId: string;
+      willBuyUser: User;
+    };
 
 const Room = () => {
   const [roomItems, setRoomItems] = useState<IRoomItem[]>([]);
@@ -21,11 +27,12 @@ const Room = () => {
   const { user, setUser, ws } = useUserContext();
 
   const pathname = usePathname();
+  const roomId = pathname.substring(pathname.lastIndexOf("/") + 1);
 
   useEffect(() => {
     ws.sendJsonMessage({
       type: "getItems",
-      roomId: pathname.substring(pathname.lastIndexOf("/") + 1),
+      roomId: roomId,
     });
   }, []);
 
@@ -35,6 +42,14 @@ const Room = () => {
       setRoomItems(msg.items);
     } else if (msg.type === "itemAdd") {
       setRoomItems((prevState) => [...prevState, msg.item]);
+    } else if (msg.type === "willBuy") {
+      if (msg.roomId !== roomId) return;
+      setRoomItems((prevState) => {
+        const newState = [...prevState];
+        const targetItemIndex = newState.findIndex((e) => e._id === msg.itemId);
+        newState[targetItemIndex].willBeBoughtBy = msg.willBuyUser;
+        return newState;
+      });
     }
   }
 

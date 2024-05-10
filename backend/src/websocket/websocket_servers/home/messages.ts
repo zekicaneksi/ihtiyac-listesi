@@ -118,3 +118,27 @@ export async function notifyAddItem(userIds: string[], addedItem: RoomItem) {
     });
   }
 }
+
+export function notifyWillBuy(
+  userIds: string[],
+  itemId: string,
+  willBuyUser: {
+    id: number;
+    fullname: string;
+    profilePictureId: string | null;
+  },
+  roomId: string,
+) {
+  for (let i = 0; i < userIds.length; i++) {
+    connectionMap.get(userIds[i])?.forEach((ws) => {
+      ws.send(
+        JSON.stringify({
+          type: "willBuy",
+          roomId: roomId,
+          itemId: itemId,
+          willBuyUser: willBuyUser,
+        }),
+      );
+    });
+  }
+}
