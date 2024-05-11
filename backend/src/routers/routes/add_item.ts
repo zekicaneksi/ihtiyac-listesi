@@ -53,6 +53,7 @@ export default async (req: Request, res: Response) => {
 
   await notifyAddItem(
     insertResult.members.map((e) => e.toString()),
+    roomId.toString(),
     itemToAdd,
     {
       _id: user._id.toString(),

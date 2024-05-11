@@ -11,7 +11,7 @@ import { FaArrowDownLong } from "react-icons/fa6";
 
 type WSMessage =
   | { type: "initialItems"; items: IRoomItem[] }
-  | { type: "itemAdd"; item: IRoomItem }
+  | { type: "itemAdd"; roomId: string; item: IRoomItem }
   | {
       type: "willBuy";
       roomId: string;
@@ -20,6 +20,11 @@ type WSMessage =
     }
   | {
       type: "cancelWillBuy";
+      roomId: string;
+      itemId: string;
+    }
+  | {
+      type: "boughtItem";
       roomId: string;
       itemId: string;
     };
@@ -46,6 +51,8 @@ const Room = () => {
     if (msg.type === "initialItems") {
       setRoomItems(msg.items);
     } else if (msg.type === "itemAdd") {
+      console.log(msg);
+      if (msg.roomId !== roomId) return;
       setRoomItems((prevState) => [...prevState, msg.item]);
     } else if (msg.type === "willBuy") {
       if (msg.roomId !== roomId) return;
@@ -56,12 +63,18 @@ const Room = () => {
         return newState;
       });
     } else if (msg.type === "cancelWillBuy") {
+      if (msg.roomId !== roomId) return;
       setRoomItems((prevState) => {
         const newState = [...prevState];
         const targetItemIndex = newState.findIndex((e) => e._id === msg.itemId);
         newState[targetItemIndex].willBeBoughtBy = null;
         return newState;
       });
+    } else if (msg.type === "boughtItem") {
+      if (msg.roomId !== roomId) return;
+      setRoomItems((prevState) =>
+        prevState.filter((e) => e._id !== msg.itemId),
+      );
     }
   }
 

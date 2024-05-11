@@ -66,9 +66,21 @@ const RoomItem = (props: IRoomItem) => {
     if (response.status === 201) setIsDisabled(false);
   }
 
-  function handleBoughtOnClick(e: React.MouseEvent<HTMLElement>) {
+  async function handleBoughtOnClick(e: React.MouseEvent<HTMLElement>) {
     e.stopPropagation();
-    console.log("bought");
+
+    setIsDisabled(true);
+
+    interface PostData {
+      roomId: string;
+      itemId: string;
+    }
+    const response = await fetchBackendPOST<PostData>("/bought-item", {
+      roomId: roomId,
+      itemId: props._id,
+    });
+
+    if (response.status === 201) setIsDisabled(false);
   }
 
   return (

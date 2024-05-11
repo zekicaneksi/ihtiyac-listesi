@@ -106,6 +106,7 @@ export async function getInitialItems(roomId: string, userId: ObjectId) {
 
 export async function notifyAddItem(
   userIds: string[],
+  roomId: string,
   addedItem: RoomItem,
   addedBy: UserFrontend,
 ) {
@@ -115,6 +116,7 @@ export async function notifyAddItem(
         JSON.stringify({
           type: "itemAdd",
           item: { ...addedItem, addedBy: addedBy },
+          roomId: roomId,
         }),
       );
     });
@@ -151,6 +153,24 @@ export function notifyCancelWillBuy(
       ws.send(
         JSON.stringify({
           type: "cancelWillBuy",
+          roomId: roomId,
+          itemId: itemId,
+        }),
+      );
+    });
+  }
+}
+
+export function notifyBoughtItemRoom(
+  userIds: string[],
+  itemId: string,
+  roomId: string,
+) {
+  for (let i = 0; i < userIds.length; i++) {
+    connectionMap.get(userIds[i])?.forEach((ws) => {
+      ws.send(
+        JSON.stringify({
+          type: "boughtItem",
           roomId: roomId,
           itemId: itemId,
         }),
