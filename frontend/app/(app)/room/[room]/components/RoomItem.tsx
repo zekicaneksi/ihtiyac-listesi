@@ -6,6 +6,8 @@ import ProfilePicture from "@/app/components/ProfilePicture";
 import { fetchBackendPOST } from "@/app/utils/fetch";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { GrEdit } from "react-icons/gr";
+import { TiDeleteOutline } from "react-icons/ti";
 
 export interface IRoomItem {
   _id: string;
@@ -83,6 +85,18 @@ const RoomItem = (props: IRoomItem) => {
     if (response.status === 201) setIsDisabled(false);
   }
 
+  async function handleEditOnClick(e: React.MouseEvent<SVGElement>) {
+    e.stopPropagation();
+
+    console.log("clicked edit");
+  }
+
+  async function handleDeleteOnClick(e: React.MouseEvent<SVGElement>) {
+    e.stopPropagation();
+
+    console.log("clicked delete");
+  }
+
   return (
     <div
       className={`relative flex flex-col border-b-2 border-black bg-element p-4 ${isDisabled ? "cursor-default opacity-70" : "hover:cursor-pointer hover:brightness-105"}`}
@@ -93,40 +107,58 @@ const RoomItem = (props: IRoomItem) => {
         {props.description}
       </p>
       {isExpanded && (
-        <div className="mt-5">
-          <div className="flex flex-row items-center gap-2">
-            <p>{"Added by: "}</p>
-            <ProfilePicture address={props.addedBy.profilePictureId} />
-            <p>{props.addedBy.fullname}</p>
+        <>
+          {props.addedBy._id === user._id && (
+            <div className="absolute right-0 top-0 mr-4 mt-4 flex flex-col gap-2">
+              <TiDeleteOutline
+                className="size-8 text-foreground hover:brightness-150"
+                onClick={handleDeleteOnClick}
+              />
+              <GrEdit
+                className="size-8 text-foreground hover:brightness-150"
+                onClick={handleEditOnClick}
+              />
+            </div>
+          )}
+          <div className="mt-5">
+            <div className="flex flex-row items-center gap-2">
+              <p>{"Added by: "}</p>
+              <ProfilePicture address={props.addedBy.profilePictureId} />
+              <p>{props.addedBy.fullname}</p>
+            </div>
+            <div className="flex flex-row items-center gap-2">
+              <p>{"Will buy: "}</p>
+              {props.willBeBoughtBy && (
+                <ProfilePicture
+                  address={props.willBeBoughtBy.profilePictureId}
+                />
+              )}
+              <p>
+                {props.willBeBoughtBy ? props.willBeBoughtBy.fullname : "-"}
+              </p>
+            </div>
+            <div className="mt-4 flex flex-row justify-center gap-4 sm:justify-normal">
+              <Button
+                bgColor="bg-background"
+                onClick={
+                  willBeBoughtByMe
+                    ? handleWillNotBuyOnClick
+                    : handleWillBuyOnClick
+                }
+                disabled={isDisabled}
+              >
+                {willBeBoughtByMe ? "Will Not Buy" : "Will Buy"}
+              </Button>
+              <Button
+                bgColor="bg-background"
+                onClick={handleBoughtOnClick}
+                disabled={isDisabled}
+              >
+                Bought
+              </Button>
+            </div>
           </div>
-          <div className="flex flex-row items-center gap-2">
-            <p>{"Will buy: "}</p>
-            {props.willBeBoughtBy && (
-              <ProfilePicture address={props.willBeBoughtBy.profilePictureId} />
-            )}
-            <p>{props.willBeBoughtBy ? props.willBeBoughtBy.fullname : "-"}</p>
-          </div>
-          <div className="mt-4 flex flex-row justify-center gap-4 sm:justify-normal">
-            <Button
-              bgColor="bg-background"
-              onClick={
-                willBeBoughtByMe
-                  ? handleWillNotBuyOnClick
-                  : handleWillBuyOnClick
-              }
-              disabled={isDisabled}
-            >
-              {willBeBoughtByMe ? "Will Not Buy" : "Will Buy"}
-            </Button>
-            <Button
-              bgColor="bg-background"
-              onClick={handleBoughtOnClick}
-              disabled={isDisabled}
-            >
-              Bought
-            </Button>
-          </div>
-        </div>
+        </>
       )}
       <div className="mt-4 flex flex-row justify-between">
         {props.willBeBoughtBy && (
