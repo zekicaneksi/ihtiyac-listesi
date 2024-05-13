@@ -7,12 +7,12 @@ import { fetchBackendPOST } from "@/app/utils/fetch";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-interface AddRoomPopupProps {
+interface AddItemPopupProps {
   isOpen: boolean;
   handleClose: () => void;
 }
 
-const AddRoomPopup = (props: AddRoomPopupProps) => {
+const AddItemPopup = (props: AddItemPopupProps) => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
 
@@ -87,4 +87,4 @@ const AddRoomPopup = (props: AddRoomPopupProps) => {
   );
 };
 
-export default AddRoomPopup;
+export default AddItemPopup;

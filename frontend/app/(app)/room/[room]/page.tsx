@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
 import { User, useUserContext } from "@/app/(app)/context/user_context";
-import AddRoomPopup from "./components/AddRoomPopup";
+import AddItemPopup from "./components/AddItemPopup";
 import RoomItem, { IRoomItem } from "./components/RoomItem";
 import { FaArrowDownLong } from "react-icons/fa6";
 
@@ -32,7 +32,7 @@ type WSMessage =
 const Room = () => {
   const [roomItems, setRoomItems] = useState<IRoomItem[]>([]);
 
-  const [showAddRoomPopup, setShowAddRoomPopup] = useState<boolean>(false);
+  const [showAddItemPopup, setShowAddItemPopup] = useState<boolean>(false);
 
   const { user, setUser, ws } = useUserContext();
 
@@ -83,11 +83,11 @@ const Room = () => {
   }, [ws.lastJsonMessage]);
 
   function handleAddItem() {
-    setShowAddRoomPopup(true);
+    setShowAddItemPopup(true);
   }
 
-  function handleAddRoomPopupClose() {
-    setShowAddRoomPopup(false);
+  function handleAddItemPopupClose() {
+    setShowAddItemPopup(false);
   }
 
   const menuElements: MenuElementProps[] = [
@@ -121,9 +121,9 @@ const Room = () => {
 
   return (
     <>
-      <AddRoomPopup
-        isOpen={showAddRoomPopup}
-        handleClose={handleAddRoomPopupClose}
+      <AddItemPopup
+        isOpen={showAddItemPopup}
+        handleClose={handleAddItemPopupClose}
       />
       <div className="flex flex-grow flex-col overflow-auto">
         {roomItems.length === 0 ? (
