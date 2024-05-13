@@ -103,7 +103,9 @@ const RoomItem = (props: IRoomItem) => {
       onClick={handleDivOnClick}
     >
       <p className="text-xl">{props.title}</p>
-      <p className="w-1/2 overflow-hidden text-ellipsis whitespace-nowrap">
+      <p
+        className={`${isExpanded ? "w-5/6" : "w-1/3 overflow-hidden text-ellipsis whitespace-nowrap"}`}
+      >
         {props.description}
       </p>
       {isExpanded && (
