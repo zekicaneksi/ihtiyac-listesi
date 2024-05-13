@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
 import { User, useUserContext } from "@/app/(app)/context/user_context";
 import AddItemPopup from "./components/AddItemPopup";
-import RoomItem, { IRoomItem } from "./components/RoomItem";
+import RoomItem, { IRoomItem } from "./components/RoomItem/RoomItem";
 import { FaArrowDownLong } from "react-icons/fa6";
 
 type WSMessage =
@@ -25,6 +25,11 @@ type WSMessage =
     }
   | {
       type: "boughtItem";
+      roomId: string;
+      itemId: string;
+    }
+  | {
+      type: "deleteItem";
       roomId: string;
       itemId: string;
     };
@@ -48,14 +53,12 @@ const Room = () => {
 
   function handleWSMessage(msg: WSMessage) {
     if (msg === null) return;
+    if (msg.type !== "initialItems" && msg.roomId !== roomId) return;
     if (msg.type === "initialItems") {
       setRoomItems(msg.items);
     } else if (msg.type === "itemAdd") {
-      console.log(msg);
-      if (msg.roomId !== roomId) return;
       setRoomItems((prevState) => [...prevState, msg.item]);
     } else if (msg.type === "willBuy") {
-      if (msg.roomId !== roomId) return;
       setRoomItems((prevState) => {
         const newState = [...prevState];
         const targetItemIndex = newState.findIndex((e) => e._id === msg.itemId);
@@ -63,15 +66,13 @@ const Room = () => {
         return newState;
       });
     } else if (msg.type === "cancelWillBuy") {
-      if (msg.roomId !== roomId) return;
       setRoomItems((prevState) => {
         const newState = [...prevState];
         const targetItemIndex = newState.findIndex((e) => e._id === msg.itemId);
         newState[targetItemIndex].willBeBoughtBy = null;
         return newState;
       });
-    } else if (msg.type === "boughtItem") {
-      if (msg.roomId !== roomId) return;
+    } else if (msg.type === "boughtItem" || msg.type === "deleteItem") {
       setRoomItems((prevState) =>
         prevState.filter((e) => e._id !== msg.itemId),
       );
