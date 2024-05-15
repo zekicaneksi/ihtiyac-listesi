@@ -119,7 +119,7 @@ const RoomItem = (props: IRoomItem) => {
       >
         <p className="text-xl">{props.title}</p>
         <p
-          className={`${isExpanded ? "w-5/6" : "w-1/3 overflow-hidden text-ellipsis whitespace-nowrap"}`}
+          className={`${isExpanded ? "w-5/6" : "line-clamp-3 w-1/3"} whitespace-pre-wrap`}
         >
           {props.description}
         </p>

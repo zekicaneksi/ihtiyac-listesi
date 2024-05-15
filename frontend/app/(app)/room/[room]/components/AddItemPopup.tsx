@@ -74,11 +74,12 @@ const AddItemPopup = (props: AddItemPopupProps) => {
           value={title}
           setValue={setTitle}
         />
-        <Input
-          type="text"
+        <textarea
+          className="h-32 resize-none overflow-auto p-2"
           placeholder="description..."
+          wrap="off"
           value={description}
-          setValue={setDescription}
+          onChange={(e) => setDescription(e.target.value)}
         />
         {infoMessage && <p className="text-center">{infoMessage}</p>}
         <Button onClick={handleAddBtn}>Add</Button>
