@@ -196,3 +196,25 @@ export function notifyDeleteItem(
     });
   }
 }
+
+export function notifyEditItem(
+  userIds: string[],
+  itemId: string,
+  roomId: string,
+  newTitle: string,
+  newDescription: string,
+) {
+  for (let i = 0; i < userIds.length; i++) {
+    connectionMap.get(userIds[i])?.forEach((ws) => {
+      ws.send(
+        JSON.stringify({
+          type: "editItem",
+          roomId: roomId,
+          itemId: itemId,
+          newTitle: newTitle,
+          newDescription: newDescription,
+        }),
+      );
+    });
+  }
+}

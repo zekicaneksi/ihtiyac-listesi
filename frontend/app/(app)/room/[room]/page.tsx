@@ -32,6 +32,13 @@ type WSMessage =
       type: "deleteItem";
       roomId: string;
       itemId: string;
+    }
+  | {
+      type: "editItem";
+      roomId: string;
+      itemId: string;
+      newTitle: string;
+      newDescription: string;
     };
 
 const Room = () => {
@@ -75,6 +82,16 @@ const Room = () => {
     } else if (msg.type === "boughtItem" || msg.type === "deleteItem") {
       setRoomItems((prevState) =>
         prevState.filter((e) => e._id !== msg.itemId),
+      );
+    } else if (msg.type === "editItem") {
+      setRoomItems((prevState) =>
+        prevState.map((e) => {
+          if (e._id !== msg.itemId) return e;
+          let toReturn = { ...e };
+          toReturn.title = msg.newTitle;
+          toReturn.description = msg.newDescription;
+          return toReturn;
+        }),
       );
     }
   }

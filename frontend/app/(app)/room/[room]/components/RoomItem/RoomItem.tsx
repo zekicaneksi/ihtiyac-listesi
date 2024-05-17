@@ -9,6 +9,7 @@ import { useState } from "react";
 import { GrEdit } from "react-icons/gr";
 import { TiDeleteOutline } from "react-icons/ti";
 import RoomItemDeletePopup from "./RoomItemDeletePopup";
+import RoomItemEditPopup from "./RoomItemEditPopup";
 
 export interface IRoomItem {
   _id: string;
@@ -24,6 +25,7 @@ const RoomItem = (props: IRoomItem) => {
 
   const [showDeleteItemPopup, setShowDeleteItemPopup] =
     useState<boolean>(false);
+  const [showEditItemPopup, setShowEditItemPopup] = useState<boolean>(false);
 
   const { user, setUser, ws } = useUserContext();
 
@@ -40,6 +42,10 @@ const RoomItem = (props: IRoomItem) => {
 
   async function handleDeleteItemPopupClose() {
     setShowDeleteItemPopup(false);
+  }
+
+  async function handleEditItemPopupClose() {
+    setShowEditItemPopup(false);
   }
 
   async function handleWillBuyOnClick(e: React.MouseEvent<HTMLElement>) {
@@ -96,7 +102,7 @@ const RoomItem = (props: IRoomItem) => {
   async function handleEditOnClick(e: React.MouseEvent<SVGElement>) {
     e.stopPropagation();
 
-    console.log("clicked edit");
+    setShowEditItemPopup(true);
   }
 
   async function handleDeleteOnClick(e: React.MouseEvent<SVGElement>) {
@@ -113,6 +119,14 @@ const RoomItem = (props: IRoomItem) => {
         itemTitle={props.title}
         itemId={props._id}
       />
+      <RoomItemEditPopup
+        isOpen={showEditItemPopup}
+        handleClose={handleEditItemPopupClose}
+        itemTitle={props.title}
+        itemId={props._id}
+        itemDescription={props.description}
+      />
+
       <div
         className={`relative flex flex-col border-b-2 border-black bg-element p-4 ${isDisabled ? "cursor-default opacity-70" : "hover:cursor-pointer hover:brightness-105"}`}
         onClick={handleDivOnClick}
