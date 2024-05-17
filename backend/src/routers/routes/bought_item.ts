@@ -20,9 +20,9 @@ export default async (req: Request, res: Response) => {
   const itemId = new ObjectId(bodyData.itemId);
   const roomId = new ObjectId(bodyData.roomId);
 
-  const dbRes = await dbCon
-    .collection<Room>("rooms")
-    .findOneAndUpdate({ _id: roomId, members: user._id, "items._id": itemId }, [
+  const dbRes = await dbCon.collection<Room>("rooms").findOneAndUpdate(
+    { _id: roomId, members: user._id, "items._id": itemId },
+    [
       {
         $addFields: {
           tempItem: {
@@ -58,7 +58,9 @@ export default async (req: Request, res: Response) => {
           },
         },
       },
-    ]);
+    ],
+    { projection: { members: 1 } },
+  );
 
   if (!dbRes) return res.status(404).send("record not found");
 

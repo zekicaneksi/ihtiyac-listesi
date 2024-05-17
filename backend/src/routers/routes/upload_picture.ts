@@ -40,6 +40,7 @@ export default async (req: Request, res: Response) => {
           .findOneAndUpdate(
             { _id: user._id },
             { $set: { profilePictureId: generatedFileName } },
+            { projection: { profilePictureId: 1 } },
           )
           .then((oldDoc) => {
             if (oldDoc?.profilePictureId !== null)

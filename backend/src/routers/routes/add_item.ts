@@ -45,6 +45,7 @@ export default async (req: Request, res: Response) => {
         items: { ...itemToAdd },
       },
     },
+    { projection: { members: 1 } },
   );
 
   if (!insertResult) {

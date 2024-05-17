@@ -28,7 +28,10 @@ export default async (req: Request, res: Response) => {
       "items.willBeBoughtBy": user._id,
     },
     { $set: { "items.$[elem].willBeBoughtBy": null } },
-    { arrayFilters: [{ "elem._id": itemId, "elem.willBeBoughtBy": user._id }] },
+    {
+      arrayFilters: [{ "elem._id": itemId, "elem.willBeBoughtBy": user._id }],
+      projection: { members: 1 },
+    },
   );
 
   if (!dbRes) return res.status(404).send("record not found");
