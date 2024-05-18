@@ -1,7 +1,7 @@
 "use client";
 
 import Footer, { MenuElementProps } from "@/app/components/Footer";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { IoAddCircle } from "react-icons/io5";
 import { User, useUserContext } from "@/app/(app)/context/user_context";
@@ -50,6 +50,8 @@ const Room = () => {
 
   const pathname = usePathname();
   const roomId = pathname.substring(pathname.lastIndexOf("/") + 1);
+
+  const router = useRouter();
 
   useEffect(() => {
     ws.sendJsonMessage({
@@ -118,7 +120,7 @@ const Room = () => {
     {
       text: "History",
       onClick: () => {
-        console.log("history");
+        router.push(pathname + "/history");
       },
     },
   ];

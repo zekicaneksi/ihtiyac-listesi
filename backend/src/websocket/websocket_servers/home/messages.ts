@@ -1,5 +1,5 @@
 import { connectionMap } from "./home";
-import { ObjectId } from "mongodb";
+import { ObjectId, Document } from "mongodb";
 import dbCon from "@/setup/database/db_setup";
 import { Room, RoomItem } from "@/setup/database/collections/rooms";
 
@@ -104,6 +104,61 @@ export async function getInitialItems(roomId: string, userId: ObjectId) {
   else return response;
 }
 
+export async function getInitialHistoryItems(roomId: string, userId: ObjectId) {
+  if (!ObjectId.isValid(roomId)) return null;
+
+  const response = await dbCon
+    .collection<Room>("rooms")
+    .aggregate([
+      {
+        $match: {
+          $and: [{ _id: new ObjectId(roomId) }, { members: { $in: [userId] } }],
+        },
+      },
+      { $unwind: "$history" },
+      {
+        $lookup: {
+          from: "users",
+          localField: "history.addedBy",
+          foreignField: "_id",
+          as: "history.addedBy",
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "history.boughtBy",
+          foreignField: "_id",
+          as: "history.boughtBy",
+        },
+      },
+      {
+        $replaceRoot: { newRoot: "$history" },
+      },
+      {
+        $project: {
+          "addedBy.password": 0,
+          "addedBy.memberOfRooms": 0,
+          "addedBy.username": 0,
+
+          "boughtBy.password": 0,
+          "boughtBy.memberOfRooms": 0,
+          "boughtBy.username": 0,
+        },
+      },
+      {
+        $set: {
+          addedBy: { $first: "$addedBy" },
+          boughtBy: { $first: "$boughtBy" },
+        },
+      },
+    ])
+    .toArray();
+
+  if (!response) return null;
+  else return response;
+}
+
 export async function notifyAddItem(
   userIds: string[],
   roomId: string,
@@ -161,10 +216,11 @@ export function notifyCancelWillBuy(
   }
 }
 
-export function notifyBoughtItemRoom(
+export function notifyBoughtItem(
   userIds: string[],
   itemId: string,
   roomId: string,
+  historyItem: Document,
 ) {
   for (let i = 0; i < userIds.length; i++) {
     connectionMap.get(userIds[i])?.forEach((ws) => {
@@ -173,6 +229,13 @@ export function notifyBoughtItemRoom(
           type: "boughtItem",
           roomId: roomId,
           itemId: itemId,
+        }),
+      );
+      ws.send(
+        JSON.stringify({
+          type: "historyItemAdd",
+          roomId: roomId,
+          item: historyItem,
         }),
       );
     });

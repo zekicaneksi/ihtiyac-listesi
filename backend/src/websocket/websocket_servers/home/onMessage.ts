@@ -1,5 +1,9 @@
 import CustomWebSocket from "@/websocket/utils/CustomWebSocket";
-import { getInitialItems, getInitialRooms } from "./messages";
+import {
+  getInitialHistoryItems,
+  getInitialItems,
+  getInitialRooms,
+} from "./messages";
 import { User } from "@/setup/database/collections/users";
 
 type Message =
@@ -8,6 +12,10 @@ type Message =
     }
   | {
       type: "getItems";
+      roomId: string;
+    }
+  | {
+      type: "getHistoryItems";
       roomId: string;
     };
 
@@ -27,6 +35,18 @@ export function setOnMessage(ws: CustomWebSocket, user: User) {
       const initialItems = await getInitialItems(jsonData.roomId, user._id);
       if (initialItems)
         ws.send(JSON.stringify({ type: "initialItems", items: initialItems }));
+    } else if (jsonData.type === "getHistoryItems") {
+      const initialHistoryItems = await getInitialHistoryItems(
+        jsonData.roomId,
+        user._id,
+      );
+      if (initialHistoryItems)
+        ws.send(
+          JSON.stringify({
+            type: "initialHistoryItems",
+            items: initialHistoryItems,
+          }),
+        );
     }
   });
 }
