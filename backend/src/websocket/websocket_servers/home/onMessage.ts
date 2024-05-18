@@ -17,6 +17,7 @@ type Message =
   | {
       type: "getHistoryItems";
       roomId: string;
+      page: number;
     };
 
 export function setOnMessage(ws: CustomWebSocket, user: User) {
@@ -39,6 +40,7 @@ export function setOnMessage(ws: CustomWebSocket, user: User) {
       const initialHistoryItems = await getInitialHistoryItems(
         jsonData.roomId,
         user._id,
+        jsonData.page,
       );
       if (initialHistoryItems)
         ws.send(

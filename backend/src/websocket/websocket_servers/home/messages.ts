@@ -104,8 +104,13 @@ export async function getInitialItems(roomId: string, userId: ObjectId) {
   else return response;
 }
 
-export async function getInitialHistoryItems(roomId: string, userId: ObjectId) {
+export async function getInitialHistoryItems(
+  roomId: string,
+  userId: ObjectId,
+  page: number,
+) {
   if (!ObjectId.isValid(roomId)) return null;
+  if (!Number.isInteger(page) && page > 0) return null;
 
   const response = await dbCon
     .collection<Room>("rooms")
@@ -113,6 +118,23 @@ export async function getInitialHistoryItems(roomId: string, userId: ObjectId) {
       {
         $match: {
           $and: [{ _id: new ObjectId(roomId) }, { members: { $in: [userId] } }],
+        },
+      },
+      {
+        $project: {
+          history: {
+            $slice: [
+              "$history",
+              {
+                $cond: [
+                  { $gte: [{ $size: "$history" }, (page - 1) * 10] },
+                  (page - 1) * 10,
+                  { $size: "$history" },
+                ],
+              },
+              10,
+            ],
+          },
         },
       },
       { $unwind: "$history" },

@@ -40,7 +40,7 @@ export default async (req: Request, res: Response) => {
       {
         $set: {
           history: {
-            $concatArrays: ["$history", ["$tempItem"]],
+            $concatArrays: [["$tempItem"], "$history"],
           },
         },
       },
