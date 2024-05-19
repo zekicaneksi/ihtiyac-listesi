@@ -18,40 +18,43 @@ export default async (req: Request, res: Response) => {
   // Validating Fields
   res.statusCode = 409;
   if (bodyData.name.length > 40 || bodyData.name.length < 2) {
-    res.send("Room name must be between 2-40 characters long");
+    return res.send("Room name must be between 2-40 characters long");
   } else if (RegExp(regexp.containsWhiteSpace).test(bodyData.password)) {
-    res.send("Password cannot contain whitespaces");
+    return res.send("Password cannot contain whitespaces");
   } else if (bodyData.password.length < 8 || bodyData.password.length > 20) {
-    res.send("Password must be 8-20 characters long");
-  } else {
-    // Validation successful
-
-    // Hashing the password
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(bodyData.password, salt);
-
-    const insertResult = await dbCon
-      .collection<Omit<Room, "_id">>("rooms")
-      .insertOne({
-        name: bodyData.name,
-        password: hashedPassword,
-        creatorId: user._id,
-        items: [],
-        history: [],
-        members: [user._id],
-      });
-
-    if (insertResult.insertedId) {
-      res.statusCode = 201;
-      res.send("room creation is successful");
-
-      notifyCreatedRoom(user._id.toString(), {
-        roomName: bodyData.name,
-        roomId: insertResult.insertedId.toString(),
-      });
-    } else {
-      res.statusCode = 500;
-      res.send("something went wrong");
-    }
+    return res.send("Password must be 8-20 characters long");
   }
+
+  // Hashing the password
+  const salt = bcrypt.genSaltSync(10);
+  const hashedPassword = bcrypt.hashSync(bodyData.password, salt);
+
+  const insertResult = await dbCon
+    .collection<Omit<Room, "_id">>("rooms")
+    .insertOne({
+      name: bodyData.name,
+      password: hashedPassword,
+      creatorId: user._id,
+      items: [],
+      history: [],
+      members: [user._id],
+    });
+
+  if (!insertResult.insertedId)
+    return res.status(500).send("something went wrong");
+
+  await dbCon
+    .collection<User>("users")
+    .updateOne(
+      { _id: user._id },
+      { $push: { memberOfRooms: insertResult.insertedId } },
+    );
+
+  res.statusCode = 201;
+  res.send("room creation is successful");
+
+  notifyCreatedRoom(user._id.toString(), {
+    roomName: bodyData.name,
+    roomId: insertResult.insertedId.toString(),
+  });
 };

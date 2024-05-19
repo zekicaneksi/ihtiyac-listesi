@@ -17,6 +17,7 @@ import cancelWillBuy from "./routes/cancel_will_buy";
 import boughtItem from "./routes/bought_item";
 import deleteItem from "./routes/delete_item";
 import editItem from "./routes/edit_item";
+import removeMember from "./routes/remove_member";
 
 const router = express.Router();
 
@@ -36,5 +37,6 @@ router.post("/cancel-will-buy", checkSession, cancelWillBuy);
 router.post("/bought-item", checkSession, boughtItem);
 router.post("/delete-item", checkSession, deleteItem);
 router.post("/edit-item", checkSession, editItem);
+router.post("/remove-member", checkSession, removeMember);
 
 export default router;

@@ -18,8 +18,7 @@ export default async (req: Request, res: Response) => {
     !ObjectId.isValid(bodyData.roomId) ||
     !ObjectId.isValid(bodyData.itemId)
   ) {
-    res.statusCode = 400;
-    res.send("invalid room id or item id");
+    return res.status(400).send("invalid room id or item id");
   }
 
   const updatedRoom = await dbCon.collection<Room>("rooms").findOneAndUpdate(
@@ -45,5 +44,5 @@ export default async (req: Request, res: Response) => {
   );
 
   res.statusCode = 200;
-  res.send("left room");
+  res.send("deleted item");
 };

@@ -24,29 +24,30 @@ export default async (req: Request, res: Response) => {
   }
 
   if (!room) {
-    res.statusCode = 404;
-    res.send("room not found");
-  } else {
-    if (room.members.some((e) => e.toString() === user._id.toString())) {
-      res.statusCode = 406;
-      res.send("already in the room");
-    } else {
-      if (bcrypt.compareSync(bodyData.password, room.password)) {
-        await dbCon
-          .collection<Room>("rooms")
-          .updateOne({ _id: room._id }, { $addToSet: { members: user._id } });
-
-        notifyJoinRoom(user._id.toString(), {
-          roomName: room.name,
-          roomId: room._id.toString(),
-        });
-
-        res.statusCode = 200;
-        res.send("successful");
-      } else {
-        res.statusCode = 401;
-        res.send("incorrect password");
-      }
-    }
+    return res.status(404).send("room not found");
   }
+
+  if (room.members.some((e) => e.toString() === user._id.toString())) {
+    return res.status(406).send("already in the room");
+  }
+
+  if (!bcrypt.compareSync(bodyData.password, room.password)) {
+    return res.status(401).send("incorrect password");
+  }
+
+  await dbCon
+    .collection<Room>("rooms")
+    .updateOne({ _id: room._id }, { $addToSet: { members: user._id } });
+
+  await dbCon
+    .collection<User>("users")
+    .updateOne({ _id: user._id }, { $push: { memberOfRooms: room._id } });
+
+  notifyJoinRoom(user._id.toString(), {
+    roomName: room.name,
+    roomId: room._id.toString(),
+  });
+
+  res.statusCode = 200;
+  res.send("successful");
 };
