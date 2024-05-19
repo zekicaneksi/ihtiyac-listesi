@@ -74,6 +74,7 @@ const Footer = (props: FooterProps) => {
           <div
             className="fixed left-0 top-0 h-[100vh] w-[100vw] bg-black opacity-60"
             onClick={hideMenu}
+            onMouseEnter={hideMenu}
           ></div>
         </>
       )}
