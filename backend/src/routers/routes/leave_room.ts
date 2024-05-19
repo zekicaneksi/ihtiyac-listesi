@@ -14,32 +14,30 @@ export default async (req: Request, res: Response) => {
   const user: User = res.locals.user;
 
   if (!ObjectId.isValid(bodyData.roomId)) {
-    res.statusCode = 400;
-    res.send("invalid room id");
+    return res.status(400).send("invalid room id");
   }
+
+  const roomId = new ObjectId(bodyData.roomId);
 
   const updatedRoom = await dbCon
     .collection<Room>("rooms")
     .findOneAndUpdate(
-      { _id: new ObjectId(bodyData.roomId) },
+      { _id: roomId, creatorId: { $ne: user._id } },
       { $pull: { members: user._id } },
-      { returnDocument: "after" },
+      { projection: { _id: 1 } },
     );
 
-  if (updatedRoom) {
-    notifyLeftRoom(user._id.toString(), updatedRoom._id.toString());
+  if (!updatedRoom)
+    return res
+      .status(400)
+      .send("room doesn't exist, or not present in such a room");
 
-    // Delete the room if it has no members left
-    if (updatedRoom.members.length === 0) {
-      await dbCon
-        .collection<Room>("rooms")
-        .findOneAndDelete({ _id: updatedRoom._id });
-    }
+  await dbCon
+    .collection<User>("users")
+    .updateOne({ _id: user._id }, { $pull: { memberOfRooms: roomId } });
 
-    res.statusCode = 200;
-    res.send("left room");
-  } else {
-    res.statusCode = 400;
-    res.send("room doesn't exist, or not present in such a room");
-  }
+  notifyLeftRoom(user._id.toString(), updatedRoom._id.toString());
+
+  res.statusCode = 200;
+  res.send("left room");
 };

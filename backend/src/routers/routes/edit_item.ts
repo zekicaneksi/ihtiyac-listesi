@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import dbCon from "@/setup/database/db_setup";
-import { Room, RoomItem } from "@/setup/database/collections/rooms";
+import { Room } from "@/setup/database/collections/rooms";
 import { User } from "@/setup/database/collections/users";
 import { ObjectId } from "mongodb";
 import { notifyEditItem } from "@/websocket/websocket_servers/home/messages";
@@ -20,19 +20,17 @@ export default async (req: Request, res: Response) => {
     !ObjectId.isValid(bodyData.roomId) ||
     !ObjectId.isValid(bodyData.itemId)
   ) {
-    res.statusCode = 409;
-    res.send("invalid room id or item id");
+    return res.status(409).send("invalid room id or item id");
   }
   const roomId = new ObjectId(bodyData.roomId);
   const itemId = new ObjectId(bodyData.itemId);
 
   // Validating fields
+  res.status(409);
   if (bodyData.title.length < 1 || bodyData.title.length > 60) {
-    res.statusCode = 409;
-    res.send("title must be between 1-60 characters");
+    return res.send("title must be between 1-60 characters");
   } else if (bodyData.description.length > 400) {
-    res.statusCode = 409;
-    res.send("description cannot be longer than 400 characters");
+    return res.send("description cannot be longer than 400 characters");
   }
 
   const updateResult = await dbCon.collection<Room>("rooms").findOneAndUpdate(

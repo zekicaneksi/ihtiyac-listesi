@@ -16,18 +16,16 @@ export default async (req: Request, res: Response) => {
   const user: User = res.locals.user;
 
   if (!ObjectId.isValid(bodyData.roomId)) {
-    res.statusCode = 409;
-    res.send("invalid room id");
+    return res.status(409).send("invalid room id");
   }
   const roomId = new ObjectId(bodyData.roomId);
 
   // Validating fields
+  res.status(409);
   if (bodyData.title.length < 1 || bodyData.title.length > 60) {
-    res.statusCode = 409;
-    res.send("title must be between 1-60 characters");
+    return res.send("title must be between 1-60 characters");
   } else if (bodyData.description.length > 400) {
-    res.statusCode = 409;
-    res.send("description cannot be longer than 400 characters");
+    return res.send("description cannot be longer than 400 characters");
   }
 
   const itemToAdd: RoomItem = {
