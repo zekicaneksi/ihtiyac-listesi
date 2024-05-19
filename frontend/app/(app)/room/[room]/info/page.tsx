@@ -164,6 +164,10 @@ const Info = () => {
     console.log("closing room");
   }
 
+  function handleLeaveRoom() {
+    console.log("leaving room");
+  }
+
   if (!roomInfo) {
     return <FullPageLoadingScreen show={true} message="Loading room..." />;
   }
@@ -176,11 +180,11 @@ const Info = () => {
         <div className="flex items-center justify-center pb-4 pt-4">
           <p className="self-center text-4xl">{roomInfo.name}</p>
         </div>
-        {amIAdmin && (
-          <div className="flex items-center justify-center">
-            <Button onClick={handleCloseRoom}>Close Room</Button>
-          </div>
-        )}
+        <div className="flex items-center justify-center">
+          <Button onClick={amIAdmin ? handleCloseRoom : handleLeaveRoom}>
+            {amIAdmin ? "Close Room" : "Leave Room"}
+          </Button>
+        </div>
         <div className="mt-4 flex items-center justify-center">
           <p className="text-2xl">Members</p>
         </div>

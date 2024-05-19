@@ -3,7 +3,7 @@
 import Footer, { MenuElementProps } from "@/app/components/Footer";
 import { useEffect, useState } from "react";
 import { FaArrowDownLong } from "react-icons/fa6";
-import Room, { IRoom } from "./components/Room/Room";
+import Room, { IRoom } from "./components/Room";
 import CreateRoomPopup from "./components/CreateRoomPopup";
 import JoinRoomPopup from "./components/JoinRoomPopup";
 import { useUserContext } from "./context/user_context";
