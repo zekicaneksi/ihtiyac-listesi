@@ -181,6 +181,43 @@ export async function getInitialHistoryItems(
   else return response;
 }
 
+export async function getRoomInfo(roomId: string, userId: ObjectId) {
+  if (!ObjectId.isValid(roomId)) return null;
+
+  const response = await dbCon
+    .collection<Room>("rooms")
+    .aggregate([
+      {
+        $match: {
+          $and: [{ _id: new ObjectId(roomId) }, { members: { $in: [userId] } }],
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "members",
+          foreignField: "_id",
+          as: "members",
+        },
+      },
+      {
+        $project: {
+          "members.password": 0,
+          "members.memberOfRooms": 0,
+          "members.username": 0,
+
+          history: 0,
+          items: 0,
+          password: 0,
+        },
+      },
+    ])
+    .toArray();
+
+  if (!response) return null;
+  else return response[0];
+}
+
 export async function notifyAddItem(
   userIds: string[],
   roomId: string,

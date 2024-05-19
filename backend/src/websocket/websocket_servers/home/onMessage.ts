@@ -3,6 +3,7 @@ import {
   getInitialHistoryItems,
   getInitialItems,
   getInitialRooms,
+  getRoomInfo,
 } from "./messages";
 import { User } from "@/setup/database/collections/users";
 
@@ -18,6 +19,10 @@ type Message =
       type: "getHistoryItems";
       roomId: string;
       page: number;
+    }
+  | {
+      type: "getRoomInfo";
+      roomId: string;
     };
 
 export function setOnMessage(ws: CustomWebSocket, user: User) {
@@ -49,6 +54,9 @@ export function setOnMessage(ws: CustomWebSocket, user: User) {
             items: initialHistoryItems,
           }),
         );
+    } else if (jsonData.type === "getRoomInfo") {
+      const roomInfo = await getRoomInfo(jsonData.roomId, user._id);
+      ws.send(JSON.stringify({ type: "roomInfo", room: roomInfo }));
     }
   });
 }

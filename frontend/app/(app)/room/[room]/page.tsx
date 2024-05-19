@@ -114,7 +114,7 @@ const Room = () => {
     {
       text: "Room Info",
       onClick: () => {
-        console.log("room info");
+        router.push(pathname + "/info");
       },
     },
     {
