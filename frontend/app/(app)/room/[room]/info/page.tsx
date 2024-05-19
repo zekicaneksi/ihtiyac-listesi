@@ -10,6 +10,7 @@ import { fetchBackendPOST } from "@/app/utils/fetch";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
+import LeaveRoomPopup from "./components/LeaveRoomPopup";
 
 interface RemoveMemberPopupProps {
   memberId: string;
@@ -136,6 +137,8 @@ type WSMessage = {
 const Info = () => {
   const [roomInfo, setRoomInfo] = useState<RoomInfo | undefined>();
 
+  const [showLeaveRoomPopup, setShowLeaveRoomPopup] = useState<boolean>(false);
+
   const { user, setUser, ws } = useUserContext();
 
   const router = useRouter();
@@ -165,7 +168,11 @@ const Info = () => {
   }
 
   function handleLeaveRoom() {
-    console.log("leaving room");
+    setShowLeaveRoomPopup(true);
+  }
+
+  function handleLeaveRoomPopupClose() {
+    setShowLeaveRoomPopup(false);
   }
 
   if (!roomInfo) {
@@ -176,6 +183,11 @@ const Info = () => {
 
   return (
     <>
+      <LeaveRoomPopup
+        roomName={roomInfo.name}
+        isOpen={showLeaveRoomPopup}
+        handleClose={handleLeaveRoomPopupClose}
+      />
       <div className="flex flex-grow flex-col overflow-auto">
         <div className="flex items-center justify-center pb-4 pt-4">
           <p className="self-center text-4xl">{roomInfo.name}</p>
