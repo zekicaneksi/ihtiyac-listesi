@@ -2,6 +2,7 @@ import { connectionMap } from "./home";
 import { ObjectId, Document } from "mongodb";
 import dbCon from "@/setup/database/db_setup";
 import { Room, RoomItem } from "@/setup/database/collections/rooms";
+import { User } from "@/setup/database/collections/users";
 
 interface UserFrontend {
   _id: string;
@@ -35,12 +36,28 @@ export function notifyJoinRoom(
 
 export async function getInitialRooms(userId: ObjectId) {
   const response = await dbCon
-    .collection<Room>("rooms")
-    .find({ members: userId })
-    .project({ name: 1 })
+    .collection<User>("users")
+    .aggregate([
+      {
+        $match: {
+          _id: userId,
+        },
+      },
+      {
+        $lookup: {
+          from: "rooms",
+          localField: "memberOfRooms",
+          foreignField: "_id",
+          as: "memberOfRooms",
+        },
+      },
+      {
+        $project: { memberOfRooms: 1 },
+      },
+    ])
     .toArray();
 
-  return response;
+  return response[0].memberOfRooms;
 }
 
 export async function getInitialItems(roomId: string, userId: ObjectId) {
