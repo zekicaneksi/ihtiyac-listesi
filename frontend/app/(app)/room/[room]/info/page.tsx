@@ -11,6 +11,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
 import LeaveRoomPopup from "./components/LeaveRoomPopup";
+import CloseRoomPopup from "./components/CloseRoomPopup";
 
 interface RemoveMemberPopupProps {
   memberId: string;
@@ -138,6 +139,7 @@ const Info = () => {
   const [roomInfo, setRoomInfo] = useState<RoomInfo | undefined>();
 
   const [showLeaveRoomPopup, setShowLeaveRoomPopup] = useState<boolean>(false);
+  const [showCloseRoomPopup, setShowCloseRoomPopup] = useState<boolean>(false);
 
   const { user, setUser, ws } = useUserContext();
 
@@ -164,7 +166,11 @@ const Info = () => {
   }, []);
 
   function handleCloseRoom() {
-    console.log("closing room");
+    setShowCloseRoomPopup(true);
+  }
+
+  function handleCloseRoomPopupClose() {
+    setShowCloseRoomPopup(false);
   }
 
   function handleLeaveRoom() {
@@ -187,6 +193,11 @@ const Info = () => {
         roomName={roomInfo.name}
         isOpen={showLeaveRoomPopup}
         handleClose={handleLeaveRoomPopupClose}
+      />
+      <CloseRoomPopup
+        roomName={roomInfo.name}
+        isOpen={showCloseRoomPopup}
+        handleClose={handleCloseRoomPopupClose}
       />
       <div className="flex flex-grow flex-col overflow-auto">
         <div className="flex items-center justify-center pb-4 pt-4">

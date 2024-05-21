@@ -18,15 +18,17 @@ import boughtItem from "./routes/bought_item";
 import deleteItem from "./routes/delete_item";
 import editItem from "./routes/edit_item";
 import removeMember from "./routes/remove_member";
+import closeRoom from "./routes/close_room";
 
 const router = express.Router();
 
 router.use("/public", express.static(appRootPath + "/../public"));
 
-router.get("/hello", checkSession, hello);
 router.post("/login", login);
-router.get("/logout", checkSession, logout);
 router.post("/register", register);
+
+router.get("/hello", checkSession, hello);
+router.get("/logout", checkSession, logout);
 router.post("/create-room", checkSession, createRoom);
 router.post("/leave-room", checkSession, leaveRoom);
 router.post("/join-room", checkSession, joinRoom);
@@ -38,5 +40,6 @@ router.post("/bought-item", checkSession, boughtItem);
 router.post("/delete-item", checkSession, deleteItem);
 router.post("/edit-item", checkSession, editItem);
 router.post("/remove-member", checkSession, removeMember);
+router.post("/close-room", checkSession, closeRoom);
 
 export default router;
