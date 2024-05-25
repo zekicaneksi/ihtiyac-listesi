@@ -14,8 +14,8 @@ const useWS = (props: useWSProps) => {
 
   const ws = useWebSocket(backendWSPrefix + props.url, {
     onOpen: () => {
-      setShouldRefreshPage(true);
       if (shouldRefreshPage) window.location.reload();
+      setShouldRefreshPage(true);
     },
     heartbeat: { timeout: 10000 + 1000, interval: 5000 },
     shouldReconnect: (_) => true,
