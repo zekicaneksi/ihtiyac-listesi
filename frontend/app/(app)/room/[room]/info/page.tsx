@@ -28,25 +28,27 @@ const Info = () => {
   const [showLeaveRoomPopup, setShowLeaveRoomPopup] = useState<boolean>(false);
   const [showCloseRoomPopup, setShowCloseRoomPopup] = useState<boolean>(false);
 
-  const { user, setUser, ws } = useUserContext();
+  const { user, setUser, wsLastJsonMessage, wsSendJsonMessage } =
+    useUserContext();
 
   const router = useRouter();
   const pathname = usePathname();
   const roomId = pathname.split("/")[2];
 
-  function handleWSMessage(msg: WSMessage) {
-    if (msg === null) return;
+  function handleWSMessage(msg: WSMessage, location: string) {
+    if (msg === null || pathname !== location) return;
     if (msg.type === "roomInfo") {
       setRoomInfo(msg.room);
     }
   }
 
   useEffect(() => {
-    handleWSMessage(ws.lastJsonMessage);
-  }, [ws.lastJsonMessage]);
+    if (wsLastJsonMessage)
+      handleWSMessage(wsLastJsonMessage.message, wsLastJsonMessage.location);
+  }, [wsLastJsonMessage]);
 
   useEffect(() => {
-    ws.sendJsonMessage({
+    wsSendJsonMessage({
       type: "getRoomInfo",
       roomId: roomId,
     });

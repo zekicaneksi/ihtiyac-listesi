@@ -8,6 +8,7 @@ import CreateRoomPopup from "./components/CreateRoomPopup";
 import JoinRoomPopup from "./components/JoinRoomPopup";
 import { useUserContext } from "./context/user_context";
 import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
+import { usePathname } from "next/navigation";
 
 type WSMessage =
   | {
@@ -30,7 +31,8 @@ type WSMessage =
     };
 
 export default function Home() {
-  const { user, setUser, ws } = useUserContext();
+  const { user, setUser, wsSendJsonMessage, wsLastJsonMessage } =
+    useUserContext();
 
   const [rooms, setRooms] = useState<IRoom[]>([]);
   const [loadingRooms, setLoadingRooms] = useState<boolean>(true);
@@ -40,8 +42,10 @@ export default function Home() {
 
   const [showJoinRoomPopup, setShowJoinRoomPopup] = useState<boolean>(false);
 
-  function handleWSMessage(msg: WSMessage) {
-    if (msg === null) return;
+  const pathname = usePathname();
+
+  function handleWSMessage(msg: WSMessage, location: string) {
+    if (msg === null || pathname !== location) return;
     if (msg.type === "roomCreation") {
       setRooms((prevState) => [
         ...prevState,
@@ -65,11 +69,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-    handleWSMessage(ws.lastJsonMessage);
-  }, [ws.lastJsonMessage]);
+    if (wsLastJsonMessage)
+      handleWSMessage(wsLastJsonMessage.message, wsLastJsonMessage.location);
+  }, [wsLastJsonMessage]);
 
   useEffect(() => {
-    ws.sendJsonMessage({ type: "getRooms" });
+    wsSendJsonMessage({ type: "getRooms" });
   }, []);
 
   function handleCreateRoomPopupClose() {

@@ -20,7 +20,8 @@ const History = () => {
   const [endOfData, setEndOfData] = useState<boolean>(false);
   const [scrollTop, setScrollTop] = useState<number>(0);
 
-  const { user, setUser, ws } = useUserContext();
+  const { user, setUser, wsLastJsonMessage, wsSendJsonMessage } =
+    useUserContext();
 
   const router = useRouter();
 
@@ -32,7 +33,7 @@ const History = () => {
   const fetchData = useCallback(() => {
     if (endOfData || isLoading) return;
     setIsLoading(true);
-    ws.sendJsonMessage({
+    wsSendJsonMessage({
       type: "getHistoryItems",
       roomId: roomId,
       page: page,
@@ -70,8 +71,8 @@ const History = () => {
     }
   }, [historyItems]);
 
-  function handleWSMessage(msg: WSMessage) {
-    if (msg === null) return;
+  function handleWSMessage(msg: WSMessage, location: string) {
+    if (msg === null || location !== pathname) return;
     if (msg.type !== "initialHistoryItems" && msg.roomId !== roomId) return;
     if (msg.type === "initialHistoryItems") {
       setIsLoading(false);
@@ -100,8 +101,9 @@ const History = () => {
   }
 
   useEffect(() => {
-    handleWSMessage(ws.lastJsonMessage);
-  }, [ws.lastJsonMessage]);
+    if (wsLastJsonMessage)
+      handleWSMessage(wsLastJsonMessage.message, wsLastJsonMessage.location);
+  }, [wsLastJsonMessage]);
 
   return (
     <>

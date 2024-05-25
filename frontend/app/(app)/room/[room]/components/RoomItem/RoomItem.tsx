@@ -27,7 +27,7 @@ const RoomItem = (props: IRoomItem) => {
     useState<boolean>(false);
   const [showEditItemPopup, setShowEditItemPopup] = useState<boolean>(false);
 
-  const { user, setUser, ws } = useUserContext();
+  const { user, setUser } = useUserContext();
 
   const pathname = usePathname();
   const roomId = pathname.substring(pathname.lastIndexOf("/") + 1);

@@ -6,8 +6,8 @@ import React, {
   useState,
 } from "react";
 import { fetchBackendGET } from "@/app/utils/fetch";
-import { useRouter } from "next/navigation";
-import { WebSocketHook } from "react-use-websocket/dist/lib/types";
+import { usePathname, useRouter } from "next/navigation";
+import { SendJsonMessage } from "react-use-websocket/dist/lib/types";
 import useWS from "@/app/hooks/useWS";
 import FullPageLoadingScreen from "@/app/components/FullPageLoadingScreen";
 import { ReadyState } from "react-use-websocket";
@@ -18,10 +18,16 @@ export interface User {
   profilePictureId: string | null;
 }
 
+interface ILastJsonMessage {
+  message: any;
+  location: string;
+}
+
 interface IUserContext {
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
-  ws: WebSocketHook<any, MessageEvent<any> | null>;
+  wsSendJsonMessage: SendJsonMessage;
+  wsLastJsonMessage: ILastJsonMessage | undefined;
 }
 
 const UserContext = createContext<IUserContext>({} as IUserContext);
@@ -33,7 +39,10 @@ interface Props {
 export const UserProvider = ({ children }: Props) => {
   const [user, setUser] = useState<User>();
   const ws = useWS({ url: "/" });
+  const [wsLastJsonMessage, setWsLastJsonMessage] =
+    useState<ILastJsonMessage>();
   const router = useRouter();
+  const pathname = usePathname();
 
   async function fetchUser() {
     let response = await fetchBackendGET("/hello");
@@ -44,6 +53,10 @@ export const UserProvider = ({ children }: Props) => {
       router.push("/sign");
     }
   }
+
+  useEffect(() => {
+    setWsLastJsonMessage({ message: ws.lastJsonMessage, location: pathname });
+  }, [ws.lastJsonMessage]);
 
   useEffect(() => {
     fetchUser();
@@ -60,7 +73,14 @@ export const UserProvider = ({ children }: Props) => {
     );
 
   return (
-    <UserContext.Provider value={{ user, setUser, ws }}>
+    <UserContext.Provider
+      value={{
+        user: user,
+        setUser: setUser,
+        wsSendJsonMessage: ws.sendJsonMessage,
+        wsLastJsonMessage: wsLastJsonMessage,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

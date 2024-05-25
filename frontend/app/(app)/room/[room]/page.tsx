@@ -46,7 +46,8 @@ const Room = () => {
 
   const [showAddItemPopup, setShowAddItemPopup] = useState<boolean>(false);
 
-  const { user, setUser, ws } = useUserContext();
+  const { user, setUser, wsSendJsonMessage, wsLastJsonMessage } =
+    useUserContext();
 
   const pathname = usePathname();
   const roomId = pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -54,14 +55,14 @@ const Room = () => {
   const router = useRouter();
 
   useEffect(() => {
-    ws.sendJsonMessage({
+    wsSendJsonMessage({
       type: "getItems",
       roomId: roomId,
     });
   }, []);
 
-  function handleWSMessage(msg: WSMessage) {
-    if (msg === null) return;
+  function handleWSMessage(msg: WSMessage, location: string) {
+    if (msg === null || location !== pathname) return;
     if (msg.type !== "initialItems" && msg.roomId !== roomId) return;
     if (msg.type === "initialItems") {
       setRoomItems(msg.items);
@@ -99,8 +100,9 @@ const Room = () => {
   }
 
   useEffect(() => {
-    handleWSMessage(ws.lastJsonMessage);
-  }, [ws.lastJsonMessage]);
+    if (wsLastJsonMessage)
+      handleWSMessage(wsLastJsonMessage.message, wsLastJsonMessage.location);
+  }, [wsLastJsonMessage]);
 
   function handleAddItem() {
     setShowAddItemPopup(true);
