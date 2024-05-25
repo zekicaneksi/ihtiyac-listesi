@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import HistoryRoomItem, {
   IHistoryRoomItem,
 } from "./components/RoomHistoryItem";
+import FullPageLoadingScreen from "@/app/components/FullPageLoadingScreen";
 
 type WSMessage =
   | { type: "initialHistoryItems"; items: IHistoryRoomItem[] }
@@ -104,6 +105,7 @@ const History = () => {
 
   return (
     <>
+      <FullPageLoadingScreen show={isLoading} message={"loading items..."} />
       <div
         className="flex flex-grow flex-col overflow-auto"
         ref={bodyRef}
