@@ -31,7 +31,7 @@ const Footer = (props: FooterProps) => {
         className={`relative h-[${MenuElementHeight_SmallScreen}vh] bg-foreground md:h-[${MenuElementHeight_BigScreen}vh]`}
       >
         <div
-          className="relative z-[1] flex h-full items-center justify-center bg-foreground hover:brightness-150"
+          className="relative z-[1] flex h-full items-center justify-center bg-foreground p-4 hover:brightness-150"
           onClick={props.backFunction}
         >
           <FaArrowUp className={`size-8 rotate-[270deg]`} />
@@ -45,7 +45,7 @@ const Footer = (props: FooterProps) => {
       className={`relative h-[${MenuElementHeight_SmallScreen}vh] bg-foreground md:h-[${MenuElementHeight_BigScreen}vh]`}
     >
       <div
-        className="relative z-[1] flex h-full items-center justify-center bg-foreground hover:brightness-150"
+        className="relative z-[1] flex h-full items-center justify-center bg-foreground p-4 hover:brightness-150"
         onClick={isMenuOpen ? hideMenu : showMenu}
         onMouseEnter={showMenu}
       >
