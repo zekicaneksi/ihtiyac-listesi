@@ -357,3 +357,20 @@ export function notifyEditItem(
     });
   }
 }
+
+export async function checkRoomExistence(
+  userId: ObjectId,
+  roomId: string,
+): Promise<boolean> {
+  if (!ObjectId.isValid(roomId)) return false;
+  const roomObjId = new ObjectId(roomId);
+  const room = await dbCon
+    .collection<Room>("rooms")
+    .findOne(
+      { _id: roomObjId, members: { $in: [userId] } },
+      { projection: { _id: 1 } },
+    );
+
+  if (room) return true;
+  else return false;
+}

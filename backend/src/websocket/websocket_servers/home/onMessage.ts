@@ -1,5 +1,6 @@
 import CustomWebSocket from "@/websocket/utils/CustomWebSocket";
 import {
+  checkRoomExistence,
   getInitialHistoryItems,
   getInitialItems,
   getInitialRooms,
@@ -22,6 +23,10 @@ type Message =
     }
   | {
       type: "getRoomInfo";
+      roomId: string;
+    }
+  | {
+      type: "checkRoomExistence";
       roomId: string;
     };
 
@@ -57,6 +62,13 @@ export function setOnMessage(ws: CustomWebSocket, user: User) {
     } else if (jsonData.type === "getRoomInfo") {
       const roomInfo = await getRoomInfo(jsonData.roomId, user._id);
       ws.send(JSON.stringify({ type: "roomInfo", room: roomInfo }));
+    } else if (jsonData.type === "checkRoomExistence") {
+      ws.send(
+        JSON.stringify({
+          type: "checkRoomExistence",
+          value: await checkRoomExistence(user._id, jsonData.roomId),
+        }),
+      );
     }
   });
 }
