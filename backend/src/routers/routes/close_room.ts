@@ -3,6 +3,7 @@ import { User } from "@/setup/database/collections/users";
 import dbCon from "@/setup/database/db_setup";
 import { Room } from "@/setup/database/collections/rooms";
 import { ObjectId } from "mongodb";
+import { notifyCloseRoom } from "@/websocket/websocket_servers/home/messages";
 
 interface Body {
   roomId: string;
@@ -30,6 +31,11 @@ export default async (req: Request, res: Response) => {
       { _id: { $in: deletedRoom.members } },
       { $pull: { memberOfRooms: deletedRoom._id } },
     );
+
+  notifyCloseRoom(
+    deletedRoom.members.map((e) => e.toString()),
+    roomId.toString(),
+  );
 
   res.statusCode = 200;
   res.send("closed room");

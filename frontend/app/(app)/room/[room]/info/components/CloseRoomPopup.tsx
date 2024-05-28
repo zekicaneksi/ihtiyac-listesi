@@ -3,7 +3,7 @@
 import Button from "@/app/components/Button";
 import Popup from "@/app/components/Popup";
 import { fetchBackendPOST } from "@/app/utils/fetch";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 interface CloseRoomPopupProps {
@@ -16,6 +16,7 @@ const CloseRoomPopup = (props: CloseRoomPopupProps) => {
   const [disableForm, setDisableForm] = useState<boolean>(false);
   const [infoMessage, setInfoMessage] = useState("");
 
+  const router = useRouter();
   const pathname = usePathname();
   const roomId = pathname.split("/")[2];
 
@@ -40,6 +41,7 @@ const CloseRoomPopup = (props: CloseRoomPopupProps) => {
     });
 
     if (response.status === 200) {
+      router.push("/");
       handleClose();
     } else {
       setInfoMessage("Something went wrong!");

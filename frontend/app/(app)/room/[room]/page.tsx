@@ -39,6 +39,10 @@ type WSMessage =
       itemId: string;
       newTitle: string;
       newDescription: string;
+    }
+  | {
+      type: "closeRoom";
+      roomId: string;
     };
 
 const Room = () => {
@@ -96,6 +100,8 @@ const Room = () => {
           return toReturn;
         }),
       );
+    } else if (msg.type === "closeRoom") {
+      router.push("/");
     }
   }
 
