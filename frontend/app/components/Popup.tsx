@@ -5,7 +5,7 @@ import { ReactNode, useRef } from "react";
 interface PopupProps {
   children: ReactNode;
   open: boolean;
-  handleClose: () => void;
+  handleClose: Function;
 }
 
 const Popup = (props: PopupProps) => {

@@ -5,18 +5,30 @@ import ProfilePicture from "@/app/components/ProfilePicture";
 import { useState } from "react";
 import { TiDeleteOutline } from "react-icons/ti";
 import RemoveMemberPopup from "./RemoveMemberPopup";
+import { RoomInfo } from "../page";
 
 export interface MemberUserProps {
   user: User;
   isAdmin: boolean;
   myId: string;
+  setRoomInfo: React.Dispatch<React.SetStateAction<RoomInfo | undefined>>;
 }
 
 const MemberUser = (props: MemberUserProps) => {
   const [showRemoveMemberPopup, setShowRemoveMemberPopup] =
     useState<boolean>(false);
 
-  function handleRemoveMemberPopupClose() {
+  function handleRemoveMemberPopupClose(result: boolean) {
+    if (result) {
+      props.setRoomInfo((prevState) => {
+        if (!prevState) return undefined;
+        const toReturn = { ...prevState };
+        toReturn.members = toReturn.members.filter(
+          (e) => e._id !== props.user._id,
+        );
+        return toReturn;
+      });
+    }
     setShowRemoveMemberPopup(false);
   }
 

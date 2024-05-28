@@ -10,7 +10,7 @@ import LeaveRoomPopup from "./components/LeaveRoomPopup";
 import CloseRoomPopup from "./components/CloseRoomPopup";
 import MemberUser from "./components/MemberUser";
 
-type RoomInfo = {
+export type RoomInfo = {
   _id: string;
   creatorId: string;
   name: string;
@@ -107,6 +107,7 @@ const Info = () => {
               isAdmin={amIAdmin}
               myId={user._id}
               key={e._id}
+              setRoomInfo={setRoomInfo}
             />
           ))}
         </div>

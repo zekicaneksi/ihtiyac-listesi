@@ -10,7 +10,7 @@ interface RemoveMemberPopupProps {
   memberId: string;
   memberName: string;
   isOpen: boolean;
-  handleClose: () => void;
+  handleClose: (result: boolean) => void;
 }
 
 function RemoveMemberPopup(props: RemoveMemberPopupProps) {
@@ -19,8 +19,8 @@ function RemoveMemberPopup(props: RemoveMemberPopupProps) {
 
   const pathname = usePathname();
 
-  function handlePopupClose() {
-    if (!disableForm) props.handleClose();
+  function handlePopupClose(result: boolean) {
+    if (!disableForm) props.handleClose(result);
   }
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function RemoveMemberPopup(props: RemoveMemberPopupProps) {
     });
 
     if (response.status === 200) {
-      handlePopupClose();
+      handlePopupClose(true);
     } else {
       setInfoMessage("Something went wrong!");
     }
@@ -51,7 +51,7 @@ function RemoveMemberPopup(props: RemoveMemberPopupProps) {
   }
 
   function handleCancelBtn() {
-    handlePopupClose();
+    handlePopupClose(false);
   }
 
   return (

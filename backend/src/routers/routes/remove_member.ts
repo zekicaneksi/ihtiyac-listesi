@@ -3,6 +3,7 @@ import { User } from "@/setup/database/collections/users";
 import dbCon from "@/setup/database/db_setup";
 import { Room } from "@/setup/database/collections/rooms";
 import { ObjectId } from "mongodb";
+import { notifyRemoveMember } from "@/websocket/websocket_servers/home/messages";
 
 interface Body {
   roomId: string;
@@ -48,6 +49,8 @@ export default async (req: Request, res: Response) => {
       { $pull: { memberOfRooms: roomId } },
       { projection: { _id: 1 } },
     );
+
+  notifyRemoveMember(memberId.toString(), roomId.toString());
 
   return res.status(200).send("removed member");
 };

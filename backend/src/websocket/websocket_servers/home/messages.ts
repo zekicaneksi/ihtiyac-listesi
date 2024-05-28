@@ -387,3 +387,14 @@ export function notifyCloseRoom(userIds: string[], roomId: string) {
     });
   }
 }
+
+export function notifyRemoveMember(userId: string, roomId: string) {
+  connectionMap.get(userId)?.forEach((ws) => {
+    ws.send(
+      JSON.stringify({
+        type: "removeMember",
+        roomId: roomId,
+      }),
+    );
+  });
+}

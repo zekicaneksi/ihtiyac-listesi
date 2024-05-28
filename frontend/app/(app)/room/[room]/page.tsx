@@ -43,6 +43,10 @@ type WSMessage =
   | {
       type: "closeRoom";
       roomId: string;
+    }
+  | {
+      type: "removeMember";
+      roomId: string;
     };
 
 const Room = () => {
@@ -101,6 +105,8 @@ const Room = () => {
         }),
       );
     } else if (msg.type === "closeRoom") {
+      router.push("/");
+    } else if (msg.type === "removeMember") {
       router.push("/");
     }
   }
