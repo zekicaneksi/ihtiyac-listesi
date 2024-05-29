@@ -3,21 +3,19 @@
 import ProfilePicture from "@/app/components/ProfilePicture";
 import { useUserContext } from "@/app/(app)/context/user_context";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const LogoWithName = () => {
-  const router = useRouter();
-
   return (
-    <img
-      src={"/logo-with-name.png"}
-      alt={"clickable logo that takes to home"}
-      height={"100%"}
-      width={"auto"}
-      className="h-[100%] w-auto hover:cursor-pointer"
-      onClick={() => {
-        router.push("/");
-      }}
-    />
+    <Link href="/">
+      <img
+        src={"/logo-with-name.png"}
+        alt={"clickable logo that takes to home"}
+        height={"100%"}
+        width={"auto"}
+        className="h-[100%] w-auto hover:cursor-pointer"
+      />
+    </Link>
   );
 };
 
