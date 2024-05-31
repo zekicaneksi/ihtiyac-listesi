@@ -34,10 +34,28 @@ const ProfilePicturePlaceHolder = () => {
   );
 };
 
+const LanguageIconBtn = () => {
+  const { langMap, setLanguage } = useUserContext();
+
+  return (
+    <div className={`mr-4 aspect-square h-[100%] w-auto hover:cursor-pointer`}>
+      <img
+        src={"/language/" + langMap.code + ".png"}
+        className="size-full rounded-full"
+        onClick={() => {
+          if (langMap.code === "tr") setLanguage("en");
+          else setLanguage("tr");
+        }}
+      />
+    </div>
+  );
+};
+
 export const Header = () => {
   return (
     <div className="flex h-[10vh] justify-between bg-foreground p-2 md:h-[6vh]">
       <LogoWithName />
+      <LanguageIconBtn />
       <ProfilePicturePlaceHolder />
     </div>
   );

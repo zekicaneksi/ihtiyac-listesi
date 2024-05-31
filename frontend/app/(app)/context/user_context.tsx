@@ -1,3 +1,5 @@
+"use client";
+
 import React, {
   ReactNode,
   createContext,
@@ -11,6 +13,7 @@ import { SendJsonMessage } from "react-use-websocket/dist/lib/types";
 import useWS from "@/app/hooks/useWS";
 import FullPageLoadingScreen from "@/app/components/FullPageLoadingScreen";
 import { ReadyState } from "react-use-websocket";
+import LangMap from "./LangMap";
 
 export interface User {
   _id: string;
@@ -28,9 +31,16 @@ interface IUserContext {
   setUser: React.Dispatch<React.SetStateAction<User | undefined>>;
   wsSendJsonMessage: SendJsonMessage;
   wsLastJsonMessage: ILastJsonMessage | undefined;
+  langMap: Required<Language>;
+  setLanguage: (newLang: string) => void;
 }
 
 const UserContext = createContext<IUserContext>({} as IUserContext);
+
+interface Language {
+  code: string;
+  values?: LangMap;
+}
 
 interface Props {
   children?: ReactNode;
@@ -44,6 +54,10 @@ export const UserProvider = ({ children }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
 
+  const [language, setLanguage] = useState<Language>({
+    code: typeof window !== "undefined" ? window.navigator.language : "en",
+  });
+
   async function fetchUser() {
     let response = await fetchBackendGET("/hello");
     if (response.status === 200) {
@@ -53,6 +67,37 @@ export const UserProvider = ({ children }: Props) => {
       router.push("/sign");
     }
   }
+
+  async function fetchLanguage() {
+    if (language.values !== undefined) return;
+
+    async function getLangValue(lang: string): Promise<LangMap> {
+      const response = await fetch("/language/" + lang + ".json");
+      const responseJson = await response.json();
+      return responseJson;
+    }
+
+    const trLangs = ["tr", "tr-CY", "tr-TR"];
+    if (trLangs.includes(language.code)) {
+      setLanguage({
+        code: "tr",
+        values: await getLangValue("tr"),
+      });
+    } else {
+      setLanguage({
+        code: "en",
+        values: await getLangValue("en"),
+      });
+    }
+  }
+
+  function setNewLanguage(newLangCode: string) {
+    setLanguage({ code: newLangCode });
+  }
+
+  useEffect(() => {
+    fetchLanguage();
+  }, [language]);
 
   useEffect(() => {
     setWsLastJsonMessage({ message: ws.lastJsonMessage, location: pathname });
@@ -72,6 +117,12 @@ export const UserProvider = ({ children }: Props) => {
       <FullPageLoadingScreen show={true} message={"Connecting real-time..."} />
     );
 
+  if (language.values === undefined) {
+    return (
+      <FullPageLoadingScreen show={true} message={"Getting language file..."} />
+    );
+  }
+
   return (
     <UserContext.Provider
       value={{
@@ -79,6 +130,8 @@ export const UserProvider = ({ children }: Props) => {
         setUser: setUser,
         wsSendJsonMessage: ws.sendJsonMessage,
         wsLastJsonMessage: wsLastJsonMessage,
+        langMap: language as Required<Language>,
+        setLanguage: setNewLanguage,
       }}
     >
       {children}

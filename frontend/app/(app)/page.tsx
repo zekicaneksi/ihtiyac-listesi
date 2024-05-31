@@ -31,8 +31,14 @@ type WSMessage =
     };
 
 export default function Home() {
-  const { user, setUser, wsSendJsonMessage, wsLastJsonMessage } =
-    useUserContext();
+  const {
+    user,
+    setUser,
+    wsSendJsonMessage,
+    wsLastJsonMessage,
+    langMap,
+    setLanguage,
+  } = useUserContext();
 
   const [rooms, setRooms] = useState<IRoom[]>([]);
   const [loadingRooms, setLoadingRooms] = useState<boolean>(true);
@@ -112,6 +118,7 @@ export default function Home() {
 
   return (
     <>
+      <p>{langMap.values.abc1}</p>
       <FullPageLoadingScreen show={loadingRooms} message="Loading rooms..." />
       <CreateRoomPopup
         isOpen={showCreateRoomPopup}

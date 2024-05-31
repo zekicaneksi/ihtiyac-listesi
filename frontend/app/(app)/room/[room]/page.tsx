@@ -54,7 +54,7 @@ const Room = () => {
 
   const [showAddItemPopup, setShowAddItemPopup] = useState<boolean>(false);
 
-  const { user, setUser, wsSendJsonMessage, wsLastJsonMessage } =
+  const { user, setUser, wsSendJsonMessage, wsLastJsonMessage, langMap } =
     useUserContext();
 
   const pathname = usePathname();
