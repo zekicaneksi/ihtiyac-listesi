@@ -4,6 +4,7 @@ import ProfilePicture from "@/app/components/ProfilePicture";
 import { useUserContext } from "@/app/(app)/context/user_context";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 
 const LogoWithName = () => {
   return (
@@ -35,7 +36,7 @@ const ProfilePicturePlaceHolder = () => {
 };
 
 const LanguageIconBtn = () => {
-  const { langMap, setLanguage } = useUserContext();
+  const { langMap, setLanguage } = useLanguageContext();
 
   return (
     <div className={`mr-4 aspect-square h-[100%] w-auto hover:cursor-pointer`}>
