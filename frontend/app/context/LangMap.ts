@@ -21,4 +21,35 @@ export default interface LangMap {
     register: string;
     or: string;
   };
+
+  // Root (/) Page
+  root_page: {
+    room_name_length: string;
+    room_password_space: string;
+    room_password_length: string;
+    room_password_match: string;
+    creating_room: string;
+    something_went_wrong: string;
+    room_name: string;
+    room_password: string;
+    room_password_again: string;
+    create: string;
+    cancel: string;
+    joining_room: string;
+    room_not_found: string;
+    room_incorrect_pass: string;
+    room_already_member: string;
+    room_something_went_wrong: string;
+    room_id: string;
+    join: string;
+    copied_clipboard: string;
+    fetching_credentials: string;
+    connecting_realtime: string;
+    logo_alt: string;
+    join_room: string;
+    create_room: string;
+    no_room_info: string;
+    create_or_join_info: string;
+    loading_rooms: string;
+  };
 }

@@ -13,6 +13,7 @@ import { SendJsonMessage } from "react-use-websocket/dist/lib/types";
 import useWS from "@/app/hooks/useWS";
 import FullPageLoadingScreen from "@/app/components/FullPageLoadingScreen";
 import { ReadyState } from "react-use-websocket";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 
 export interface User {
   _id: string;
@@ -43,8 +44,11 @@ export const UserProvider = ({ children }: Props) => {
   const ws = useWS({ url: "/" });
   const [wsLastJsonMessage, setWsLastJsonMessage] =
     useState<ILastJsonMessage>();
+
   const router = useRouter();
   const pathname = usePathname();
+
+  const { langMap } = useLanguageContext();
 
   async function fetchUser() {
     let response = await fetchBackendGET("/hello");
@@ -66,12 +70,18 @@ export const UserProvider = ({ children }: Props) => {
 
   if (!user)
     return (
-      <FullPageLoadingScreen show={true} message={"Fetching credentials..."} />
+      <FullPageLoadingScreen
+        show={true}
+        message={langMap.values.root_page.fetching_credentials}
+      />
     );
 
   if (ws.readyState !== ReadyState.OPEN)
     return (
-      <FullPageLoadingScreen show={true} message={"Connecting real-time..."} />
+      <FullPageLoadingScreen
+        show={true}
+        message={langMap.values.root_page.connecting_realtime}
+      />
     );
 
   return (

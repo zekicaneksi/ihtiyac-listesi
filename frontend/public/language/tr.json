@@ -19,5 +19,35 @@
     "login": "Giriş Yap",
     "register": "Kayıt Ol",
     "or": "ya da"
+  },
+
+  "root_page": {
+    "room_name_length": "Oda ismi 2-40 karakter uzunluğunda olmalı",
+    "room_password_space": "Şifre boşluk içeremez",
+    "room_password_length": "Şifre 8-20 karakter uzunluğunda olmalı",
+    "room_password_match": "Şifreler uyuşmuyor",
+    "creating_room": "oda oluşturuluyor...",
+    "something_went_wrong": "Bir şeyler ters gitti!",
+    "room_name": "oda ismi",
+    "room_password": "oda şifresi",
+    "room_password_again": "oda şifresi tekrar",
+    "create": "Oluştur",
+    "cancel": "Vazgeç",
+    "joining_room": "odaya katılınıyor...",
+    "room_not_found": "oda bulunamadı",
+    "room_incorrect_pass": "şifre yanlış",
+    "room_already_member": "halihazırda odada bulunuluyor",
+    "room_something_went_wrong": "bir şeyler ters gitti",
+    "room_id": "oda numarası",
+    "join": "Katıl",
+    "copied_clipboard": "Kopyalandı",
+    "fetching_credentials": "Kullanıcı bilgileri alınıyor...",
+    "connecting_realtime": "Gerçek zamanlı bağlantı kuruluyor...",
+    "logo_alt": "ana sayfaya götüren tıklanılabilir logo",
+    "join_room": "Odaya Katıl",
+    "create_room": "Oda Oluştur",
+    "no_room_info": "Görünüşe göre hiçbir odada bulunmuyorsun",
+    "create_or_join_info": "Aşağıdaki menüden yeni bir oda oluşturabilir veya bir odaya katılabilirsin",
+    "loading_rooms": "Odalar yükleniyor..."
   }
 }

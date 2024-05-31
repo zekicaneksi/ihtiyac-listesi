@@ -7,6 +7,7 @@ import Input from "@/app/components/Input";
 import Button from "@/app/components/Button";
 import { fetchBackendPOST } from "@/app/utils/fetch";
 import regexp from "@/app/utils/regexp";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 
 interface CreateRoomPopupProps {
   isOpen: boolean;
@@ -32,21 +33,23 @@ function CreateRoomPopup(props: CreateRoomPopupProps) {
     setPasswordAgain("");
   }, [props.isOpen]);
 
+  const { langMap } = useLanguageContext();
+
   async function handleCreate() {
     // Validating Inputs
     if (roomName.length > 40 || roomName.length < 2) {
-      setInfoMessage("Room name must be between 2-40 characters long");
+      setInfoMessage(langMap.values.root_page.room_name_length);
     } else if (RegExp(regexp.containsWhiteSpace).test(password)) {
-      setInfoMessage("Password cannot contain whitespaces");
+      setInfoMessage(langMap.values.root_page.room_password_space);
     } else if (password.length < 8 || password.length > 20) {
-      setInfoMessage("Password must be 8-20 characters long");
+      setInfoMessage(langMap.values.root_page.room_password_length);
     } else if (password !== passwordAgain) {
-      setInfoMessage("Passwords do not match");
+      setInfoMessage(langMap.values.root_page.room_password_match);
     } else {
       // Validation successful
       // Making the backend request
       setDisableForm(true);
-      setInfoMessage("creating room...");
+      setInfoMessage(langMap.values.root_page.creating_room);
 
       interface PostData {
         name: string;
@@ -62,7 +65,7 @@ function CreateRoomPopup(props: CreateRoomPopupProps) {
         // Creation successful
         handleClose();
       } else {
-        setInfoMessage("Something went wrong!");
+        setInfoMessage(langMap.values.root_page.something_went_wrong);
       }
     }
     setDisableForm(false);
@@ -76,19 +79,19 @@ function CreateRoomPopup(props: CreateRoomPopupProps) {
         <Input
           value={roomName}
           setValue={setRoomName}
-          placeholder="room name"
+          placeholder={langMap.values.root_page.room_name}
           type="text"
         />
         <Input
           value={password}
           setValue={setPassword}
-          placeholder="room password"
+          placeholder={langMap.values.root_page.room_password}
           type="password"
         />
         <Input
           value={passwordAgain}
           setValue={setPasswordAgain}
-          placeholder="room password again"
+          placeholder={langMap.values.root_page.room_password_again}
           type="password"
         />
         {infoMessage !== "" && (
@@ -96,8 +99,10 @@ function CreateRoomPopup(props: CreateRoomPopupProps) {
             {infoMessage}
           </p>
         )}
-        <Button onClick={handleCreate}>Create</Button>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleCreate}>
+          {langMap.values.root_page.create}
+        </Button>
+        <Button onClick={handleClose}>{langMap.values.root_page.cancel}</Button>
       </div>
     </Popup>
   );

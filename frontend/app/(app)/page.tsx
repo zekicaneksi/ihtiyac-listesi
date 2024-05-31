@@ -9,6 +9,7 @@ import JoinRoomPopup from "./components/JoinRoomPopup";
 import { useUserContext } from "./context/user_context";
 import FullPageLoadingScreen from "../components/FullPageLoadingScreen";
 import { usePathname } from "next/navigation";
+import { useLanguageContext } from "../context/LanguageContext";
 
 type WSMessage =
   | {
@@ -43,6 +44,8 @@ export default function Home() {
   const [showJoinRoomPopup, setShowJoinRoomPopup] = useState<boolean>(false);
 
   const pathname = usePathname();
+
+  const { langMap } = useLanguageContext();
 
   function handleWSMessage(msg: WSMessage, location: string) {
     if (msg === null || pathname !== location) return;
@@ -87,13 +90,13 @@ export default function Home() {
 
   const menuElements: MenuElementProps[] = [
     {
-      text: "Join Room",
+      text: langMap.values.root_page.join_room,
       onClick: () => {
         setShowJoinRoomPopup(true);
       },
     },
     {
-      text: "Create Room",
+      text: langMap.values.root_page.create_room,
       onClick: () => {
         setShowCreateRoomPopup(true);
       },
@@ -103,8 +106,8 @@ export default function Home() {
   const NoRoomsSection = () => {
     return (
       <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
-        <p>Looks like you are not a part of any room</p>
-        <p>You can create or join a room from the menu down below</p>
+        <p>{langMap.values.root_page.no_room_info}</p>
+        <p>{langMap.values.root_page.create_or_join_info}</p>
         <FaArrowDownLong className="size-12" />
       </div>
     );
@@ -112,7 +115,10 @@ export default function Home() {
 
   return (
     <>
-      <FullPageLoadingScreen show={loadingRooms} message="Loading rooms..." />
+      <FullPageLoadingScreen
+        show={loadingRooms}
+        message={langMap.values.root_page.loading_rooms}
+      />
       <CreateRoomPopup
         isOpen={showCreateRoomPopup}
         handleClose={handleCreateRoomPopupClose}

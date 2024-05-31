@@ -19,5 +19,35 @@
     "login": "Login",
     "register": "Register",
     "or": "or"
+  },
+
+  "root_page": {
+    "room_name_length": "Room name must be between 2-40 characters long",
+    "room_password_space": "Password cannot contain whitespaces",
+    "room_password_length": "Password must be 8-20 characters long",
+    "room_password_match": "Passwords do not match",
+    "creating_room": "creating room...",
+    "something_went_wrong": "Something went wrong!",
+    "room_name": "room name",
+    "room_password": "room password",
+    "room_password_again": "room password again",
+    "create": "Create",
+    "cancel": "Cancel",
+    "joining_room": "joining room...",
+    "room_not_found": "room not found",
+    "room_incorrect_pass": "incorrect password",
+    "room_already_member": "already a member of room",
+    "room_something_went_wrong": "something went wrong",
+    "room_id": "room id",
+    "join": "Join",
+    "copied_clipboard": "Copied to clipboard",
+    "fetching_credentials": "Fetching credentials...",
+    "connecting_realtime": "Connecting real-time...",
+    "logo_alt": "clickable logo that takes to home",
+    "join_room": "Join Room",
+    "create_room": "Create Room",
+    "no_room_info": "Looks like you are not a part of any room",
+    "create_or_join_info": "You can create or join a room from the menu down below",
+    "loading_rooms": "Loading rooms..."
   }
 }

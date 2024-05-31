@@ -7,11 +7,13 @@ import Link from "next/link";
 import { useLanguageContext } from "@/app/context/LanguageContext";
 
 const LogoWithName = () => {
+  const { langMap } = useLanguageContext();
+
   return (
     <Link href="/">
       <img
         src={"/logo-with-name.png"}
-        alt={"clickable logo that takes to home"}
+        alt={langMap.values.root_page.logo_alt}
         height={"100%"}
         width={"auto"}
         className="h-[100%] w-auto hover:cursor-pointer"

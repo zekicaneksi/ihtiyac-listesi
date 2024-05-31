@@ -3,6 +3,7 @@
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Popup from "@/app/components/Popup";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 import { fetchBackendPOST } from "@/app/utils/fetch";
 import { useEffect, useState } from "react";
 
@@ -19,6 +20,8 @@ function JoinRoomPopup(props: JoinRoomPopupProps) {
 
   const [disableForm, setDisableForm] = useState<boolean>(false);
 
+  const { langMap } = useLanguageContext();
+
   function handleClose() {
     if (!disableForm) props.handleClose();
   }
@@ -31,7 +34,7 @@ function JoinRoomPopup(props: JoinRoomPopupProps) {
 
   async function handleJoin() {
     setDisableForm(true);
-    setInfoMessage("joining room...");
+    setInfoMessage(langMap.values.root_page.joining_room);
 
     interface PostData {
       roomId: string;
@@ -46,17 +49,18 @@ function JoinRoomPopup(props: JoinRoomPopupProps) {
     if (response.status === 200) {
       handleClose();
     } else if (response.status === 404) {
-      setInfoMessage("room not found");
+      setInfoMessage(langMap.values.root_page.room_not_found);
     } else if (response.status === 401) {
-      setInfoMessage("incorrect password");
+      setInfoMessage(langMap.values.root_page.room_incorrect_pass);
     } else if (response.status === 406) {
-      setInfoMessage("already a member of room");
+      setInfoMessage(langMap.values.root_page.room_already_member);
     } else {
-      setInfoMessage("something went wrong");
+      setInfoMessage(langMap.values.root_page.room_something_went_wrong);
     }
 
     setDisableForm(false);
   }
+
   return (
     <Popup open={props.isOpen} handleClose={handleClose}>
       <div
@@ -65,13 +69,13 @@ function JoinRoomPopup(props: JoinRoomPopupProps) {
         <Input
           value={roomId}
           setValue={setRoomId}
-          placeholder="room id"
+          placeholder={langMap.values.root_page.room_id}
           type="text"
         />
         <Input
           value={password}
           setValue={setPassword}
-          placeholder="room password"
+          placeholder={langMap.values.root_page.room_password}
           type="password"
         />
         {infoMessage !== "" && (
@@ -79,8 +83,8 @@ function JoinRoomPopup(props: JoinRoomPopupProps) {
             {infoMessage}
           </p>
         )}
-        <Button onClick={handleJoin}>Join</Button>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleJoin}>{langMap.values.root_page.join}</Button>
+        <Button onClick={handleClose}>{langMap.values.root_page.cancel}</Button>
       </div>
     </Popup>
   );

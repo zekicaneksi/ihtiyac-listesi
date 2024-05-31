@@ -1,6 +1,7 @@
 "use client";
 
 import Snackbar from "@/app/components/Snackbar/Snackbar";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 import Link from "next/link";
 import { useState } from "react";
 import { FaCopy } from "react-icons/fa";
@@ -24,10 +25,12 @@ const Room = (props: RoomProps) => {
     setIsSnackbarOpen(true);
   }
 
+  const { langMap } = useLanguageContext();
+
   return (
     <>
       <Snackbar
-        message={"Copied to clipboard"}
+        message={langMap.values.root_page.copied_clipboard}
         onClose={() => {
           setIsSnackbarOpen(false);
         }}
