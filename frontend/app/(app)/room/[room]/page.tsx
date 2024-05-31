@@ -8,6 +8,7 @@ import { User, useUserContext } from "@/app/(app)/context/user_context";
 import AddItemPopup from "./components/AddItemPopup";
 import RoomItem, { IRoomItem } from "./components/RoomItem/RoomItem";
 import { FaArrowDownLong } from "react-icons/fa6";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 
 type WSMessage =
   | { type: "initialItems"; items: IRoomItem[] }
@@ -61,6 +62,8 @@ const Room = () => {
   const roomId = pathname.substring(pathname.lastIndexOf("/") + 1);
 
   const router = useRouter();
+
+  const { langMap } = useLanguageContext();
 
   useEffect(() => {
     wsSendJsonMessage({
@@ -126,13 +129,13 @@ const Room = () => {
 
   const menuElements: MenuElementProps[] = [
     {
-      text: "Room Info",
+      text: langMap.values.room.room_info,
       onClick: () => {
         router.push(pathname + "/info");
       },
     },
     {
-      text: "History",
+      text: langMap.values.room.room_history,
       onClick: () => {
         router.push(pathname + "/history");
       },
@@ -142,11 +145,11 @@ const Room = () => {
   const NoItemsSection = () => {
     return (
       <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
-        <p>Looks like your room has no items yet</p>
+        <p>{langMap.values.room.no_items_info}</p>
         <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
-          <p>You can create a new item with the </p>
+          <p>{langMap.values.room.create_new_item_info1 + " "}</p>
           <IoAddCircle className="size-6" />
-          <p> button at the right-bottom corner</p>
+          <p>{" " + langMap.values.room.create_new_item_info2}</p>
         </div>
         <FaArrowDownLong className="size-12 -rotate-45" />
       </div>

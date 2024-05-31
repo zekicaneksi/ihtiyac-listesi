@@ -10,6 +10,7 @@ import { GrEdit } from "react-icons/gr";
 import { TiDeleteOutline } from "react-icons/ti";
 import RoomItemDeletePopup from "./RoomItemDeletePopup";
 import RoomItemEditPopup from "./RoomItemEditPopup";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 
 export interface IRoomItem {
   _id: string;
@@ -28,6 +29,8 @@ const RoomItem = (props: IRoomItem) => {
   const [showEditItemPopup, setShowEditItemPopup] = useState<boolean>(false);
 
   const { user, setUser } = useUserContext();
+
+  const { langMap } = useLanguageContext();
 
   const pathname = usePathname();
   const roomId = pathname.substring(pathname.lastIndexOf("/") + 1);
@@ -153,12 +156,12 @@ const RoomItem = (props: IRoomItem) => {
             )}
             <div className="mt-5">
               <div className="flex flex-row items-center gap-2">
-                <p>{"Added by: "}</p>
+                <p>{langMap.values.room.added_by + ": "}</p>
                 <ProfilePicture address={props.addedBy.profilePictureId} />
                 <p>{props.addedBy.fullname}</p>
               </div>
               <div className="flex flex-row items-center gap-2">
-                <p>{"Will buy: "}</p>
+                <p>{langMap.values.room.will_buy + ": "}</p>
                 {props.willBeBoughtBy && (
                   <ProfilePicture
                     address={props.willBeBoughtBy.profilePictureId}
@@ -178,14 +181,16 @@ const RoomItem = (props: IRoomItem) => {
                   }
                   disabled={isDisabled}
                 >
-                  {willBeBoughtByMe ? "Will Not Buy" : "Will Buy"}
+                  {willBeBoughtByMe
+                    ? langMap.values.room.btn_will_not_buy
+                    : langMap.values.room.btn_will_buy}
                 </Button>
                 <Button
                   bgColor="bg-background"
                   onClick={handleBoughtOnClick}
                   disabled={isDisabled}
                 >
-                  Bought
+                  {langMap.values.room.btn_bought}
                 </Button>
               </div>
             </div>

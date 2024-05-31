@@ -8,6 +8,7 @@ import HistoryRoomItem, {
   IHistoryRoomItem,
 } from "./components/RoomHistoryItem";
 import FullPageLoadingScreen from "@/app/components/FullPageLoadingScreen";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 
 type WSMessage =
   | { type: "initialHistoryItems"; items: IHistoryRoomItem[] }
@@ -27,6 +28,8 @@ const History = () => {
 
   const pathname = usePathname();
   const roomId = pathname.split("/")[2];
+
+  const { langMap } = useLanguageContext();
 
   const bodyRef = useRef<HTMLDivElement>(null);
 
@@ -107,7 +110,10 @@ const History = () => {
 
   return (
     <>
-      <FullPageLoadingScreen show={isLoading} message={"loading items..."} />
+      <FullPageLoadingScreen
+        show={isLoading}
+        message={langMap.values.room.loading_items}
+      />
       <div
         className="flex flex-grow flex-col overflow-auto"
         ref={bodyRef}

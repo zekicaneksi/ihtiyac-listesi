@@ -3,6 +3,7 @@
 import Button from "@/app/components/Button";
 import Input from "@/app/components/Input";
 import Popup from "@/app/components/Popup";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 import { fetchBackendPOST } from "@/app/utils/fetch";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -21,20 +22,22 @@ const AddItemPopup = (props: AddItemPopupProps) => {
 
   const pathname = usePathname();
 
+  const { langMap } = useLanguageContext();
+
   function handlePopupClose() {
     if (!disableForm) props.handleClose();
   }
 
   async function handleAddBtn() {
     if (title.length < 1 || title.length > 60) {
-      setInfoMessage("Title must be between 1-60 characters long");
+      setInfoMessage(langMap.values.room.title_length);
     } else if (description.length > 400) {
-      setInfoMessage("Description cannot be longer than 400 characters");
+      setInfoMessage(langMap.values.room.description_length);
     } else {
       // Validation successful
       // Making the backend request
       setDisableForm(true);
-      setInfoMessage("adding...");
+      setInfoMessage(langMap.values.room.adding);
 
       interface PostData {
         title: string;
@@ -51,7 +54,7 @@ const AddItemPopup = (props: AddItemPopupProps) => {
       if (response.status === 201) {
         handlePopupClose();
       } else {
-        setInfoMessage("Something went wrong!");
+        setInfoMessage(langMap.values.room.something_went_wrong);
       }
     }
     setDisableForm(false);
@@ -70,19 +73,19 @@ const AddItemPopup = (props: AddItemPopupProps) => {
       >
         <Input
           type="text"
-          placeholder="title..."
+          placeholder={langMap.values.room.title}
           value={title}
           setValue={setTitle}
         />
         <textarea
           className="h-32 resize-none overflow-auto p-2"
-          placeholder="description..."
+          placeholder={langMap.values.room.description}
           wrap="off"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
         {infoMessage && <p className="text-center">{infoMessage}</p>}
-        <Button onClick={handleAddBtn}>Add</Button>
+        <Button onClick={handleAddBtn}>{langMap.values.room.add}</Button>
       </div>
     </Popup>
   );

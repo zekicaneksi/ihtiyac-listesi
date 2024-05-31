@@ -4,6 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 import { useUserContext } from "@/app/(app)/context/user_context";
 import FullPageLoadingScreen from "@/app/components/FullPageLoadingScreen";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 
 interface ChildrenProps {
   children: ReactNode;
@@ -21,6 +22,8 @@ const Layout = ({ children }: ChildrenProps) => {
 
   const router = useRouter();
   const pathname = usePathname();
+
+  const { langMap } = useLanguageContext();
 
   function handleWSMessage(msg: WSMessage, location: string) {
     if (msg === null || pathname !== location) return;
@@ -50,7 +53,7 @@ const Layout = ({ children }: ChildrenProps) => {
     return (
       <FullPageLoadingScreen
         show={true}
-        message={"Checking room existence..."}
+        message={langMap.values.room.check_room_exist}
       />
     );
   else if (roomExists === false) {

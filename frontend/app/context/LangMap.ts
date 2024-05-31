@@ -63,4 +63,48 @@ export default interface LangMap {
     choose_file: string;
     upload: string;
   };
+
+  // [room] page
+  room: {
+    check_room_exist: string;
+    room_info: string;
+    room_history: string;
+    no_items_info: string;
+    create_new_item_info1: string;
+    create_new_item_info2: string;
+    loading_items: string;
+    added_by: string;
+    bought_by: string;
+    purchase_date: string;
+    title_length: string;
+    description_length: string;
+    adding: string;
+    something_went_wrong: string;
+    title: string;
+    description: string;
+    add: string;
+    will_buy: string;
+    btn_will_buy: string;
+    btn_will_not_buy: string;
+    btn_bought: string;
+    deleting: string;
+    delete_inform: string;
+    delete: string;
+    cancel: string;
+    editing: string;
+    edit: string;
+    loading_room: string;
+    close_room: string;
+    leave_room: string;
+    members: string;
+    closing_room: string;
+    close_room_info: string;
+    yes: string;
+    no: string;
+    leaving_room: string;
+    leave_room_info: string;
+    removing: string;
+    remove_member_info: string;
+    remove: string;
+  };
 }

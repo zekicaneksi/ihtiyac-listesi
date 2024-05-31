@@ -2,6 +2,7 @@
 
 import Button from "@/app/components/Button";
 import Popup from "@/app/components/Popup";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 import { fetchBackendPOST } from "@/app/utils/fetch";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,6 +18,8 @@ function RemoveMemberPopup(props: RemoveMemberPopupProps) {
   const [infoMessage, setInfoMessage] = useState<string>("");
   const [disableForm, setDisableForm] = useState<boolean>(false);
 
+  const { langMap } = useLanguageContext();
+
   const pathname = usePathname();
 
   function handlePopupClose(result: boolean) {
@@ -29,7 +32,7 @@ function RemoveMemberPopup(props: RemoveMemberPopupProps) {
 
   async function handleRemoveBtn() {
     setDisableForm(true);
-    setInfoMessage("removing...");
+    setInfoMessage(langMap.values.room.removing);
 
     interface PostData {
       roomId: string;
@@ -44,7 +47,7 @@ function RemoveMemberPopup(props: RemoveMemberPopupProps) {
     if (response.status === 200) {
       handlePopupClose(true);
     } else {
-      setInfoMessage("Something went wrong!");
+      setInfoMessage(langMap.values.room.something_went_wrong);
     }
 
     setDisableForm(false);
@@ -60,11 +63,12 @@ function RemoveMemberPopup(props: RemoveMemberPopupProps) {
         className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 bg-foreground px-4 py-4`}
       >
         <p className="text-center">
-          Are you sure you want to remove member <b>{props.memberName}</b>?
+          {langMap.values.room.remove_member_info + " "}
+          <b>{props.memberName}</b>?
         </p>
         {infoMessage && <p className="text-center">{infoMessage}</p>}
-        <Button onClick={handleRemoveBtn}>Remove</Button>
-        <Button onClick={handleCancelBtn}>Cancel</Button>
+        <Button onClick={handleRemoveBtn}>{langMap.values.room.remove}</Button>
+        <Button onClick={handleCancelBtn}>{langMap.values.room.cancel}</Button>
       </div>
     </Popup>
   );

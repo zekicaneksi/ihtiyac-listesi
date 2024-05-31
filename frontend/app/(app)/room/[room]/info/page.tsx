@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import LeaveRoomPopup from "./components/LeaveRoomPopup";
 import CloseRoomPopup from "./components/CloseRoomPopup";
 import MemberUser from "./components/MemberUser";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 
 export type RoomInfo = {
   _id: string;
@@ -30,6 +31,8 @@ const Info = () => {
 
   const { user, setUser, wsLastJsonMessage, wsSendJsonMessage } =
     useUserContext();
+
+  const { langMap } = useLanguageContext();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -71,7 +74,12 @@ const Info = () => {
   }
 
   if (!roomInfo) {
-    return <FullPageLoadingScreen show={true} message="Loading room..." />;
+    return (
+      <FullPageLoadingScreen
+        show={true}
+        message={langMap.values.room.loading_room}
+      />
+    );
   }
 
   const amIAdmin: boolean = roomInfo.creatorId === user._id ? true : false;
@@ -94,11 +102,13 @@ const Info = () => {
         </div>
         <div className="flex items-center justify-center">
           <Button onClick={amIAdmin ? handleCloseRoom : handleLeaveRoom}>
-            {amIAdmin ? "Close Room" : "Leave Room"}
+            {amIAdmin
+              ? langMap.values.room.close_room
+              : langMap.values.room.leave_room}
           </Button>
         </div>
         <div className="mt-4 flex items-center justify-center">
-          <p className="text-2xl">Members</p>
+          <p className="text-2xl">{langMap.values.room.members}</p>
         </div>
         <div className="mt-4">
           {roomInfo.members.map((e) => (

@@ -2,6 +2,7 @@
 
 import Button from "@/app/components/Button";
 import Popup from "@/app/components/Popup";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 import { fetchBackendPOST } from "@/app/utils/fetch";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,6 +18,8 @@ const RoomItemDeletePopup = (props: RoomItemDeletePopupProps) => {
   const [infoMessage, setInfoMessage] = useState<string>("");
   const [disableForm, setDisableForm] = useState<boolean>(false);
 
+  const { langMap } = useLanguageContext();
+
   const pathname = usePathname();
 
   function handlePopupClose() {
@@ -25,7 +28,7 @@ const RoomItemDeletePopup = (props: RoomItemDeletePopupProps) => {
 
   async function handleDeleteBtn() {
     setDisableForm(true);
-    setInfoMessage("deleting...");
+    setInfoMessage(langMap.values.room.deleting);
 
     interface PostData {
       itemId: string;
@@ -40,7 +43,7 @@ const RoomItemDeletePopup = (props: RoomItemDeletePopupProps) => {
     if (response.status === 201) {
       handlePopupClose();
     } else {
-      setInfoMessage("Something went wrong!");
+      setInfoMessage(langMap.values.room.something_went_wrong);
     }
 
     setDisableForm(false);
@@ -60,11 +63,12 @@ const RoomItemDeletePopup = (props: RoomItemDeletePopupProps) => {
         className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 bg-foreground px-4 py-4`}
       >
         <p className="text-center">
-          Are you sure you want to delete <b>{props.itemTitle}</b>?
+          {langMap.values.room.delete_inform + " "}
+          <b>{props.itemTitle}</b>?
         </p>
         {infoMessage && <p className="text-center">{infoMessage}</p>}
-        <Button onClick={handleDeleteBtn}>Delete</Button>
-        <Button onClick={handleCancelBtn}>Cancel</Button>
+        <Button onClick={handleDeleteBtn}>{langMap.values.room.delete}</Button>
+        <Button onClick={handleCancelBtn}>{langMap.values.room.cancel}</Button>
       </div>
     </Popup>
   );
