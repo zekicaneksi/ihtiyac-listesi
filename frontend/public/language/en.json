@@ -49,5 +49,15 @@
     "no_room_info": "Looks like you are not a part of any room",
     "create_or_join_info": "You can create or join a room from the menu down below",
     "loading_rooms": "Loading rooms..."
+  },
+
+  "profile": {
+    "uploading": "uploading...",
+    "successful": "successful",
+    "file_size_big": "file size is too big",
+    "something_went_wrong": "something went wrong",
+    "logout": "Logout",
+    "choose_file": "Choose File",
+    "upload": "Upload"
   }
 }

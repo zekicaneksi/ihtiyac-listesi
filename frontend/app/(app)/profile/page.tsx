@@ -7,6 +7,7 @@ import { User, useUserContext } from "@/app/(app)/context/user_context";
 import Button from "@/app/components/Button";
 import { useEffect, useState } from "react";
 import ProfilePicture from "@/app/components/ProfilePicture";
+import { useLanguageContext } from "@/app/context/LanguageContext";
 
 const Profile = () => {
   const { user, setUser } = useUserContext();
@@ -17,6 +18,8 @@ const Profile = () => {
   const [infoMessage, setInfoMessage] = useState<string>("");
 
   const [disabled, setDisabled] = useState<boolean>(false);
+
+  const { langMap } = useLanguageContext();
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files || e.target.files.length === 0) {
@@ -55,7 +58,7 @@ const Profile = () => {
     if (!file) return;
 
     setDisabled(true);
-    setInfoMessage("uploading...");
+    setInfoMessage(langMap.values.profile.uploading);
 
     // Resizing image for upload
     const targetWidth = 250;
@@ -81,16 +84,16 @@ const Profile = () => {
     const newImageId = await response.text();
 
     if (response.status === 200) {
-      setInfoMessage("successful");
+      setInfoMessage(langMap.values.profile.successful);
       setUser((oldState) => {
         let clone: User = JSON.parse(JSON.stringify(oldState));
         clone.profilePictureId = newImageId;
         return clone;
       });
     } else if (response.status === 413) {
-      setInfoMessage("file size is too big");
+      setInfoMessage(langMap.values.profile.file_size_big);
     } else {
-      setInfoMessage("something went wrong");
+      setInfoMessage(langMap.values.profile.something_went_wrong);
     }
 
     setDisabled(false);
@@ -117,7 +120,7 @@ const Profile = () => {
 
   const menuElements: MenuElementProps[] = [
     {
-      text: "Logout",
+      text: langMap.values.profile.logout,
       onClick: () => {
         logout();
       },
@@ -147,11 +150,11 @@ const Profile = () => {
               accept="image/jpeg, image/png"
               className="hidden"
             />
-            Choose File
+            {langMap.values.profile.choose_file}
           </label>
           {infoMessage && <p className="self-center">{infoMessage}</p>}
           <Button onClick={handleUpload} disabled={file ? false : true}>
-            Upload Picture
+            {langMap.values.profile.upload}
           </Button>
         </div>
       </div>

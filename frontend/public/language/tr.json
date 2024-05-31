@@ -49,5 +49,15 @@
     "no_room_info": "Görünüşe göre hiçbir odada bulunmuyorsun",
     "create_or_join_info": "Aşağıdaki menüden yeni bir oda oluşturabilir veya bir odaya katılabilirsin",
     "loading_rooms": "Odalar yükleniyor..."
+  },
+
+  "profile": {
+    "uploading": "yükleniyor...",
+    "successful": "başarılı",
+    "file_size_big": "dosya boyutu çok büyük",
+    "something_went_wrong": "bir şeyler ters gitti",
+    "logout": "Çıkış Yap",
+    "choose_file": "Dosya Seç",
+    "upload": "Yükle"
   }
 }

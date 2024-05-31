@@ -52,4 +52,15 @@ export default interface LangMap {
     create_or_join_info: string;
     loading_rooms: string;
   };
+
+  // Profile page
+  profile: {
+    uploading: string;
+    successful: string;
+    file_size_big: string;
+    something_went_wrong: string;
+    logout: string;
+    choose_file: string;
+    upload: string;
+  };
 }
