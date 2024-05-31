@@ -10,15 +10,17 @@ const LogoWithName = () => {
   const { langMap } = useLanguageContext();
 
   return (
-    <Link href="/">
-      <img
-        src={"/logo-with-name.png"}
-        alt={langMap.values.root_page.logo_alt}
-        height={"100%"}
-        width={"auto"}
-        className="h-[100%] w-auto hover:cursor-pointer"
-      />
-    </Link>
+    <div>
+      <Link href="/" className="contents">
+        <img
+          src={"/logo-with-name.png"}
+          alt={langMap.values.root_page.logo_alt}
+          height={"100%"}
+          width={"auto"}
+          className="h-[100%] w-auto hover:cursor-pointer"
+        />
+      </Link>
+    </div>
   );
 };
 
