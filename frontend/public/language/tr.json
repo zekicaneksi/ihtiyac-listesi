@@ -1,6 +1,23 @@
 {
-  "abc1": "hello1TR",
-  "abc2": "hello2TR",
-  "abc3": "hello3TR",
-  "abc4": "hello4TR"
+  "sign": {
+    "username_special": "Kullanıcı adı özel karakterler içeremez",
+    "username_length": "Kullanıcı adı 6-15 karakter uzunluğunda olmalı",
+    "fullname_special": "Tam ad yalnızca karakterlerden ve boşluklardan oluşabilir",
+    "fullname_length": "Tam ad 4-25 karakter uzunluğunda olmalı",
+    "password_spaces": "Şifre boşluk içeremez",
+    "password_length": "Şifre 8-20 karakter uzunluğunda olmalı",
+    "password_match": "Şifreler uyuşmuyor",
+    "creating_user": "kullanıcı oluşturuluyor...",
+    "username_exists": "Kullanıcı adı mevcut, lütfen başka bir kullanıcı adı seçin",
+    "please_wait": "lütfen bekleyin...",
+    "invalid_credentials": "Kullanıcı adı veya şifre yanlış",
+    "unknown_error": "Bilinmeyen hata",
+    "username": "kullanıcı adı",
+    "password": "şifre",
+    "password_again": "tekrar şifre",
+    "fullname": "tam ad",
+    "login": "Giriş Yap",
+    "register": "Kayıt Ol",
+    "or": "ya da"
+  }
 }

@@ -1,6 +1,23 @@
 {
-  "abc1": "hello1EN",
-  "abc2": "hello2EN",
-  "abc3": "hello3EN",
-  "abc4": "hello4EN"
+  "sign": {
+    "username_special": "Username cannot contain special characters",
+    "username_length": "Username must be 6-15 characters long",
+    "fullname_special": "Full name must consist of characters and spaces only",
+    "fullname_length": "Fullname must be 4-25 characters long",
+    "password_spaces": "Password cannot contain whitespaces",
+    "password_length": "Password must be 8-20 characters long",
+    "password_match": "Passwords do not match",
+    "creating_user": "creating user...",
+    "username_exists": "Username exists, please choose another username",
+    "please_wait": "please wait...",
+    "invalid_credentials": "Invalid credentials",
+    "unknown_error": "Unkown error",
+    "username": "username",
+    "password": "password",
+    "password_again": "password again",
+    "fullname": "fullname",
+    "login": "Login",
+    "register": "Register",
+    "or": "or"
+  }
 }

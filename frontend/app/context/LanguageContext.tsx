@@ -28,34 +28,33 @@ interface Props {
 
 export const LanguageProvider = ({ children }: Props) => {
   const [language, setLanguage] = useState<Language>({
-    code: typeof window !== "undefined" ? window.navigator.language : "en",
+    code:
+      typeof window !== "undefined"
+        ? getLanguageCode(window.navigator.language)
+        : "en",
   });
+
+  function getLanguageCode(langCode: string) {
+    const trLangs = ["tr", "tr-CY", "tr-TR"];
+    if (trLangs.includes(langCode)) {
+      return "tr";
+    } else return "en";
+  }
 
   async function fetchLanguage() {
     if (language.values !== undefined) return;
 
-    async function getLangValue(lang: string): Promise<LangMap> {
-      const response = await fetch("/language/" + lang + ".json");
-      const responseJson = await response.json();
-      return responseJson;
-    }
+    const response = await fetch("/language/" + language.code + ".json");
+    const responseJson = await response.json();
 
-    const trLangs = ["tr", "tr-CY", "tr-TR"];
-    if (trLangs.includes(language.code)) {
-      setLanguage({
-        code: "tr",
-        values: await getLangValue("tr"),
-      });
-    } else {
-      setLanguage({
-        code: "en",
-        values: await getLangValue("en"),
-      });
-    }
+    setLanguage({
+      code: language.code,
+      values: responseJson,
+    });
   }
 
   function setNewLanguage(newLangCode: string) {
-    setLanguage({ code: newLangCode });
+    setLanguage({ code: getLanguageCode(newLangCode) });
   }
 
   useEffect(() => {
