@@ -69,7 +69,7 @@ const AddItemPopup = (props: AddItemPopupProps) => {
   return (
     <Popup open={props.isOpen} handleClose={handlePopupClose}>
       <div
-        className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 bg-foreground px-4 py-4`}
+        className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 rounded bg-foreground px-4 py-4`}
       >
         <Input
           type="text"
@@ -84,7 +84,9 @@ const AddItemPopup = (props: AddItemPopupProps) => {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
-        {infoMessage && <p className="text-center">{infoMessage}</p>}
+        {infoMessage && (
+          <p className="text-center text-gray-100">{infoMessage}</p>
+        )}
         <Button onClick={handleAddBtn}>{langMap.values.room.add}</Button>
       </div>
     </Popup>

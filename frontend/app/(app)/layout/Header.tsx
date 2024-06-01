@@ -60,7 +60,7 @@ const LanguageIconBtn = () => {
 
 export const Header = () => {
   return (
-    <div className="flex h-[10vh] justify-between bg-foreground p-2 md:h-[6vh]">
+    <div className="flex h-[7vh] justify-between bg-foreground p-2 md:h-[6vh]">
       <LogoWithName />
       <LanguageIconBtn />
       <ProfilePicturePlaceHolder />

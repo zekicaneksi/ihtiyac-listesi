@@ -144,7 +144,7 @@ const Room = () => {
 
   const NoItemsSection = () => {
     return (
-      <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
+      <div className="text-highligt flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
         <p>{langMap.values.room.no_items_info}</p>
         <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
           <p>{langMap.values.room.create_new_item_info1 + " "}</p>
@@ -169,10 +169,10 @@ const Room = () => {
           roomItems.map((e) => <RoomItem {...e} key={e._id} />)
         )}
         <div
-          className="sticky bottom-0 right-0 ml-auto mt-auto size-12 hover:cursor-pointer md:size-16"
+          className="sticky bottom-0 right-0 ml-auto mt-auto size-16 hover:cursor-pointer"
           onClick={handleAddItem}
         >
-          <IoAddCircle className="h-full w-full" />
+          <IoAddCircle className="text-highligt h-full w-full hover:brightness-125" />
         </div>
       </div>
       <Footer menuElements={menuElements} />

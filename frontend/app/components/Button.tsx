@@ -10,7 +10,7 @@ interface ButtonProps {
 const Button = (props: ButtonProps) => {
   return (
     <button
-      className={`${props.bgColor ? props.bgColor : "bg-element"} px-3 py-3 ${props.disabled ? "pointer-events-none opacity-70" : "hover:brightness-105"}`}
+      className={`${props.bgColor ? props.bgColor : "bg-element"} px-3 py-3 text-gray-100 ${props.disabled ? "pointer-events-none opacity-70" : "hover:brightness-105"}`}
       onClick={props.onClick}
     >
       {props.children}

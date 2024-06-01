@@ -34,7 +34,7 @@ const Footer = (props: FooterProps) => {
           className="relative z-[1] flex h-full items-center justify-center bg-foreground p-4 hover:brightness-150"
           onClick={props.backFunction}
         >
-          <FaArrowUp className={`size-8 rotate-[270deg]`} />
+          <FaArrowUp className={`text-highligt size-8 rotate-[270deg]`} />
         </div>
       </div>
     );
@@ -49,7 +49,9 @@ const Footer = (props: FooterProps) => {
         onClick={isMenuOpen ? hideMenu : showMenu}
         onMouseEnter={showMenu}
       >
-        <FaArrowUp className={`size-8 ${isMenuOpen && "rotate-180"}`} />
+        <FaArrowUp
+          className={`text-highligt size-8 ${isMenuOpen && "rotate-180"}`}
+        />
       </div>
       {isMenuOpen && props.menuElements && (
         <>
@@ -66,7 +68,7 @@ const Footer = (props: FooterProps) => {
                     setIsMenuOpen(false);
                   }}
                 >
-                  <p>{elem.text}</p>
+                  <p className="text-highligt">{elem.text}</p>
                 </div>
               );
             })}

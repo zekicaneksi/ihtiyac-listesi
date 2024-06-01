@@ -145,11 +145,11 @@ const RoomItem = (props: IRoomItem) => {
             {props.addedBy._id === user._id && (
               <div className="absolute right-0 top-0 mr-4 mt-4 flex flex-col gap-2">
                 <TiDeleteOutline
-                  className="size-8 text-foreground hover:brightness-150"
+                  className="size-8 text-foreground hover:brightness-125"
                   onClick={handleDeleteOnClick}
                 />
                 <GrEdit
-                  className="size-8 text-foreground hover:brightness-150"
+                  className="size-8 text-foreground hover:brightness-125"
                   onClick={handleEditOnClick}
                 />
               </div>

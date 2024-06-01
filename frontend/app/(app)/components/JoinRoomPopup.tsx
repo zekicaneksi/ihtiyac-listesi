@@ -64,7 +64,7 @@ function JoinRoomPopup(props: JoinRoomPopupProps) {
   return (
     <Popup open={props.isOpen} handleClose={handleClose}>
       <div
-        className={`${disableForm ? "pointer-events-none opacity-70" : ""} z-20 flex w-80 flex-col gap-4 bg-foreground px-4 py-4`}
+        className={`${disableForm ? "pointer-events-none opacity-70" : ""} z-20 flex w-80 flex-col gap-4 rounded bg-foreground px-4 py-4`}
       >
         <Input
           value={roomId}

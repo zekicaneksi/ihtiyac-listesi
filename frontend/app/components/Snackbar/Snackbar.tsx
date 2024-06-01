@@ -31,7 +31,7 @@ const Snackbar = (props: SnackbarProps) => {
   if (!props.open) return false;
 
   return (
-    <div className="fixed left-1/2 top-0 z-20 min-w-36 -translate-x-1/2 -translate-y-full transform animate-[inAndOut_3s_linear] rounded-3xl bg-red-300 p-4 text-center">
+    <div className="bg-highligt fixed left-1/2 top-0 z-20 min-w-36 -translate-x-1/2 -translate-y-full transform animate-[inAndOut_3s_linear] rounded-3xl p-4 text-center">
       <p>{props.message}</p>
     </div>
   );

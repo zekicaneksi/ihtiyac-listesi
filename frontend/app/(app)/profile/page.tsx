@@ -113,6 +113,14 @@ const Profile = () => {
     return () => URL.revokeObjectURL(objectUrl);
   }, [file]);
 
+  useEffect(() => {
+    setPreview(
+      user.profilePictureId
+        ? "/api/public/uploaded_images/" + user.profilePictureId
+        : "/static/default_pic.png",
+    );
+  }, []);
+
   async function logout() {
     await fetchBackendGET("/logout");
     router.push("/sign");
@@ -133,17 +141,13 @@ const Profile = () => {
         <div
           className={`flex w-fit flex-col gap-8 ${disabled ? "pointer-events-none opacity-70" : ""}`}
         >
-          <div className="flex flex-row justify-center gap-8">
-            <ProfilePicture address={user.profilePictureId} />
-            <p className="self-center">{user.fullname}</p>
-          </div>
           {preview && (
             <img
               className="h-72 w-72 self-center rounded-full bg-yellow-200"
               src={preview}
             />
           )}
-          <label className="cursor-pointer border-2 border-black p-2 text-center">
+          <label className="text-highligt cursor-pointer rounded border-2 border-foreground bg-element p-4 text-center">
             <input
               type="file"
               onChange={handleImageChange}
@@ -152,7 +156,9 @@ const Profile = () => {
             />
             {langMap.values.profile.choose_file}
           </label>
-          {infoMessage && <p className="self-center">{infoMessage}</p>}
+          {infoMessage && (
+            <p className="text-highligt self-center">{infoMessage}</p>
+          )}
           <Button onClick={handleUpload} disabled={file ? false : true}>
             {langMap.values.profile.upload}
           </Button>

@@ -60,13 +60,15 @@ function RemoveMemberPopup(props: RemoveMemberPopupProps) {
   return (
     <Popup open={props.isOpen} handleClose={handlePopupClose}>
       <div
-        className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 bg-foreground px-4 py-4`}
+        className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 rounded bg-foreground px-4 py-4`}
       >
-        <p className="text-center">
+        <p className="text-center text-gray-100">
           {langMap.values.room.remove_member_info + " "}
           <b>{props.memberName}</b>?
         </p>
-        {infoMessage && <p className="text-center">{infoMessage}</p>}
+        {infoMessage && (
+          <p className="text-center text-gray-100">{infoMessage}</p>
+        )}
         <Button onClick={handleRemoveBtn}>{langMap.values.room.remove}</Button>
         <Button onClick={handleCancelBtn}>{langMap.values.room.cancel}</Button>
       </div>

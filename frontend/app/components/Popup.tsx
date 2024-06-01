@@ -25,7 +25,7 @@ const Popup = (props: PopupProps) => {
       </div>
 
       <div
-        className="fixed inset-0 z-10 bg-black opacity-40"
+        className="fixed inset-0 z-10 bg-black opacity-80"
         onClick={handleClose}
         ref={backgroundRef}
       ></div>

@@ -41,7 +41,7 @@ const MemberUser = (props: MemberUserProps) => {
         handleClose={handleRemoveMemberPopupClose}
       />
       <div
-        className={`relative flex flex-col border-b-2 border-black bg-element p-4`}
+        className={`relative flex flex-col rounded border-b-2 border-black bg-element p-4`}
       >
         <div className="flex flex-row justify-between">
           <div className="flex flex-row items-center gap-2">

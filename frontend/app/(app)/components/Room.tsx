@@ -42,7 +42,7 @@ const Room = (props: RoomProps) => {
             {props.room.roomName}
           </p>
           <div
-            className="group right-0 flex h-full flex-col justify-between p-3 sm:absolute"
+            className="group right-0 flex h-full flex-col justify-between p-3 text-xs sm:absolute"
             onClick={copyRoomId}
           >
             <div className="flex flex-grow flex-col items-center justify-center">

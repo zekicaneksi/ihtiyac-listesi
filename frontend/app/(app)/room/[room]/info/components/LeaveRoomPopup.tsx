@@ -57,9 +57,9 @@ const LeaveRoomPopup = (props: LeaveRoomPopupProps) => {
   return (
     <Popup open={props.isOpen} handleClose={handleClose}>
       <div
-        className={`${disableForm ? "pointer-events-none opacity-70" : ""} z-20 flex w-80 flex-col gap-4 bg-foreground px-4 py-4`}
+        className={`${disableForm ? "pointer-events-none opacity-70" : ""} z-20 flex w-80 flex-col gap-4 rounded bg-foreground px-4 py-4`}
       >
-        <p className="text-center">
+        <p className="text-center text-gray-100">
           {langMap.values.room.leave_room_info + " "}
           <b>{props.roomName}</b>?
         </p>

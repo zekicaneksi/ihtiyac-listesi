@@ -96,9 +96,9 @@ const Info = () => {
         isOpen={showCloseRoomPopup}
         handleClose={handleCloseRoomPopupClose}
       />
-      <div className="flex flex-grow flex-col overflow-auto">
+      <div className="flex flex-grow flex-col overflow-auto p-4">
         <div className="flex items-center justify-center pb-4 pt-4">
-          <p className="self-center text-4xl">{roomInfo.name}</p>
+          <p className="text-highligt self-center text-4xl">{roomInfo.name}</p>
         </div>
         <div className="flex items-center justify-center">
           <Button onClick={amIAdmin ? handleCloseRoom : handleLeaveRoom}>
@@ -108,9 +108,11 @@ const Info = () => {
           </Button>
         </div>
         <div className="mt-4 flex items-center justify-center">
-          <p className="text-2xl">{langMap.values.room.members}</p>
+          <p className="text-highligt text-2xl">
+            {langMap.values.room.members}
+          </p>
         </div>
-        <div className="mt-4">
+        <div className="mt-4 flex flex-col gap-1">
           {roomInfo.members.map((e) => (
             <MemberUser
               user={e}

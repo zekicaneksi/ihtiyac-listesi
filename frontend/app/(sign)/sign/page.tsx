@@ -123,7 +123,7 @@ export default function Register() {
       </div>
 
       <div
-        className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 bg-foreground px-4 py-4`}
+        className={`${disableForm ? "pointer-events-none opacity-70" : ""} m-auto flex w-80  flex-col gap-4 rounded bg-foreground px-4 py-4`}
       >
         <Input
           value={username}
