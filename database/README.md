@@ -2,7 +2,7 @@
 
 Prerequisites
 
-    - Docker (with docker compose)
+- Docker (with docker compose)
 
 To get a mongo database up
 

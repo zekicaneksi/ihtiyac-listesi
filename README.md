@@ -1,6 +1,8 @@
 # ihtiyac-listesi
 
-TODO-description
+In a household, office or a similar place of numerous people, there's always need for "things". Things that need to be bought, brought, or errands.
+
+This real-time web app allows you to track what is needed and who will be handling what.
 
 ## Screenshots
 

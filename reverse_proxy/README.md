@@ -2,7 +2,7 @@
 
 Prerequisites
 
-    - Docker (with docker compose)
+- Docker (with docker compose)
 
 To get Nginx up (need to re-run this on changes to the nginx config file)
 

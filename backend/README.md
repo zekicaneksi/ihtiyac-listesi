@@ -12,7 +12,7 @@
 
 ## Prerequisites
 
-    - Node.js (20) with NPM
+- Node.js (20) with NPM
 
 ## Required Environment Variables
 

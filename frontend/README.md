@@ -11,7 +11,7 @@
 
 ## Prerequisites
 
-    - Node.js (20) with NPM
+- Node.js (20) with NPM
 
 
 ## Development
