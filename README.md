@@ -21,7 +21,7 @@ This real-time web app allows you to track what is needed and who will be handli
 
 ### Notes
 
-Site is developed with mobile-first approach, and it is fully responsive.
+Site is developed with mobile-first approach, and is fully responsive.
 
 ## Development
 
@@ -32,7 +32,7 @@ To get the project running, in order, go into these directories, and follow inst
 - `frontend`
 - `reverse_proxy`
 
-Then visit [http://localhost:3000](http://localhost:3000) (or any other port you specified)
+Then visit [http://localhost:3000](http://localhost:3000)
 
 ### Notes
 
