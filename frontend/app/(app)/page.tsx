@@ -105,7 +105,7 @@ export default function Home() {
 
   const NoRoomsSection = () => {
     return (
-      <div className="flex flex-grow flex-col items-center justify-center gap-10 [&>p]:text-center">
+      <div className="flex flex-grow flex-col items-center justify-center gap-10 text-highligt [&>p]:text-center">
         <p>{langMap.values.root_page.no_room_info}</p>
         <p>{langMap.values.root_page.create_or_join_info}</p>
         <FaArrowDownLong className="size-12" />
