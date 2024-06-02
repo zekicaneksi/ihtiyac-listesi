@@ -1,5 +1,15 @@
 # backend
 
+## Used Technologies/Frameworks
+
+- Node.js
+- Express
+- TypeScript
+- ws (WebSocket)
+- busboy
+- mongodb
+- cookie
+
 ## Prerequisites
 
     - Node.js (20) with NPM

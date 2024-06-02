@@ -1,5 +1,14 @@
 # frontend
 
+
+## Used Technologies/Frameworks
+
+- React
+- Next.js
+- TypeScript
+- Native WebSocket
+- Tailwind
+
 ## Prerequisites
 
     - Node.js (20) with NPM
