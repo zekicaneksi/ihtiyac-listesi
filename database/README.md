@@ -1,9 +1,15 @@
 # database
 
-To get a mongo database up;
+Prerequisites
 
-`docker compose up --build`
+    - Docker (with docker compose)
 
-To take it down;
+To get a mongo database up
 
-`docker compose down`
+```sh
+docker compose up --build
+```
+
+```sh
+docker compose down
+```

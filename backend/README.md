@@ -1,6 +1,12 @@
 # backend
 
-Required env variables; (the env variables can be given via an `.env` file, or from environment itself)
+## Prerequisites
+
+    - Node.js (20) with NPM
+
+## Required Environment Variables
+
+The environment variables can be given via an `.env` file, or from environment itself.
 
 ```
 MONGODB_URL="mongodb://localhost:27017/ihtiyac_listesi"
@@ -9,8 +15,30 @@ SECURE=false # If your app uses HTTPS or not
 PORT=3002 # The port number the app will listen on
 ```
 
-`npm install` to install node modules.
+## Development
 
-`npm run dev` to run in development.
+To install node modules
 
-`npm run build` to build the typescript files into the `dist` folder and then `npm run start` to serve the built files.
+```sh
+npm install
+```
+
+To run the project in development mode
+
+```sh
+npm run dev
+```
+
+## Deployment
+
+To build the project
+
+```sh
+npm run build
+```
+
+To run the project in production mode
+
+```sh
+npm run start
+```

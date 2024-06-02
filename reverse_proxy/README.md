@@ -1,11 +1,17 @@
 # reverse_proxy
 
-As the reverse proxy tool, Nginx is used. And for convenience, instead of installation, Docker is used.
+Prerequisites
 
-To get Nginx up (need to re-run this on changes to the nginx config file);
+    - Docker (with docker compose)
 
-`docker compose up --build`
+To get Nginx up (need to re-run this on changes to the nginx config file)
 
-To take everything down;
+```sh
+docker compose up --build
+```
 
-`docker compose down`
+To take everything down
+
+```sh
+docker compose down
+```

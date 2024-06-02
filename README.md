@@ -1,29 +1,29 @@
 # ihtiyac-listesi
 
-Requirement for setting up the project locally;
+TODO-description
 
-- With Nix
-    - Docker
-- Without Nix
-    - Docker
-    - Node.js (20) with NPM
-    - Mongodb Compass to inspect the DB
+## Screenshots
 
-To get the project running, go into these directories, and follow instructions to get them running;
+TODO-ss
 
-- `frontend`
-- `backend`
-- `reverse_proxy`
+## Development
+
+To get the project running, in order, go into these directories, and follow instructions to get them running;
+
 - `database`
+- `backend`
+- `frontend`
+- `reverse_proxy`
 
-Then visit [http://localhost:3000](http://localhost:3000)
+Then visit [http://localhost:3000](http://localhost:3000) (or any other port you specified)
 
 ### Notes
 
-#### Ports
+Reverse proxy is used to prevent CORS issues.
 
-Ports among `frontend`, `backend`, `database`, and `reverse_proxy` must be consistent.
+## Deployment
 
-#### About Nix
+Follow the instructions in these directories;
 
-Nix is a package manager. And with `nix-shell` you can have a virtual environment that has all the tools neccessary for each of your projects easily. Provided `shell.nix` file is to be used with the `nix-shell` command.
+- `backend`
+- `frontend`
